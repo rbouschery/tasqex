@@ -1,6 +1,7 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { registerBoardTools } from "./tools/board";
 import { registerContactTools } from "./tools/contacts";
+import { registerOrganizationTools } from "./tools/organization";
 import { registerCustomFieldTools } from "./tools/custom-fields";
 import { registerSettingsTools } from "./tools/settings";
 import { registerStatusTools } from "./tools/statuses";
@@ -10,6 +11,7 @@ import { registerUserTools } from "./tools/users";
 
 export function registerTicqexTools(server: McpServer) {
   registerUserTools(server);
+  registerOrganizationTools(server);
   registerTicketTools(server);
   registerBoardTools(server);
   registerContactTools(server);

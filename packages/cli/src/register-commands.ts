@@ -98,6 +98,24 @@ export function createProgram(): Command {
   const users = program.command("users").description("User operations");
   registerOperationCommand(users, "me", "Get current user", "ticqex_get_me");
   registerOperationCommand(users, "list", "List users", "ticqex_list_users");
+  registerOperationCommand(users, "update-role", "Change a member role", "ticqex_update_user_role");
+  registerOperationCommand(users, "remove", "Remove a member", "ticqex_remove_user");
+
+  const organization = program.command("organization").description("Organization and invites");
+  registerOperationCommand(organization, "get", "Get the organization", "ticqex_get_organization");
+  registerOperationCommand(
+    organization,
+    "update",
+    "Rename the organization",
+    "ticqex_update_organization",
+  );
+  const invites = organization.command("invites").description("Invite links");
+  registerOperationCommand(invites, "list", "List pending invites", "ticqex_list_organization_invites");
+  registerOperationCommand(invites, "create", "Create an invite link", "ticqex_create_organization_invite");
+  registerOperationCommand(invites, "revoke", "Revoke an invite", "ticqex_revoke_organization_invite");
+  registerOperationCommand(invites, "preview", "Preview an invite", "ticqex_preview_organization_invite");
+  registerOperationCommand(invites, "redeem", "Create an account from an invite", "ticqex_redeem_organization_invite");
+  registerOperationCommand(invites, "accept", "Accept an invite as the current user", "ticqex_accept_organization_invite");
 
   const tickets = program.command("tickets").description("Task operations");
   registerOperationCommand(tickets, "list", "List tasks", "ticqex_list_tickets");

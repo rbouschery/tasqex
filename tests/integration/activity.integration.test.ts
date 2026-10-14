@@ -288,7 +288,7 @@ describeIntegration("activity log", () => {
 
   it("records failed activity when non-admin staff access admin routes", async () => {
     const { token, userId } = await signInAsSeedAdmin();
-    await adminDb().from("users").update({ role: "agent" }).eq("id", userId);
+    await adminDb().from("users").update({ role: "member" }).eq("id", userId);
     restoredAdminRoleFor = userId;
 
     const response = await listActivityRoute(

@@ -14,7 +14,7 @@ import { login, type LoginState } from "./actions";
 
 function LoginForm() {
   const searchParams = useSearchParams();
-  const authError = searchParams.get("error") === "auth";
+  const authError = searchParams.get("error");
   const [showPassword, setShowPassword] = useState(false);
 
   const [state, formAction, pending] = useActionState<LoginState, FormData>(
@@ -24,10 +24,17 @@ function LoginForm() {
 
   return (
     <form action={formAction} className="space-y-4">
-      {authError && (
+      {authError === "auth" && (
         <Alert variant="destructive">
           <AlertDescription>
             Your session could not be restored. Please sign in again.
+          </AlertDescription>
+        </Alert>
+      )}
+      {authError === "inactive" && (
+        <Alert variant="destructive">
+          <AlertDescription>
+            This account is not active. Open your invite link to join.
           </AlertDescription>
         </Alert>
       )}

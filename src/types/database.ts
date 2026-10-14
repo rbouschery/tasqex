@@ -1,4 +1,4 @@
-export type UserRole = "admin" | "agent";
+export type UserRole = "admin" | "member";
 
 export type TicketKind = "task";
 

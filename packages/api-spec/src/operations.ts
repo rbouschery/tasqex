@@ -8,6 +8,8 @@ export type OperationDefinition = {
   queryParams: string[];
   bodyKey?: string | null;
   admin?: boolean;
+  /** Reachable without a session or API key. Omitted from the MCP server. */
+  public?: boolean;
   alias?: string[];
 };
 
@@ -328,6 +330,83 @@ export const OPERATION_CATALOG: OperationDefinition[] = [
     admin: true,
   },
   {
+    name: "ticqex_get_organization",
+    method: "GET",
+    pathTemplate: "/organization",
+    pathParams: [],
+    queryParams: [],
+  },
+  {
+    name: "ticqex_update_organization",
+    method: "PATCH",
+    pathTemplate: "/organization",
+    pathParams: [],
+    queryParams: [],
+    bodyKey: null,
+  },
+  {
+    name: "ticqex_list_organization_invites",
+    method: "GET",
+    pathTemplate: "/organization/invites",
+    pathParams: [],
+    queryParams: [],
+  },
+  {
+    name: "ticqex_create_organization_invite",
+    method: "POST",
+    pathTemplate: "/organization/invites",
+    pathParams: [],
+    queryParams: [],
+    bodyKey: null,
+  },
+  {
+    name: "ticqex_revoke_organization_invite",
+    method: "DELETE",
+    pathTemplate: "/organization/invites/:id",
+    pathParams: ["id"],
+    queryParams: [],
+  },
+  {
+    name: "ticqex_preview_organization_invite",
+    method: "GET",
+    pathTemplate: "/organization/invites/preview",
+    pathParams: [],
+    queryParams: ["token"],
+    public: true,
+  },
+  {
+    name: "ticqex_redeem_organization_invite",
+    method: "POST",
+    pathTemplate: "/organization/invites/redeem",
+    pathParams: [],
+    queryParams: [],
+    bodyKey: null,
+    public: true,
+  },
+  {
+    name: "ticqex_accept_organization_invite",
+    method: "POST",
+    pathTemplate: "/organization/invites/accept",
+    pathParams: [],
+    queryParams: [],
+    bodyKey: null,
+  },
+  {
+    name: "ticqex_update_user_role",
+    method: "PATCH",
+    pathTemplate: "/users/:id",
+    pathParams: ["id"],
+    queryParams: [],
+    bodyKey: null,
+  },
+  {
+    name: "ticqex_remove_user",
+    method: "DELETE",
+    pathTemplate: "/users/:id",
+    pathParams: ["id"],
+    queryParams: [],
+  },
+  {
     name: "ticqex_create_api_key",
     method: "POST",
     pathTemplate: "/api-keys",
@@ -377,9 +456,9 @@ export const OPERATION_CATALOG: OperationDefinition[] = [
   },
 ];
 
-export const MCP_TOOL_NAMES = OPERATION_CATALOG.filter((op) => !op.admin).map(
-  (op) => op.name,
-);
+export const MCP_TOOL_NAMES = OPERATION_CATALOG.filter(
+  (op) => !op.admin && !op.public,
+).map((op) => op.name);
 
 export const REST_ONLY_ADMIN_OPERATIONS = OPERATION_CATALOG.filter(
   (op) => op.admin,

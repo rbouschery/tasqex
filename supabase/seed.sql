@@ -27,6 +27,10 @@ SELECT
   )
 WHERE NOT EXISTS (SELECT 1 FROM public.global_settings WHERE id = 1);
 
+INSERT INTO public.organizations (name)
+SELECT 'Workspace'
+WHERE NOT EXISTS (SELECT 1 FROM public.organizations);
+
 -- Optional demo tickets/contacts/tags.
 INSERT INTO public.contacts (username)
 VALUES ('demo@example.com');

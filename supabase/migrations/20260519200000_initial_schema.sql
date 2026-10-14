@@ -2,7 +2,7 @@
 -- Pre-launch OSS baseline. Runtime bootstrap/demo rows stay in supabase/seed.sql.
 
 -- Enums
-CREATE TYPE public.user_role AS ENUM ('admin', 'agent');
+CREATE TYPE public.user_role AS ENUM ('admin', 'member');
 CREATE TYPE public.ticket_kind AS ENUM ('task');
 CREATE TYPE public.ticket_origin AS ENUM ('manual', 'api');
 CREATE TYPE public.custom_field_group AS ENUM ('ticket', 'contact');
@@ -17,7 +17,8 @@ CREATE TABLE public.users (
   id uuid PRIMARY KEY REFERENCES auth.users (id) ON DELETE CASCADE,
   username text NOT NULL,
   email text NOT NULL,
-  role public.user_role NOT NULL DEFAULT 'agent',
+  role public.user_role NOT NULL DEFAULT 'member',
+  active boolean NOT NULL DEFAULT false,
   created_at timestamptz NOT NULL DEFAULT now()
 );
 
@@ -156,6 +157,34 @@ CREATE TABLE public.ticket_comments (
 CREATE INDEX ticket_comments_ticket_id_created_at_idx
   ON public.ticket_comments (ticket_id, created_at, id);
 
+-- One organization per database. Another org means another deployment.
+CREATE TABLE public.organizations (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  name text NOT NULL,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+
+CREATE UNIQUE INDEX organizations_singleton_idx ON public.organizations ((true));
+
+CREATE TABLE public.organization_invites (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  organization_id uuid NOT NULL REFERENCES public.organizations (id) ON DELETE CASCADE,
+  email text NOT NULL,
+  role public.user_role NOT NULL DEFAULT 'member',
+  token text NOT NULL UNIQUE,
+  invited_by uuid REFERENCES public.users (id) ON DELETE SET NULL,
+  expires_at timestamptz NOT NULL,
+  accepted_at timestamptz,
+  revoked_at timestamptz,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+
+CREATE UNIQUE INDEX organization_invites_pending_email_idx
+  ON public.organization_invites (email)
+  WHERE accepted_at IS NULL AND revoked_at IS NULL;
+
+CREATE INDEX organization_invites_token_idx ON public.organization_invites (token);
+
 -- Functions and triggers
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS trigger
@@ -164,12 +193,13 @@ SECURITY DEFINER
 SET search_path = public
 AS $$
 BEGIN
-  INSERT INTO public.users (id, username, email, role)
+  INSERT INTO public.users (id, username, email, role, active)
   VALUES (
     NEW.id,
     COALESCE(NEW.raw_user_meta_data ->> 'username', split_part(NEW.email, '@', 1)),
     NEW.email,
-    COALESCE((NEW.raw_app_meta_data ->> 'role')::public.user_role, 'agent')
+    COALESCE((NEW.raw_app_meta_data ->> 'role')::public.user_role, 'member'),
+    COALESCE((NEW.raw_app_meta_data ->> 'role') = 'admin', false)
   );
   RETURN NEW;
 END;
@@ -269,6 +299,8 @@ ALTER TABLE public.global_settings ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.api_keys ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.board_lane_orders ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.ticket_comments ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.organizations ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.organization_invites ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY users_select_authenticated ON public.users
   FOR SELECT TO authenticated USING (true);
@@ -309,6 +341,9 @@ CREATE POLICY board_lane_orders_update_authenticated ON public.board_lane_orders
 
 CREATE POLICY board_lane_orders_delete_authenticated ON public.board_lane_orders
   FOR DELETE TO authenticated USING (user_id = auth.uid());
+
+CREATE POLICY organizations_select_authenticated ON public.organizations
+  FOR SELECT TO authenticated USING (true);
 
 CREATE POLICY ticket_comments_select_authenticated ON public.ticket_comments
   FOR SELECT TO authenticated USING (true);

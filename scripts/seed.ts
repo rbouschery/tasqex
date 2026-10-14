@@ -51,7 +51,10 @@ async function main() {
   const found = existing.users.find((user) => user.email === email);
 
   if (found) {
-    await supabase.from("users").update({ role: "admin" }).eq("id", found.id);
+    await supabase
+      .from("users")
+      .update({ role: "admin", active: true })
+      .eq("id", found.id);
     console.log(`Admin already exists: ${email}`);
     return;
   }
@@ -75,7 +78,7 @@ async function main() {
   if (data.user) {
     await supabase
       .from("users")
-      .update({ role: "admin", username: "Admin" })
+      .update({ role: "admin", username: "Admin", active: true })
       .eq("id", data.user.id);
   }
 

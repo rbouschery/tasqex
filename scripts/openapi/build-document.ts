@@ -28,7 +28,7 @@ type OpenApiOperation = {
   parameters?: OpenApiParameter[];
   requestBody?: Record<string, unknown>;
   responses: Record<string, unknown>;
-  security: [{ bearerAuth: [] }];
+  security: Array<{ bearerAuth: [] }>;
 };
 
 type OpenApiTag = {
@@ -115,6 +115,10 @@ const TAG_METADATA: Record<
   tickets: {
     displayName: "Tasks",
     description: "Tasks and comments.",
+  },
+  organization: {
+    displayName: "Organization",
+    description: "The single workspace, its members, and invite links.",
   },
   users: {
     displayName: "Users",
@@ -327,7 +331,9 @@ function buildRequestBody(
 function buildOperation(operation: OperationDefinition): OpenApiOperation {
   const tag = inferOperationTag(operation.pathTemplate);
   const descriptionParts: string[] = [];
-  if (operation.admin) {
+  if (operation.public) {
+    descriptionParts.push("Public. No authentication required.");
+  } else if (operation.admin) {
     descriptionParts.push("Requires admin role.");
   }
   if (operation.name === "ticqex_get_attachment_url") {
@@ -335,7 +341,9 @@ function buildOperation(operation: OperationDefinition): OpenApiOperation {
       "By default this endpoint responds with a 302 redirect to a signed URL. Pass format=json to receive `{ data: { url } }` instead.",
     );
   }
-  descriptionParts.push(`MCP tool: \`${operation.name}\`.`);
+  if (!operation.public) {
+    descriptionParts.push(`MCP tool: \`${operation.name}\`.`);
+  }
 
   const parameters = buildParameters(operation);
   const requestBody = buildRequestBody(operation);
@@ -380,7 +388,7 @@ function buildOperation(operation: OperationDefinition): OpenApiOperation {
         },
       },
     },
-    security: [{ bearerAuth: [] }],
+    security: operation.public ? [] : [{ bearerAuth: [] }],
   };
 
   if (parameters.length > 0) {

@@ -18,10 +18,23 @@ export async function login(
   }
 
   const supabase = await createClient();
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
-  if (error) {
-    return { error: loginErrorMessage(error.message) };
+  if (error || !data.user) {
+    return { error: loginErrorMessage(error?.message ?? "Sign-in failed.") };
+  }
+
+  const { data: profile } = await supabase
+    .from("users")
+    .select("active")
+    .eq("id", data.user.id)
+    .maybeSingle();
+
+  if (!profile?.active) {
+    await supabase.auth.signOut();
+    return {
+      error: "This account is not active. Open your invite link to join.",
+    };
   }
 
   redirect("/board");

@@ -3,6 +3,7 @@
 import type { ComponentType } from "react";
 import type { SettingsSectionContentProps } from "@/components/settings/settings-section-content";
 import { AppearanceSettingsSection } from "@/components/settings/sections/appearance-section";
+import { OrganizationSettingsSection } from "@/components/settings/sections/organization-section";
 import { ApiMcpSettingsSection } from "@/components/settings/sections/api-mcp-section";
 import { BoardSettingsSection } from "@/components/settings/sections/board-section";
 import { CustomFieldsSettingsSection } from "@/components/settings/sections/custom-fields-section";
@@ -13,6 +14,9 @@ const SETTINGS_SECTION_COMPONENTS: Record<
 > = {
   "settings.appearance": function AppearanceSectionContent() {
     return <AppearanceSettingsSection />;
+  },
+  "settings.organization": function OrganizationSectionContent() {
+    return <OrganizationSettingsSection />;
   },
   "settings.api-mcp": function ApiMcpSectionContent(props) {
     return (

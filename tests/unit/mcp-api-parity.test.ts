@@ -24,6 +24,11 @@ const FRONTEND_MUTATION_MCP_TOOLS: Record<string, string> = {
   "DELETE /api/v1/custom-fields/:id": "ticqex_delete_custom_field",
   "PUT /api/v1/custom-fields/reorder": "ticqex_reorder_custom_fields",
   "PATCH /api/v1/settings": "ticqex_patch_settings",
+  "PATCH /api/v1/organization": "ticqex_update_organization",
+  "POST /api/v1/organization/invites": "ticqex_create_organization_invite",
+  "DELETE /api/v1/organization/invites/:id": "ticqex_revoke_organization_invite",
+  "PATCH /api/v1/users/:id": "ticqex_update_user_role",
+  "DELETE /api/v1/users/:id": "ticqex_remove_user",
 };
 
 /** Read routes the UI uses that should have MCP list/get parity. */
@@ -37,6 +42,7 @@ const REST_ONLY_MUTATIONS = [
   "DELETE /api/v1/api-keys/:id",
   "supabase.auth.signInWithPassword",
   "supabase.auth.signOut",
+  "POST /api/v1/organization/invites/redeem",
   "next-themes setTheme",
 ] as const;
 

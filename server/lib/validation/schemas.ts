@@ -1,4 +1,5 @@
 import { copyContextSettingsPatchSchema } from "@shared/copy-context";
+import { USER_ROLES } from "@shared/organization/membership";
 import { z } from "zod";
 import { ApiError } from "@server/lib/errors";
 import {
@@ -199,6 +200,31 @@ export const patchSettingsSchema = z.object({
 
 export const createApiKeySchema = z.object({
   name: z.string().trim().min(1, "Key name is required"),
+});
+
+export const userRoleSchema = z.enum(USER_ROLES);
+
+export const updateOrganizationSchema = z.object({
+  name: z.string().trim().min(1).max(80),
+});
+
+export const createOrganizationInviteSchema = z.object({
+  email: z.string().trim().email(),
+  role: userRoleSchema.default("member"),
+});
+
+export const acceptOrganizationInviteSchema = z.object({
+  token: z.string().trim().min(1),
+});
+
+export const redeemOrganizationInviteSchema = z.object({
+  token: z.string().trim().min(1),
+  password: z.string().min(8).max(200),
+  username: z.string().trim().min(1).max(80).optional(),
+});
+
+export const updateUserRoleSchema = z.object({
+  role: userRoleSchema,
 });
 
 export function parseBody<T>(schema: z.ZodType<T>, body: unknown): T {

@@ -10,6 +10,13 @@ export const CORE_SETTINGS_SECTIONS: readonly SettingsSectionDescriptor[] = [
     order: 10,
   },
   {
+    id: "organization",
+    label: "Organization",
+    description: "Workspace name, members, and invite links.",
+    componentKey: "settings.organization",
+    order: 15,
+  },
+  {
     id: "api-mcp",
     label: "API & MCP",
     description: "Programmatic access and MCP client connection.",

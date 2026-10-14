@@ -4,8 +4,10 @@ import {
   boardMoveTicketSchema,
   commentInputSchema,
   commentUpdateSchema,
+  acceptOrganizationInviteSchema,
   createApiKeySchema,
   createContactSchema,
+  createOrganizationInviteSchema,
   createCustomFieldSchema,
   createStatusSchema,
   createTagSchema,
@@ -13,13 +15,16 @@ import {
   deleteStatusSchema,
   patchSettingsSchema,
   reorderCustomFieldsSchema,
+  redeemOrganizationInviteSchema,
   reorderStatusesSchema,
   seedManualLaneOrdersSchema,
   updateContactSchema,
   updateCustomFieldSchema,
   updateStatusSchema,
   updateTagSchema,
+  updateOrganizationSchema,
   updateTicketSchema,
+  updateUserRoleSchema,
 } from "@server/lib/validation/schemas";
 
 export type RequestBodyKind =
@@ -54,6 +59,20 @@ export const REQUEST_BODY_BY_OPERATION: Record<string, RequestBodyKind> = {
   },
   ticqex_patch_settings: { kind: "json", schema: patchSettingsSchema },
   ticqex_create_api_key: { kind: "json", schema: createApiKeySchema },
+  ticqex_update_organization: { kind: "json", schema: updateOrganizationSchema },
+  ticqex_create_organization_invite: {
+    kind: "json",
+    schema: createOrganizationInviteSchema,
+  },
+  ticqex_redeem_organization_invite: {
+    kind: "json",
+    schema: redeemOrganizationInviteSchema,
+  },
+  ticqex_accept_organization_invite: {
+    kind: "json",
+    schema: acceptOrganizationInviteSchema,
+  },
+  ticqex_update_user_role: { kind: "json", schema: updateUserRoleSchema },
 };
 
 export function listOperationsWithRequestBodies(): string[] {
