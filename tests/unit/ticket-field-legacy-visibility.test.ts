@@ -47,10 +47,6 @@ describe("buildTicketFieldVisibilityFromLegacy (migration contract)", () => {
       showOnCard: true,
       showInTicket: false,
     });
-    expect(mapped[CORE_TICKET_FIELD_IDS.contact_address]).toEqual({
-      showOnCard: false,
-      showInTicket: true,
-    });
   });
 
   it("sets custom ticket fields showInTicket from visible_ticket_field_ids", () => {

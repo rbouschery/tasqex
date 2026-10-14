@@ -44,14 +44,14 @@ describeIntegration("board filter", () => {
     expect(boardTicketIds(unfiltered)).toContain(task.id);
 
     const hideTaskFilter: TicketFilter = [
-      { field: "kind", op: "eq", value: "conversation" },
+      { field: "origin", op: "eq", value: "api" },
     ];
     const hideResult = await getBoard(userId, hideTaskFilter);
     expect(hideResult.filter_active).toBe(true);
     expect(boardTicketIds(hideResult)).not.toContain(task.id);
 
     const showTaskFilter: TicketFilter = [
-      { field: "kind", op: "neq", value: "conversation" },
+      { field: "origin", op: "neq", value: "api" },
     ];
     const showResult = await getBoard(userId, showTaskFilter);
     expect(boardTicketIds(showResult)).toContain(task.id);
@@ -87,7 +87,6 @@ describeIntegration("board filter", () => {
     const inMemoryOk = ticketMatchesFilter(
       {
         kind: "task",
-        channel: null,
         origin: "manual",
         assignee_id: userId,
         contact_id: null,

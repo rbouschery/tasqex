@@ -7,7 +7,6 @@ function ticket(id: string): BoardTicket {
     id,
     title: id,
     kind: "task",
-    channel: null,
     origin: "manual",
     contact_id: null,
     assignee_id: null,

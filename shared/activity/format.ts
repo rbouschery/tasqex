@@ -16,12 +16,6 @@ const ACTION_LABELS: Record<ActivityAction, string> = {
   [ACTIVITY_ACTIONS.COMMENT_CREATED]: "Comment added",
   [ACTIVITY_ACTIONS.COMMENT_UPDATED]: "Comment updated",
   [ACTIVITY_ACTIONS.COMMENT_DELETED]: "Comment deleted",
-  [ACTIVITY_ACTIONS.MESSAGE_CREATED]: "Message sent",
-  [ACTIVITY_ACTIONS.MESSAGE_DRAFT_CREATED]: "Draft created",
-  [ACTIVITY_ACTIONS.MESSAGE_DRAFT_UPDATED]: "Draft updated",
-  [ACTIVITY_ACTIONS.MESSAGE_DRAFT_DELETED]: "Draft deleted",
-  [ACTIVITY_ACTIONS.MESSAGE_DRAFT_SENT]: "Draft sent",
-  [ACTIVITY_ACTIONS.MESSAGE_INBOUND]: "Inbound message",
 };
 
 export function formatActivityAction(action: ActivityAction): string {
@@ -36,8 +30,6 @@ export function formatActivitySource(source: ActivitySource): string {
       return "API";
     case "mcp":
       return "MCP";
-    case "email":
-      return "Email";
     case "system":
       return "System";
     default: {

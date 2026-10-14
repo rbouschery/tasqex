@@ -1,4 +1,3 @@
-import type { TicketChannel } from "@/types/database";
 import type { TicketOrigin } from "@shared/channels";
 
 export type {
@@ -34,48 +33,9 @@ type BoardTicketBase = {
   unread_count: number;
 };
 
-export type TaskBoardTicket = BoardTicketBase & {
+export type BoardTicket = BoardTicketBase & {
   kind: "task";
-  channel: null;
 };
 
-export type ConversationBoardTicket = BoardTicketBase & {
-  kind: "conversation";
-  channel: TicketChannel;
-};
-
-export type BoardTicket = TaskBoardTicket | ConversationBoardTicket;
-
-export type {
-  ConversationTicketDetail,
-  EmailDeliveryStatus,
-  MessageAttachment,
-  MessageRow,
-  TaskTicketDetail,
-  TicketDetail,
-} from "@/types/tickets";
-export { isConversationDetail, isTaskDetail } from "@/types/tickets";
-
-export type EmailSnippet = {
-  id: string;
-  title: string;
-  body: string;
-};
-
-export type AttachmentUpload = {
-  id: string;
-  filename: string;
-  content_type: string;
-  size_bytes: number;
-};
-
-export type EmailComposePayload = {
-  body: string;
-  email?: {
-    cc?: string[];
-    subject?: string;
-    reply_all?: boolean;
-    include_quote?: boolean;
-    attachment_upload_ids?: string[];
-  };
-};
+export type { TicketDetail } from "@/types/tickets";
+export { isTaskDetail } from "@/types/tickets";

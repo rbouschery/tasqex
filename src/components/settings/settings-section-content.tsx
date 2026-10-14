@@ -2,6 +2,7 @@
 
 import { createElement } from "react";
 import type { SettingsSectionDescriptor } from "@shared/settings/types";
+import type { AdminSettings } from "@/hooks/use-admin-settings";
 import { resolveSettingsSectionComponent } from "@/components/settings/settings-section-registry";
 
 type ApiKey = {
@@ -13,9 +14,7 @@ type ApiKey = {
 
 export type SettingsSectionContentProps = {
   section: SettingsSectionDescriptor;
-  settings: {
-    email_signature?: string;
-  } | null;
+  settings: AdminSettings | null;
   apiKeys: ApiKey[];
   newKey: string | null;
   onNewKey: (key: string) => void;

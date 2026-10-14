@@ -26,7 +26,7 @@ CREATE TABLE public.activity_events (
     outcome IN ('succeeded', 'failed')
   ),
   CONSTRAINT activity_events_source_check CHECK (
-    source IN ('ui', 'api', 'mcp', 'system', 'email')
+    source IN ('ui', 'api', 'mcp', 'system')
   ),
   CONSTRAINT activity_events_actor_type_check CHECK (
     actor_type IN ('staff', 'api_key', 'contact', 'system', 'anonymous')
@@ -43,13 +43,7 @@ CREATE TABLE public.activity_events (
       'ticket.status_changed',
       'comment.created',
       'comment.updated',
-      'comment.deleted',
-      'message.created',
-      'message.draft_created',
-      'message.draft_updated',
-      'message.draft_deleted',
-      'message.draft_sent',
-      'message.inbound'
+      'comment.deleted'
     )
   )
 );

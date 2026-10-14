@@ -40,11 +40,11 @@ export function assertConfigShape(config: TicqexConfig): void {
     );
   }
 
-  if (!config.channels?.email) {
-    throw new Error("config.channels.email is required");
+  if (!config.channels || typeof config.channels !== "object") {
+    throw new Error("config.channels is required");
   }
 
-  if (!config.integrations?.resend) {
-    throw new Error("config.integrations.resend is required");
+  if (!config.integrations || typeof config.integrations !== "object") {
+    throw new Error("config.integrations is required");
   }
 }

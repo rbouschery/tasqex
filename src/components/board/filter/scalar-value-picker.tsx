@@ -17,7 +17,6 @@ import {
   type ScalarFilterField,
 } from "@shared/ticket-filter";
 import {
-  CHANNEL_OPTIONS,
   KIND_OPTIONS,
   ORIGIN_OPTIONS,
   type Assignee,
@@ -91,14 +90,8 @@ export function ScalarValuePicker({
         />
       );
     }
-    return (
-      <MultiCheckboxList
-        label="Channels"
-        options={CHANNEL_OPTIONS.map((value) => ({ value, label: value }))}
-        selected={multiValues}
-        onToggle={onToggleMultiValue}
-      />
-    );
+    const _exhaustive: never = scalarField;
+    return _exhaustive;
   }
 
   if (scalarField === "assignee_id") {
@@ -171,21 +164,6 @@ export function ScalarValuePicker({
     );
   }
 
-  return (
-    <div className="space-y-2">
-      <Label>Channel</Label>
-      <Select value={singleValue} onValueChange={onSingleValueChange}>
-        <SelectTrigger className="w-full">
-          <SelectValue placeholder="Select channel" />
-        </SelectTrigger>
-        <SelectContent>
-          {CHANNEL_OPTIONS.map((value) => (
-            <SelectItem key={value} value={value}>
-              {value}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-    </div>
-  );
+  const _exhaustive: never = scalarField;
+  return _exhaustive;
 }

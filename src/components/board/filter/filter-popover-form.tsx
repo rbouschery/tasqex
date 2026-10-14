@@ -99,7 +99,6 @@ export function FilterPopoverForm({
             <SelectItem value="contact_id">Contact</SelectItem>
             <SelectItem value="tag">Tag</SelectItem>
             <SelectItem value="kind">Kind</SelectItem>
-            <SelectItem value="channel">Channel</SelectItem>
             <SelectItem value="origin">Origin</SelectItem>
             <SelectItem value="unread">Unread status</SelectItem>
             <SelectItem value="ticket_field">Custom field</SelectItem>

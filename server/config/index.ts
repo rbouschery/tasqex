@@ -11,7 +11,6 @@ export {
   resolveConfigPath,
 } from "@server/config/load";
 export {
-  getEmailChannelRuntime,
   resolveChannelRuntime,
   validateTicqexConfig,
   type ChannelRuntime,
@@ -23,6 +22,5 @@ export {
 } from "@server/config/runtime";
 export {
   channelUnavailableWebhookResult,
-  getOperationalEmailChannel,
   isChannelOperational,
 } from "@server/config/channel-gate";

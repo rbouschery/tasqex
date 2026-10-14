@@ -1,6 +1,4 @@
 import { describe, expect, it } from "vitest";
-import { emailSettingsSections } from "@shared/channels/email/settings-sections";
-import { getChannelDefinition } from "@server/channels";
 import { collectChannelSettingsSections } from "@server/channels/settings-sections";
 import { CORE_SETTINGS_SECTIONS } from "@shared/settings/core-sections";
 import {
@@ -13,50 +11,15 @@ import {
 } from "@shared/settings/resolve";
 
 describe("resolveSettingsSections", () => {
-  const channelsDisabled = {
-    email: { enabled: false, integration: null },
-  } as const;
-
-  const channelsEnabled = {
-    email: { enabled: true, integration: "resend" as const },
-  } as const;
-
-  it("returns core sections when email is disabled", () => {
+  it("returns only core sections when no channels are registered", () => {
     const sections = resolveSettingsSections(
-      channelsDisabled,
+      {},
       collectChannelSettingsSections(),
     );
     expect(sections.map((s) => s.id)).toEqual(
       CORE_SETTINGS_SECTIONS.map((s) => s.id),
     );
-    expect(sections.some((s) => s.id === "email")).toBe(false);
-  });
-
-  it("appends email section when the channel is enabled", () => {
-    const sections = resolveSettingsSections(
-      channelsEnabled,
-      collectChannelSettingsSections(),
-    );
-    expect(sections.at(-1)?.id).toBe("email");
-    expect(sections.at(-1)?.componentKey).toBe("settings.email");
-    expect(sections.at(-1)?.requiresChannel).toBe("email");
-  });
-});
-
-describe("email channel settings registry", () => {
-  it("registers email settings metadata on the channel definition", () => {
-    const email = getChannelDefinition("email");
-    expect(email?.settings).toEqual({ sections: emailSettingsSections });
-  });
-
-  it("collects channel sections with requiresChannel from channel key", () => {
-    const collected = collectChannelSettingsSections();
-    expect(collected).toHaveLength(1);
-    expect(collected[0]).toMatchObject({
-      id: "email",
-      componentKey: "settings.email",
-      requiresChannel: "email",
-    });
+    expect(collectChannelSettingsSections()).toEqual([]);
   });
 });
 
@@ -69,6 +32,7 @@ describe("isKnownSettingsComponentKey", () => {
 
   it("rejects unknown keys", () => {
     expect(isKnownSettingsComponentKey("settings.unknown")).toBe(false);
+    expect(isKnownSettingsComponentKey("settings.email")).toBe(false);
   });
 });
 

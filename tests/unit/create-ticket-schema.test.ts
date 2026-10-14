@@ -4,64 +4,43 @@ import {
   createTicketMcpInputSchema,
 } from "@server/lib/validation/schemas";
 
-describe("createTicketSchema conversation outbound", () => {
-  it("accepts contact message intake", () => {
+describe("createTicketSchema", () => {
+  it("accepts a task with an optional body and contact", () => {
     const parsed = createTicketSchema.parse({
-      kind: "conversation",
-      title: "Billing help",
-      contact_address: "user@example.com",
-      message: { body: "I need help" },
+      kind: "task",
+      title: "Write the spec",
+      body: "Cover invite links.",
+      contact: { username: "ada" },
     });
-    expect(parsed.kind).toBe("conversation");
-    if (parsed.kind === "conversation") {
-      expect(parsed.message?.body).toBe("I need help");
-      expect(parsed.outbound).toBeUndefined();
-    }
+
+    expect(parsed.kind).toBe("task");
+    expect(parsed.body).toBe("Cover invite links.");
+    expect(parsed.contact).toEqual({ username: "ada" });
   });
 
-  it("accepts agent outbound init", () => {
-    const parsed = createTicketSchema.parse({
-      kind: "conversation",
-      title: "Check-in",
-      contact_address: "user@example.com",
-      outbound: { body: "Hello", subject: "Check-in", cc: ["cc@example.com"] },
-      origin: "manual",
-    });
-    expect(parsed.kind).toBe("conversation");
-    if (parsed.kind === "conversation") {
-      expect(parsed.outbound?.body).toBe("Hello");
-      expect(parsed.outbound?.subject).toBe("Check-in");
-      expect(parsed.message).toBeUndefined();
-    }
-  });
-
-  it("rejects missing message and outbound", () => {
+  it("rejects an empty title", () => {
     const result = createTicketSchema.safeParse({
-      kind: "conversation",
-      title: "Check-in",
-      contact_address: "user@example.com",
+      kind: "task",
+      title: "",
     });
     expect(result.success).toBe(false);
   });
 
-  it("rejects both message and outbound", () => {
+  it("rejects conversation tickets", () => {
     const result = createTicketSchema.safeParse({
       kind: "conversation",
       title: "Check-in",
-      contact_address: "user@example.com",
-      message: { body: "form" },
-      outbound: { body: "email" },
     });
     expect(result.success).toBe(false);
   });
+});
 
-  it("mcp schema accepts outbound", () => {
+describe("createTicketMcpInputSchema", () => {
+  it("defaults kind to task", () => {
     const parsed = createTicketMcpInputSchema.parse({
-      kind: "conversation",
-      title: "Check-in",
-      contact_address: "user@example.com",
-      outbound: { body: "Hello from MCP" },
+      title: "Follow up",
     });
-    expect(parsed.outbound?.body).toBe("Hello from MCP");
+    expect(parsed.kind).toBe("task");
+    expect(parsed.title).toBe("Follow up");
   });
 });

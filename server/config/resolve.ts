@@ -15,7 +15,7 @@ import type {
   TicqexConfig,
 } from "@server/config/types";
 import {
-  validateAppEnvWhenEmailEnabled,
+  validateAppEnv,
   validateConfigBindings,
 } from "@shared/ticqex-config/validate";
 import { assertConfigShape } from "@shared/ticqex-config/load";
@@ -88,7 +88,7 @@ export function validateTicqexConfig(
       listIntegrationKeys(),
     ),
     ...validateIntegrationEnv(config, env),
-    ...validateAppEnvWhenEmailEnabled(config, env),
+    ...validateAppEnv(),
   ];
 
   return {
@@ -137,13 +137,3 @@ export function resolveChannelRuntime(
   };
 }
 
-/** Resolves the active email channel and its configured integration runtime. */
-export function getEmailChannelRuntime(
-  options: {
-    config?: TicqexConfig;
-    configPath?: string;
-    env?: NodeJS.ProcessEnv;
-  } = {},
-): ChannelRuntime | null {
-  return resolveChannelRuntime("email", options);
-}

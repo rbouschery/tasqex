@@ -1,16 +1,8 @@
-import type {
-  EmailProviderRef,
-  OutboundEmail,
-  ParsedEmail,
-} from "@shared/channels/email/transport";
 import type { IntegrationKey } from "@shared/ticqex-keys";
 
 export type { IntegrationKey } from "@shared/ticqex-keys";
 
-export type IntegrationCapability =
-  | "email.inbound"
-  | "email.outbound"
-  | "email.delivery-events";
+export type IntegrationCapability = string;
 
 export type IntegrationRuntime = {
   key: IntegrationKey;
@@ -35,15 +27,6 @@ export type IntegrationWebhookEventHandler = (
   headers: Headers,
 ) => Promise<IntegrationWebhookResult>;
 
-/** Provider transport for email channels bound to this integration. */
-export type IntegrationEmailHandler = {
-  send(params: OutboundEmail): Promise<{
-    messageId: string;
-    providerRef?: EmailProviderRef;
-  }>;
-  resolveInbound(raw: unknown): Promise<ParsedEmail>;
-};
-
 export type IntegrationDefinition = {
   key: IntegrationKey;
   label: string;
@@ -54,6 +37,5 @@ export type IntegrationDefinition = {
     env: NodeJS.ProcessEnv,
     config?: IntegrationBindingConfig,
   ): IntegrationRuntime;
-  email?: IntegrationEmailHandler;
   webhooks?: Partial<Record<string, IntegrationWebhookEventHandler>>;
 };

@@ -4,9 +4,6 @@ import {
   INTEGRATION_KEYS,
 } from "@shared/ticqex-keys";
 
-/** App env required when the email channel is active (not provider-specific). */
-export const APP_ENV_WHEN_EMAIL_ENABLED = ["NEXT_PUBLIC_APP_URL"] as const;
-
 export function listKnownChannelKeys(): readonly ChannelKey[] {
   return CHANNEL_KEYS;
 }
@@ -89,22 +86,6 @@ export function validateConfigBindings(
   return issues;
 }
 
-export function validateAppEnvWhenEmailEnabled(
-  config: TicqexConfig,
-  env: NodeJS.ProcessEnv = process.env,
-): ConfigValidationIssue[] {
-  if (!config.channels.email?.enabled || !config.integrations.resend?.enabled) {
-    return [];
-  }
-
-  const issues: ConfigValidationIssue[] = [];
-  for (const key of APP_ENV_WHEN_EMAIL_ENABLED) {
-    if (!env[key]?.trim()) {
-      issues.push({
-        path: `env.${key}`,
-        message: `Missing required environment variable ${key}`,
-      });
-    }
-  }
-  return issues;
+export function validateAppEnv(): ConfigValidationIssue[] {
+  return [];
 }

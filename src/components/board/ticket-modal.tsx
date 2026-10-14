@@ -10,7 +10,6 @@ import {
   DotsThreeVerticalIcon,
   TrashIcon,
 } from "@phosphor-icons/react";
-import { getConversationOriginBadge } from "@shared/channels/ticket-origin-badge";
 import {
   CORE_TICKET_FIELD_IDS,
   resolveCoreTicketFieldVisibility,
@@ -46,16 +45,14 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs";
-import { apiFetch, apiFetchText } from "@/lib/api-client";
+import { apiFetchText } from "@/lib/api-client";
 import { useTicketRealtime } from "@/hooks/use-board-realtime";
 import { useRecentTags } from "@/hooks/use-recent-tags";
-import { ticketMessagesQueryKey } from "@/hooks/use-ticket-messages";
 import {
   ticketSummaryQueryKey,
   useTicketSummary,
 } from "@/hooks/use-ticket-summary";
 import {
-  isConversationSummary,
   isTaskSummary,
   type TicketSummary,
 } from "@/types/tickets";
@@ -64,14 +61,12 @@ import {
   useCopyContextSettings,
   useTicketCommentThreadOrder,
   useTicketTags,
-  useTicketThreadOrder,
   useTicketUsers,
 } from "@/hooks/use-ticket-reference-data";
 import { useTicketCommentCount } from "@/hooks/use-ticket-comments";
 import { invalidateTicketActivity } from "@/hooks/use-activity";
 import { TicketCommentsSection } from "./ticket-comments-section";
 import { TicketActivitySection } from "./ticket-activity-section";
-import { TicketConversationSection } from "./ticket-conversation-section";
 import { TicketContactSection } from "./ticket-contact-section";
 import { TicketDetailsSection } from "./ticket-details-section";
 import {
@@ -80,18 +75,13 @@ import {
 } from "./ticket-custom-fields-section";
 import { useTicketFieldLayoutFallback } from "@/hooks/use-ticket-field-layout";
 import { useTicketCustomFieldDefinitions } from "@/hooks/use-ticket-custom-field-definitions";
-import {
-  TicketMetaSkeleton,
-  TicketConversationSkeleton,
-} from "./ticket-modal-skeletons";
+import { TicketMetaSkeleton } from "./ticket-modal-skeletons";
 import {
   TicketStatusCombobox,
   type StatusOption,
 } from "./ticket-status-combobox";
-import type { MessageRow } from "./types";
 import { useTicketModalDraft } from "./use-ticket-modal-draft";
 import { useTicketModalMetadataSave } from "./use-ticket-modal-metadata-save";
-import { useTicketModalEmailActions } from "./use-ticket-modal-email-actions";
 
 function isEditableTarget(target: EventTarget | null): boolean {
   if (!(target instanceof HTMLElement)) return false;
@@ -128,14 +118,12 @@ export function TicketModal({
   const summaryQuery = useTicketSummary(ticketId);
   const usersQuery = useTicketUsers();
   const tagsQuery = useTicketTags();
-  const threadOrderQuery = useTicketThreadOrder();
   const commentThreadOrderQuery = useTicketCommentThreadOrder();
   const copyContextSettingsQuery = useCopyContextSettings();
 
   const summary = summaryQuery.data;
   const users = usersQuery.data ?? [];
   const allTags = tagsQuery.data ?? [];
-  const threadOrder = threadOrderQuery.data ?? "oldest_first";
   const commentThreadOrder = commentThreadOrderQuery.data ?? "oldest_first";
   const { count: commentCount } = useTicketCommentCount(ticketId);
   const showCopyContext = copyContextSettingsQuery.data?.visible ?? true;
@@ -191,60 +179,13 @@ export function TicketModal({
     onCustomFieldsSaved: clearCustomFieldPatch,
   });
 
-  const {
-    saveEmailDraft,
-    updateEmailDraft,
-    sendEmailDraft,
-    deleteEmailDraft,
-    sendEmailReply,
-  } = useTicketModalEmailActions({
-    ticketId,
-    queryClient,
-    setSaving,
-    setCurrentError,
-  });
-
   const refreshTicket = useCallback(() => {
     void queryClient.invalidateQueries({
       queryKey: ticketSummaryQueryKey(ticketId),
     });
-    void queryClient.invalidateQueries({
-      queryKey: ticketMessagesQueryKey(ticketId),
-    });
   }, [queryClient, ticketId]);
 
   useTicketRealtime(ticketId, refreshTicket);
-
-  useEffect(() => {
-    const source = summary;
-    if (!source || !isConversationSummary(source)) return;
-    if ((source.unread_count ?? 0) === 0) return;
-
-    const summaryKey = ticketSummaryQueryKey(ticketId);
-    const previousUnread = source.unread_count;
-    const previousSummary = queryClient.getQueryData<TicketSummary>(summaryKey);
-
-    queryClient.setQueryData<TicketSummary>(summaryKey, (current) =>
-      current ? { ...current, unread_count: 0 } : current,
-    );
-    onBoardChange({ id: source.id, unread_count: 0 });
-
-    void apiFetch(`/api/v1/tickets/${ticketId}/read`, { method: "POST" }).then(
-      () => {
-        void queryClient.invalidateQueries({ queryKey: summaryKey });
-      },
-      () => {
-        if (previousSummary !== undefined) {
-          queryClient.setQueryData(summaryKey, previousSummary);
-        } else {
-          queryClient.setQueryData<TicketSummary>(summaryKey, (current) =>
-            current ? { ...current, unread_count: previousUnread } : current,
-          );
-        }
-        onBoardChange();
-      },
-    );
-  }, [summary, ticketId, queryClient, onBoardChange]);
 
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
@@ -270,7 +211,6 @@ export function TicketModal({
     !summary && (summaryQuery.isPending || summaryQuery.isFetching);
   const metaReady = !!summary;
   const detailSummary = summary;
-  const isConversation = displaySeed?.kind === "conversation";
 
   const patchSummaryStatus = useCallback(
     (statusId: string) => {
@@ -378,43 +318,6 @@ export function TicketModal({
     onTicketDeleted(ticketId);
   }
 
-  async function toggleMessageRead(messageId: string) {
-    const messagesKey = ticketMessagesQueryKey(ticketId);
-    await queryClient.cancelQueries({ queryKey: messagesKey });
-    const previousMessages = queryClient.getQueryData<MessageRow[]>(messagesKey);
-    const currentMessage = previousMessages?.find((msg) => msg.id === messageId);
-    if (!currentMessage) return;
-
-    const optimisticRead = !currentMessage.read;
-    queryClient.setQueryData<MessageRow[]>(messagesKey, (current) =>
-      current?.map((msg) =>
-        msg.id === messageId ? { ...msg, read: optimisticRead } : msg,
-      ) ?? current,
-    );
-
-    try {
-      const result = await apiFetch<{ read: boolean }>(
-        `/api/v1/tickets/${ticketId}/messages/${messageId}/read`,
-        { method: "PATCH" },
-      );
-      queryClient.setQueryData<MessageRow[]>(messagesKey, (current) =>
-        current?.map((msg) =>
-          msg.id === messageId ? { ...msg, read: result.read } : msg,
-        ) ?? current,
-      );
-      onBoardChange();
-    } catch (err) {
-      if (previousMessages !== undefined) {
-        queryClient.setQueryData(messagesKey, previousMessages);
-      }
-      setCurrentError(
-        err instanceof Error ? err.message : "Failed to update read state",
-      );
-    } finally {
-      void queryClient.invalidateQueries({ queryKey: messagesKey });
-    }
-  }
-
   const statusOptions = useMemo(() => {
     if (statuses.length > 0) return statuses;
     if (summary?.status) {
@@ -438,15 +341,7 @@ export function TicketModal({
     return [];
   }, [statuses, summary, initialSeed]);
 
-  const isTask =
-    (summary && isTaskSummary(summary)) ||
-    displaySeed?.kind === "task";
-  const conversationOriginBadge =
-    displaySeed?.kind === "conversation"
-      ? getConversationOriginBadge(displaySeed.origin)
-      : null;
-  const deleteKind = isTask ? "task" : "conversation";
-  const deleteCopy = ticketDeleteCopy(deleteKind);
+  const deleteCopy = ticketDeleteCopy();
 
   const visibleFields = useMemo(
     () => resolveCoreTicketFieldVisibility(fieldLayout, "ticket"),
@@ -512,18 +407,9 @@ export function TicketModal({
             </DialogTitle>
             {displaySeed && (
               <>
-                {displaySeed.kind === "task" ? (
-                  <Badge variant="outline" className="shrink-0">
-                    Ticket
-                  </Badge>
-                ) : conversationOriginBadge ? (
-                  <Badge
-                    variant={conversationOriginBadge.variant}
-                    className="shrink-0"
-                  >
-                    {conversationOriginBadge.label}
-                  </Badge>
-                ) : null}
+                <Badge variant="outline" className="shrink-0">
+                  Ticket
+                </Badge>
                 {statusOptions.length > 0 && effectiveStatusId && (
                   <TicketStatusCombobox
                     statuses={statusOptions}
@@ -671,17 +557,8 @@ export function TicketModal({
                 {showContact && detailSummary.contact && detailSummary.contact_id && (
                   <TicketContactSection
                     contactId={detailSummary.contact_id}
-                    displayName={
-                      isConversationSummary(detailSummary) &&
-                      detailSummary.contact_address
-                        ? detailSummary.contact_address
-                        : detailSummary.contact.username
-                    }
-                    contactAddress={
-                      isConversationSummary(detailSummary)
-                        ? detailSummary.contact_address
-                        : null
-                    }
+                    displayName={detailSummary.contact.username}
+                    contactAddress={null}
                   />
                 )}
                 {showDetailsSection && (
@@ -701,13 +578,9 @@ export function TicketModal({
                     onSave={() => void saveMeta()}
                     showAssignee={showAssignee}
                     showTags={showTags}
-                    body={
-                      showDescription && isTaskSummary(detailSummary)
-                        ? body
-                        : undefined
-                    }
+                    body={showDescription ? body : undefined}
                     onBodyChange={
-                      showDescription && isTaskSummary(detailSummary)
+                      showDescription
                         ? (value) => updateDraft({ body: value })
                         : undefined
                     }
@@ -739,25 +612,6 @@ export function TicketModal({
                   />
                 )}
               </div>
-            )}
-
-            {detailSummary && isConversationSummary(detailSummary) && (
-              <TicketConversationSection
-                summary={detailSummary}
-                ticketId={ticketId}
-                threadOrder={threadOrder}
-                onSubmit={sendEmailReply}
-                onSaveDraft={saveEmailDraft}
-                onUpdateDraft={updateEmailDraft}
-                onSendDraft={sendEmailDraft}
-                onDeleteDraft={deleteEmailDraft}
-                saving={saving}
-                onToggleMessageRead={(id) => void toggleMessageRead(id)}
-              />
-            )}
-
-            {isConversation && !detailSummary && summaryQuery.isFetching && (
-              <TicketConversationSkeleton />
             )}
           </TabsContent>
 
@@ -793,7 +647,6 @@ export function TicketModal({
 
       <TicketDeleteDialog
         open={deleteOpen}
-        kind={deleteKind}
         onOpenChange={setDeleteOpen}
         onConfirmDelete={confirmDelete}
       />

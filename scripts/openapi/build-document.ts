@@ -100,14 +100,6 @@ const TAG_METADATA: Record<
     displayName: "Custom fields",
     description: "Ticket and contact field definitions and ordering.",
   },
-  email_snippets: {
-    displayName: "Email snippets",
-    description: "Reusable canned responses for outbound email.",
-  },
-  messages: {
-    displayName: "Messages",
-    description: "Message attachments and signed download URLs.",
-  },
   settings: {
     displayName: "Settings",
     description: "Workspace configuration and preferences.",
@@ -122,7 +114,7 @@ const TAG_METADATA: Record<
   },
   tickets: {
     displayName: "Tickets",
-    description: "Tickets, messages, drafts, comments, and read state.",
+    description: "Tickets and comments.",
   },
   users: {
     displayName: "Users",
@@ -138,7 +130,7 @@ const QUERY_PARAM_DESCRIPTIONS: Record<string, string> = {
   status_id: "Filter tickets by status UUID.",
   assignee_id: "Filter tickets by assignee user UUID.",
   contact_id: "Filter tickets by contact UUID.",
-  origin: "Filter tickets by origin (for example email, api, or manual).",
+  origin: "Filter tickets by origin (manual or api).",
   kind: "Filter tickets by kind.",
   channel: "Filter tickets by channel identifier.",
   tag: "Filter tickets by tag name.",
@@ -191,27 +183,6 @@ function buildSharedSchemas(): Record<string, JsonSchema> {
         meta: {
           type: "object",
           additionalProperties: true,
-        },
-      },
-    },
-    AttachmentUrlData: {
-      type: "object",
-      required: ["url"],
-      properties: {
-        url: {
-          type: "string",
-          format: "uri",
-          description: "Time-limited signed URL for the attachment.",
-        },
-      },
-    },
-    AttachmentUploadRequest: {
-      type: "object",
-      required: ["file"],
-      properties: {
-        file: {
-          type: "string",
-          format: "binary",
         },
       },
     },
@@ -288,36 +259,6 @@ function buildParameters(operation: OperationDefinition): OpenApiParameter[] {
 }
 
 function successResponse(operation: OperationDefinition): Record<string, unknown> {
-  if (operation.name === "ticqex_get_attachment_url") {
-    return {
-      "302": {
-        description:
-          "Redirects to a time-limited signed URL for the attachment. This is the default response when format is omitted.",
-        headers: {
-          Location: {
-            description: "Signed attachment URL.",
-            schema: { type: "string", format: "uri" },
-          },
-        },
-      },
-      "200": {
-        description:
-          'Returned when format=json. Wraps the signed URL in the standard `{ data: { url } }` envelope.',
-        content: {
-          "application/json": {
-            schema: {
-              type: "object",
-              required: ["data"],
-              properties: {
-                data: { $ref: "#/components/schemas/AttachmentUrlData" },
-              },
-            },
-          },
-        },
-      },
-    };
-  }
-
   const isList =
     operation.method === "GET" &&
     (operation.name.startsWith("ticqex_list_") ||
@@ -370,17 +311,6 @@ function buildRequestBody(
   const bodyKind = REQUEST_BODY_BY_OPERATION[operation.name];
   if (!bodyKind) {
     return undefined;
-  }
-
-  if (bodyKind.kind === "multipart") {
-    return {
-      required: true,
-      content: {
-        "multipart/form-data": {
-          schema: { $ref: "#/components/schemas/AttachmentUploadRequest" },
-        },
-      },
-    };
   }
 
   const componentName = `${operation.name}Request`;

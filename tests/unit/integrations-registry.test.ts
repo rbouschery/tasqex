@@ -6,32 +6,16 @@ import {
 } from "@server/integrations";
 
 describe("integration registry", () => {
-  it("registers resend as the only integration", () => {
-    expect(integrationKeys).toEqual(["resend"]);
-
-    const resend = getIntegrationDefinition("resend");
-    expect(resend).toBeDefined();
-    expect(resend!.capabilities).toContain("email.inbound");
-    expect(resend!.email?.send).toBeDefined();
-    expect(resend!.email?.resolveInbound).toBeDefined();
-    expect(resend!.webhooks?.webhook).toBeDefined();
+  it("ships with no integrations", () => {
+    expect(integrationKeys).toEqual([]);
+    expect(getIntegrationDefinition("resend")).toBeNull();
   });
 });
 
 describe("configureIntegration", () => {
-  it("marks resend configured when env is complete", () => {
-    const runtime = configureIntegration(
-      "resend",
-      {
-        RESEND_API_KEY: "re_test",
-        RESEND_WEBHOOK_SECRET: "whsec_test",
-        SUPPORT_EMAIL: "support@example.com",
-        SUPPORT_FROM_NAME: "Support",
-      },
-      { enabled: true },
-    );
-
-    expect(runtime?.configured).toBe(true);
-    expect(runtime?.missingEnv).toEqual([]);
+  it("returns null for an unknown integration", () => {
+    expect(
+      configureIntegration("resend", {}, { enabled: true }),
+    ).toBeNull();
   });
 });

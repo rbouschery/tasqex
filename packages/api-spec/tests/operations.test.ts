@@ -19,6 +19,6 @@ describe("@ticqex/api-spec operations", () => {
 
   it("infers tags from the first path segment", () => {
     expect(inferOperationTag("/board/lanes/:status_id/tickets")).toBe("board");
-    expect(inferOperationTag("/email-snippets/:id")).toBe("email_snippets");
+    expect(inferOperationTag("/tickets/:id/comments")).toBe("tickets");
   });
 });

@@ -5,7 +5,6 @@ export const CORE_TICKET_FIELD_IDS = {
   tags: "tags",
   description: "description",
   preview: "preview",
-  contact_address: "contact_address",
 } as const;
 
 export type CoreTicketFieldId =

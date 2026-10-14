@@ -12,13 +12,7 @@ import {
 } from "@/hooks/use-ticket-reference-data";
 
 export type AdminSettingsPatch = Partial<
-  Pick<
-    AdminSettings,
-    | "email_thread_order"
-    | "comment_thread_order"
-    | "default_inbound_status_id"
-    | "email_signature"
-  >
+  Pick<AdminSettings, "comment_thread_order">
 >;
 
 type PatchContext = {
@@ -39,9 +33,6 @@ function applyBoardSettingsPatch(
 ): TicketBoardSettings {
   return {
     ...current,
-    ...(patch.email_thread_order !== undefined
-      ? { emailThreadOrder: patch.email_thread_order }
-      : null),
     ...(patch.comment_thread_order !== undefined
       ? { commentThreadOrder: patch.comment_thread_order }
       : null),
@@ -76,9 +67,7 @@ export function usePatchAdminSettings() {
         );
       }
 
-      const touchesBoardSettings =
-        patch.email_thread_order !== undefined ||
-        patch.comment_thread_order !== undefined;
+      const touchesBoardSettings = patch.comment_thread_order !== undefined;
 
       if (previousBoard && touchesBoardSettings) {
         queryClient.setQueryData<TicketBoardSettings>(
@@ -103,10 +92,7 @@ export function usePatchAdminSettings() {
     onSettled: (_data, _error, patch) => {
       void queryClient.invalidateQueries({ queryKey: adminSettingsQueryKey });
 
-      if (
-        patch.email_thread_order !== undefined ||
-        patch.comment_thread_order !== undefined
-      ) {
+      if (patch.comment_thread_order !== undefined) {
         void queryClient.invalidateQueries({
           queryKey: ticketBoardSettingsQueryKey,
         });

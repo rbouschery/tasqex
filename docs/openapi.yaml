@@ -27,12 +27,6 @@ tags:
   - name: custom_fields
     description: Ticket and contact field definitions and ordering.
     x-displayName: Custom fields
-  - name: email_snippets
-    description: Reusable canned responses for outbound email.
-    x-displayName: Email snippets
-  - name: messages
-    description: Message attachments and signed download URLs.
-    x-displayName: Messages
   - name: settings
     description: Workspace configuration and preferences.
     x-displayName: Settings
@@ -43,7 +37,7 @@ tags:
     description: Labels applied to tickets for filtering and organization.
     x-displayName: Tags
   - name: tickets
-    description: Tickets, messages, drafts, comments, and read state.
+    description: Tickets and comments.
     x-displayName: Tickets
   - name: users
     description: Staff users and the authenticated session identity.
@@ -205,19 +199,13 @@ paths:
           required: false
           schema:
             type: string
-          description: Filter tickets by origin (for example email, api, or manual).
+          description: Filter tickets by origin (manual or api).
         - name: kind
           in: query
           required: false
           schema:
             type: string
           description: Filter tickets by kind.
-        - name: channel
-          in: query
-          required: false
-          schema:
-            type: string
-          description: Filter tickets by channel identifier.
         - name: tag
           in: query
           required: false
@@ -514,105 +502,6 @@ paths:
           schema:
             type: string
             format: uuid
-  /tickets/{ticket_id}/messages:
-    get:
-      operationId: ticqex_list_ticket_messages
-      summary: List ticket messages
-      description: "MCP tool: `ticqex_list_ticket_messages`."
-      tags:
-        - tickets
-      responses:
-        "200":
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ListEnvelope"
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-        "403":
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-        "404":
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: ticket_id
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-    post:
-      operationId: ticqex_create_ticket_message
-      summary: Create ticket message
-      description: "MCP tool: `ticqex_create_ticket_message`."
-      tags:
-        - tickets
-      responses:
-        "201":
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/DataEnvelope"
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-        "403":
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-        "404":
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: ticket_id
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ticqex_create_ticket_messageRequest"
   /tickets/{ticket_id}/comments:
     get:
       operationId: ticqex_list_ticket_comments
@@ -835,516 +724,6 @@ paths:
           schema:
             type: string
             format: uuid
-  /tickets/{ticket_id}/messages/drafts:
-    post:
-      operationId: ticqex_create_ticket_draft
-      summary: Create ticket draft
-      description: "MCP tool: `ticqex_create_ticket_draft`."
-      tags:
-        - tickets
-      responses:
-        "201":
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/DataEnvelope"
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-        "403":
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-        "404":
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: ticket_id
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ticqex_create_ticket_draftRequest"
-    get:
-      operationId: ticqex_list_ticket_drafts
-      summary: List ticket drafts
-      description: "MCP tool: `ticqex_list_ticket_drafts`."
-      tags:
-        - tickets
-      responses:
-        "200":
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ListEnvelope"
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-        "403":
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-        "404":
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: ticket_id
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-  /tickets/{ticket_id}/messages/drafts/{message_id}:
-    patch:
-      operationId: ticqex_update_ticket_draft
-      summary: Update ticket draft
-      description: "MCP tool: `ticqex_update_ticket_draft`."
-      tags:
-        - tickets
-      responses:
-        "200":
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/DataEnvelope"
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-        "403":
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-        "404":
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: ticket_id
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - name: message_id
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ticqex_update_ticket_draftRequest"
-    delete:
-      operationId: ticqex_delete_ticket_draft
-      summary: Delete ticket draft
-      description: "MCP tool: `ticqex_delete_ticket_draft`."
-      tags:
-        - tickets
-      responses:
-        "200":
-          description: Resource deleted
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/DataEnvelope"
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-        "403":
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-        "404":
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: ticket_id
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - name: message_id
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-  /tickets/{ticket_id}/messages/drafts/{message_id}/send:
-    post:
-      operationId: ticqex_send_ticket_draft
-      summary: Send ticket draft
-      description: "MCP tool: `ticqex_send_ticket_draft`."
-      tags:
-        - tickets
-      responses:
-        "201":
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/DataEnvelope"
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-        "403":
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-        "404":
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: ticket_id
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - name: message_id
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ticqex_send_ticket_draftRequest"
-  /tickets/{ticket_id}/read:
-    post:
-      operationId: ticqex_mark_ticket_read
-      summary: Mark ticket read
-      description: "MCP tool: `ticqex_mark_ticket_read`."
-      tags:
-        - tickets
-      responses:
-        "201":
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/DataEnvelope"
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-        "403":
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-        "404":
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: ticket_id
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-  /tickets/{ticket_id}/messages/{message_id}/read:
-    patch:
-      operationId: ticqex_set_message_read
-      summary: Set message read
-      description: "MCP tool: `ticqex_set_message_read`."
-      tags:
-        - tickets
-      responses:
-        "200":
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/DataEnvelope"
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-        "403":
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-        "404":
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: ticket_id
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - name: message_id
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ticqex_set_message_readRequest"
-  /messages/{message_id}/attachments/{attachment_id}:
-    get:
-      operationId: ticqex_get_attachment_url
-      summary: Get attachment url
-      description: "By default this endpoint responds with a 302 redirect to a signed URL. Pass format=json to receive `{
-        data: { url } }` instead. MCP tool: `ticqex_get_attachment_url`."
-      tags:
-        - messages
-      responses:
-        "200":
-          description: "Returned when format=json. Wraps the signed URL in the standard `{ data: { url } }` envelope."
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - data
-                properties:
-                  data:
-                    $ref: "#/components/schemas/AttachmentUrlData"
-        "302":
-          description: Redirects to a time-limited signed URL for the attachment. This is the default response when format is
-            omitted.
-          headers:
-            Location:
-              description: Signed attachment URL.
-              schema:
-                type: string
-                format: uri
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-        "403":
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-        "404":
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: message_id
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - name: attachment_id
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - name: download
-          in: query
-          required: false
-          schema:
-            type: boolean
-          description: When true, force the signed URL to include a Content-Disposition attachment header.
-        - name: format
-          in: query
-          required: false
-          schema:
-            type: string
-            enum:
-              - json
-          description: 'Response format. Use "json" to receive `{ data: { url } }` instead of a redirect.'
-  /tickets/{ticket_id}/attachment-uploads:
-    post:
-      operationId: ticqex_stage_ticket_attachment_upload
-      summary: Stage ticket attachment upload
-      description: "MCP tool: `ticqex_stage_ticket_attachment_upload`."
-      tags:
-        - tickets
-      responses:
-        "201":
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/DataEnvelope"
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-        "403":
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-        "404":
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: ticket_id
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-      requestBody:
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              $ref: "#/components/schemas/AttachmentUploadRequest"
   /board:
     get:
       operationId: ticqex_get_board
@@ -2635,138 +2014,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/ticqex_patch_settingsRequest"
-  /email-snippets:
-    get:
-      operationId: ticqex_list_email_snippets
-      summary: List email snippets
-      description: "MCP tool: `ticqex_list_email_snippets`."
-      tags:
-        - email_snippets
-      responses:
-        "200":
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ListEnvelope"
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-        "403":
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-        "404":
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-      security:
-        - bearerAuth: []
-    post:
-      operationId: ticqex_create_email_snippet
-      summary: Create email snippet
-      description: "MCP tool: `ticqex_create_email_snippet`."
-      tags:
-        - email_snippets
-      responses:
-        "201":
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/DataEnvelope"
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-        "403":
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-        "404":
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-      security:
-        - bearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ticqex_create_email_snippetRequest"
-  /email-snippets/{id}:
-    delete:
-      operationId: ticqex_delete_email_snippet
-      summary: Delete email snippet
-      description: "MCP tool: `ticqex_delete_email_snippet`."
-      tags:
-        - email_snippets
-      responses:
-        "200":
-          description: Resource deleted
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/DataEnvelope"
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-        "403":
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-        "404":
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
   /api-keys:
     get:
       operationId: ticqex_list_api_keys
@@ -3111,134 +2358,48 @@ components:
         meta:
           type: object
           additionalProperties: true
-    AttachmentUrlData:
-      type: object
-      required:
-        - url
-      properties:
-        url:
-          type: string
-          format: uri
-          description: Time-limited signed URL for the attachment.
-    AttachmentUploadRequest:
-      type: object
-      required:
-        - file
-      properties:
-        file:
-          type: string
-          format: binary
     ticqex_create_ticketRequest:
       $schema: https://json-schema.org/draft/2020-12/schema
-      oneOf:
-        - type: object
-          properties:
-            title:
-              type: string
-              minLength: 1
-            status_id:
-              type: string
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 1
+        status_id:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+        assignee_id:
+          anyOf:
+            - type: string
               format: uuid
               pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-            assignee_id:
-              anyOf:
-                - type: string
-                  format: uuid
-                  pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-                - type: "null"
-            origin:
-              type: string
-              enum:
-                - manual
-                - api
-                - email
-            tags:
-              type: array
-              items:
-                type: string
-            custom_fields:
-              type: object
-              propertyNames:
-                type: string
-              additionalProperties: {}
-            kind:
-              type: string
-              const: task
-            body:
-              type: string
-            contact: {}
-          required:
-            - title
-            - kind
-            - contact
-          additionalProperties: false
-        - type: object
-          properties:
-            kind:
-              type: string
-              const: conversation
-            title:
-              type: string
-              minLength: 1
-            contact_address:
-              type: string
-              format: email
-              pattern: ^(?:[A-Za-z0-9_'+\-]+\.)*[A-Za-z0-9_'+\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$
-            message:
-              type: object
-              properties:
-                body:
-                  type: string
-                  minLength: 1
-              required:
-                - body
-              additionalProperties: false
-            outbound:
-              type: object
-              properties:
-                body:
-                  type: string
-                  minLength: 1
-                subject:
-                  type: string
-                cc:
-                  type: array
-                  items:
-                    type: string
-                    format: email
-                    pattern: ^(?:[A-Za-z0-9_'+\-]+\.)*[A-Za-z0-9_'+\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$
-              required:
-                - body
-              additionalProperties: false
-            origin:
-              type: string
-              enum:
-                - manual
-                - api
-            status_id:
-              type: string
-              format: uuid
-              pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-            assignee_id:
-              anyOf:
-                - type: string
-                  format: uuid
-                  pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-                - type: "null"
-            tags:
-              type: array
-              items:
-                type: string
-            custom_fields:
-              type: object
-              propertyNames:
-                type: string
-              additionalProperties: {}
-          required:
-            - kind
-            - title
-            - contact_address
-          additionalProperties: false
+            - type: "null"
+        origin:
+          type: string
+          enum:
+            - manual
+            - api
+        tags:
+          type: array
+          items:
+            type: string
+        custom_fields:
+          type: object
+          propertyNames:
+            type: string
+          additionalProperties: {}
+        kind:
+          type: string
+          const: task
+        body:
+          type: string
+        contact: {}
+      required:
+        - title
+        - kind
+        - contact
+      additionalProperties: false
     ticqex_update_ticketRequest:
       $schema: https://json-schema.org/draft/2020-12/schema
       type: object
@@ -3270,44 +2431,6 @@ components:
             type: string
           additionalProperties: {}
       additionalProperties: false
-    ticqex_create_ticket_messageRequest:
-      $schema: https://json-schema.org/draft/2020-12/schema
-      type: object
-      properties:
-        body:
-          type: string
-          minLength: 1
-        channel:
-          type: string
-          enum:
-            - email
-            - api
-            - admin
-        email:
-          type: object
-          properties:
-            cc:
-              type: array
-              items:
-                type: string
-                format: email
-                pattern: ^(?:[A-Za-z0-9_'+\-]+\.)*[A-Za-z0-9_'+\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$
-            subject:
-              type: string
-            reply_all:
-              type: boolean
-            include_quote:
-              type: boolean
-            attachment_upload_ids:
-              type: array
-              items:
-                type: string
-                format: uuid
-                pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-          additionalProperties: false
-      required:
-        - body
-      additionalProperties: false
     ticqex_create_ticket_commentRequest:
       $schema: https://json-schema.org/draft/2020-12/schema
       type: object
@@ -3329,98 +2452,6 @@ components:
           maxLength: 32000
       required:
         - body
-      additionalProperties: false
-    ticqex_create_ticket_draftRequest:
-      $schema: https://json-schema.org/draft/2020-12/schema
-      type: object
-      properties:
-        body:
-          type: string
-          minLength: 1
-        channel:
-          type: string
-          enum:
-            - email
-            - api
-            - admin
-        email:
-          type: object
-          properties:
-            cc:
-              type: array
-              items:
-                type: string
-                format: email
-                pattern: ^(?:[A-Za-z0-9_'+\-]+\.)*[A-Za-z0-9_'+\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$
-            subject:
-              type: string
-            reply_all:
-              type: boolean
-            include_quote:
-              type: boolean
-            attachment_upload_ids:
-              type: array
-              items:
-                type: string
-                format: uuid
-                pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-          additionalProperties: false
-      required:
-        - body
-      additionalProperties: false
-    ticqex_update_ticket_draftRequest:
-      $schema: https://json-schema.org/draft/2020-12/schema
-      type: object
-      properties:
-        body:
-          type: string
-          minLength: 1
-        channel:
-          type: string
-          enum:
-            - email
-            - api
-            - admin
-        email:
-          type: object
-          properties:
-            cc:
-              type: array
-              items:
-                type: string
-                format: email
-                pattern: ^(?:[A-Za-z0-9_'+\-]+\.)*[A-Za-z0-9_'+\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$
-            subject:
-              type: string
-            reply_all:
-              type: boolean
-            include_quote:
-              type: boolean
-            attachment_upload_ids:
-              type: array
-              items:
-                type: string
-                format: uuid
-                pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-          additionalProperties: false
-      required:
-        - body
-      additionalProperties: false
-    ticqex_send_ticket_draftRequest:
-      $schema: https://json-schema.org/draft/2020-12/schema
-      type: object
-      properties:
-        include_quote:
-          type: boolean
-        reply_all:
-          type: boolean
-      additionalProperties: false
-    ticqex_set_message_readRequest:
-      $schema: https://json-schema.org/draft/2020-12/schema
-      type: object
-      properties:
-        read:
-          type: boolean
       additionalProperties: false
     ticqex_set_board_lane_orderRequest:
       $schema: https://json-schema.org/draft/2020-12/schema
@@ -3745,12 +2776,6 @@ components:
             type: string
             format: uuid
             pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-        default_inbound_status_id:
-          anyOf:
-            - type: string
-              format: uuid
-              pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-            - type: "null"
         ticket_field_visibility:
           type: object
           propertyNames:
@@ -3766,13 +2791,6 @@ components:
               - showOnCard
               - showInTicket
             additionalProperties: false
-        email_signature:
-          type: string
-        email_thread_order:
-          type: string
-          enum:
-            - oldest_first
-            - newest_first
         comment_thread_order:
           type: string
           enum:
@@ -3792,20 +2810,6 @@ components:
             prepend_text:
               type: string
           additionalProperties: false
-      additionalProperties: false
-    ticqex_create_email_snippetRequest:
-      $schema: https://json-schema.org/draft/2020-12/schema
-      type: object
-      properties:
-        title:
-          type: string
-          minLength: 1
-        body:
-          type: string
-          minLength: 1
-      required:
-        - title
-        - body
       additionalProperties: false
     ticqex_create_api_keyRequest:
       $schema: https://json-schema.org/draft/2020-12/schema

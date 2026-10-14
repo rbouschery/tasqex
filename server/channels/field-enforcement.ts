@@ -75,9 +75,7 @@ export function assertSendRecipientMatchesLockedFields(
   }
 
   for (const policy of channel.fields) {
-    if (policy.key !== "contact_address" || !isFieldLocked(policy, "on_send")) {
-      continue;
-    }
+    if (!isFieldLocked(policy, "on_send")) continue;
 
     const contactAddress = String(
       resolvePolicyFieldValue(policy.key, context) ?? "",

@@ -22,9 +22,7 @@
     "kanban",
     "api",
     "nextjs",
-    "supabase",
-    "resend",
-    "email"
+    "supabase"
   ],
   "engines": {
     "node": ">=20"
@@ -43,7 +41,6 @@
     "env:verify": "tsx scripts/verify-env.ts",
     "db:seed-admin": "tsx scripts/seed.ts",
     "ticqex": "tsx scripts/ticqex.ts",
-    "resend:setup-webhooks": "tsx scripts/setup-resend-webhooks.ts",
     "config:check": "tsx scripts/config-check.ts",
     "config:sync": "tsx scripts/config-sync.ts",
     "supabase": "supabase",
@@ -55,9 +52,7 @@
     "test:packages": "pnpm --filter @ticqex/api-spec --filter @ticqex/api-client --filter @ticqex/cli test",
     "openapi:generate": "pnpm --filter @ticqex/api-spec build && tsx scripts/generate-openapi.ts",
     "openapi:check": "pnpm --filter @ticqex/api-spec build && tsx scripts/generate-openapi.ts --check",
-    "seed:board-load": "tsx --env-file=.env.local scripts/seed-board-load.ts",
-    "seed:long-email-demo": "tsx --env-file=.env.local scripts/seed-long-email-demo.ts",
-    "seed:cedar-crm-demo": "tsx --env-file=.env.local scripts/seed-cedar-crm-demo.ts"
+    "seed:board-load": "tsx --env-file=.env.local scripts/seed-board-load.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
@@ -81,7 +76,6 @@
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "react-markdown": "^10.1.0",
-    "resend": "^6.32.0",
     "shadcn": "^4.21.1",
     "sonner": "^2.0.8",
     "tailwind-merge": "^3.7.0",

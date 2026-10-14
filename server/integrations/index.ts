@@ -1,10 +1,7 @@
 import type {
   IntegrationDefinition,
-  IntegrationKey,
   IntegrationRuntime,
 } from "@server/integrations/types";
-import { resendIntegration } from "@server/integrations/resend/integration";
-import { handleResendWebhook } from "@server/integrations/resend/webhooks";
 import { createRegistry } from "@shared/registry";
 
 export type {
@@ -12,19 +9,8 @@ export type {
   IntegrationRuntime,
 } from "@server/integrations/types";
 export type { IntegrationKey } from "@shared/ticqex-keys";
-export { resendIntegration } from "@server/integrations/resend/integration";
-export type { ResendIntegrationConfig } from "@server/integrations/resend/integration";
 
-const resendWithWebhooks: IntegrationDefinition = {
-  ...resendIntegration,
-  webhooks: {
-    webhook: handleResendWebhook,
-  },
-};
-
-const integrations = createRegistry<IntegrationKey, IntegrationDefinition>({
-  resend: resendWithWebhooks,
-});
+const integrations = createRegistry<string, IntegrationDefinition>({});
 
 export const integrationRegistry = integrations.registry;
 export const integrationKeys = integrations.keys;

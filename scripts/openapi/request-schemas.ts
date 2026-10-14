@@ -7,18 +7,14 @@ import {
   createApiKeySchema,
   createContactSchema,
   createCustomFieldSchema,
-  createEmailSnippetSchema,
   createStatusSchema,
   createTagSchema,
   createTicketSchema,
   deleteStatusSchema,
-  messageInputSchema,
   patchSettingsSchema,
   reorderCustomFieldsSchema,
   reorderStatusesSchema,
   seedManualLaneOrdersSchema,
-  sendDraftSchema,
-  toggleMessageReadSchema,
   updateContactSchema,
   updateCustomFieldSchema,
   updateStatusSchema,
@@ -28,21 +24,14 @@ import {
 
 export type RequestBodyKind =
   | { kind: "json"; schema: z.ZodType }
-  | { kind: "multipart" }
   | { kind: "optional-json"; schema: z.ZodType };
 
 /** REST request bodies keyed by operation name. */
 export const REQUEST_BODY_BY_OPERATION: Record<string, RequestBodyKind> = {
   ticqex_create_ticket: { kind: "json", schema: createTicketSchema },
   ticqex_update_ticket: { kind: "json", schema: updateTicketSchema },
-  ticqex_create_ticket_message: { kind: "json", schema: messageInputSchema },
   ticqex_create_ticket_comment: { kind: "json", schema: commentInputSchema },
   ticqex_update_ticket_comment: { kind: "json", schema: commentUpdateSchema },
-  ticqex_create_ticket_draft: { kind: "json", schema: messageInputSchema },
-  ticqex_update_ticket_draft: { kind: "json", schema: messageInputSchema },
-  ticqex_send_ticket_draft: { kind: "json", schema: sendDraftSchema },
-  ticqex_set_message_read: { kind: "json", schema: toggleMessageReadSchema },
-  ticqex_stage_ticket_attachment_upload: { kind: "multipart" },
   ticqex_set_board_lane_order: { kind: "json", schema: boardLaneOrderSchema },
   ticqex_seed_manual_board_orders: {
     kind: "json",
@@ -64,7 +53,6 @@ export const REQUEST_BODY_BY_OPERATION: Record<string, RequestBodyKind> = {
     schema: reorderCustomFieldsSchema,
   },
   ticqex_patch_settings: { kind: "json", schema: patchSettingsSchema },
-  ticqex_create_email_snippet: { kind: "json", schema: createEmailSnippetSchema },
   ticqex_create_api_key: { kind: "json", schema: createApiKeySchema },
 };
 

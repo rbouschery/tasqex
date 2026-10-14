@@ -2,7 +2,6 @@
 
 import { useQuery } from "@tanstack/react-query";
 import type { Tag } from "@/components/tags/types";
-import type { EmailThreadOrder } from "@/components/board/email-conversation-panel";
 import type { CommentThreadOrder } from "@/types/comments";
 import { apiFetch } from "@/lib/api-client";
 import {
@@ -29,29 +28,19 @@ export const ticketCommentThreadOrderQueryKey = ticketBoardSettingsQueryKey;
 export const copyContextSettingsQueryKey = ticketBoardSettingsQueryKey;
 
 export type TicketBoardSettings = {
-  emailThreadOrder: EmailThreadOrder;
   commentThreadOrder: CommentThreadOrder;
   copyContext: CopyContextSettings;
-  emailChannelEnabled: boolean;
 };
 
 async function fetchTicketBoardSettings(): Promise<TicketBoardSettings> {
   const settings = await apiFetch<{
-    email_thread_order?: EmailThreadOrder;
     comment_thread_order?: CommentThreadOrder;
     copy_context?: unknown;
-    channels?: {
-      email?: {
-        enabled?: boolean;
-      };
-    };
   }>("/api/v1/settings");
 
   return {
-    emailThreadOrder: settings.email_thread_order ?? "oldest_first",
     commentThreadOrder: settings.comment_thread_order ?? "oldest_first",
     copyContext: resolveCopyContextSettings(settings.copy_context),
-    emailChannelEnabled: Boolean(settings.channels?.email?.enabled),
   };
 }
 
@@ -79,12 +68,6 @@ export function useTicketTags() {
     queryKey: ticketTagsQueryKey,
     queryFn: () => apiFetch<Tag[]>("/api/v1/tags"),
     staleTime: REFERENCE_STALE_MS,
-  });
-}
-
-export function useTicketThreadOrder() {
-  return useTicketBoardSettings({
-    select: (data) => data.emailThreadOrder,
   });
 }
 

@@ -7,7 +7,6 @@ export type FieldPolicyWhen =
   | "always";
 
 export type FieldValueContext = {
-  contact_address?: string | null;
   custom_fields?: Record<string, unknown>;
 };
 
@@ -23,10 +22,6 @@ export function resolvePolicyFieldValue(
   key: string,
   context: FieldValueContext,
 ): unknown {
-  if (key === "contact_address") {
-    return context.contact_address ?? null;
-  }
-
   return context.custom_fields?.[key] ?? null;
 }
 

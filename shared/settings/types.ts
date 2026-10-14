@@ -6,7 +6,6 @@ export const SETTINGS_COMPONENT_KEYS = [
   "settings.api-mcp",
   "settings.board",
   "settings.custom-fields",
-  "settings.email",
 ] as const;
 
 /** Known renderer keys shipped in the admin UI (see settings-section-registry). */

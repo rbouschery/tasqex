@@ -44,10 +44,6 @@ export function buildTicketFieldVisibilityFromLegacy(
       showInTicket: settings.show_body_on_ticket,
     },
     [CORE_TICKET_FIELD_IDS.preview]: { showOnCard: true, showInTicket: false },
-    [CORE_TICKET_FIELD_IDS.contact_address]: {
-      showOnCard: false,
-      showInTicket: true,
-    },
   };
 
   for (const field of ticketCustomFields) {

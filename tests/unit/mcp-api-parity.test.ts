@@ -7,17 +7,9 @@ const FRONTEND_MUTATION_MCP_TOOLS: Record<string, string> = {
   "POST /api/v1/tickets": "ticqex_create_ticket",
   "PATCH /api/v1/tickets/:id": "ticqex_update_ticket",
   "DELETE /api/v1/tickets/:id": "ticqex_delete_ticket",
-  "POST /api/v1/tickets/:id/read": "ticqex_mark_ticket_read",
-  "POST /api/v1/tickets/:id/attachment-uploads": "ticqex_stage_ticket_attachment_upload",
-  "POST /api/v1/tickets/:id/messages": "ticqex_create_ticket_message",
   "POST /api/v1/tickets/:id/comments": "ticqex_create_ticket_comment",
   "PATCH /api/v1/tickets/:id/comments/:commentId": "ticqex_update_ticket_comment",
   "DELETE /api/v1/tickets/:id/comments/:commentId": "ticqex_delete_ticket_comment",
-  "POST /api/v1/tickets/:id/messages/drafts": "ticqex_create_ticket_draft",
-  "PATCH /api/v1/tickets/:id/messages/drafts/:messageId": "ticqex_update_ticket_draft",
-  "POST /api/v1/tickets/:id/messages/drafts/:messageId/send": "ticqex_send_ticket_draft",
-  "DELETE /api/v1/tickets/:id/messages/drafts/:messageId": "ticqex_delete_ticket_draft",
-  "PATCH /api/v1/tickets/:id/messages/:messageId/read": "ticqex_set_message_read",
   "POST /api/v1/board/move-ticket": "ticqex_move_ticket_on_board",
   "PUT /api/v1/board/manual-order": "ticqex_seed_manual_board_orders",
   "POST /api/v1/statuses": "ticqex_create_status",
@@ -32,8 +24,6 @@ const FRONTEND_MUTATION_MCP_TOOLS: Record<string, string> = {
   "DELETE /api/v1/custom-fields/:id": "ticqex_delete_custom_field",
   "PUT /api/v1/custom-fields/reorder": "ticqex_reorder_custom_fields",
   "PATCH /api/v1/settings": "ticqex_patch_settings",
-  "POST /api/v1/email-snippets": "ticqex_create_email_snippet",
-  "DELETE /api/v1/email-snippets/:id": "ticqex_delete_email_snippet",
 };
 
 /** Read routes the UI uses that should have MCP list/get parity. */

@@ -1,21 +1,15 @@
-import {
-  assertChannelReadyToSend,
-  assertSendRecipientMatchesLockedFields,
-  buildTicketCardSurface,
-} from "@server/channels";
-import { isChannelOperational } from "@server/config/channel-gate";
+import { buildTicketCardSurface } from "@server/channels";
 import { notifyBoardRefresh } from "@server/lib/board-broadcast";
 import { createAdminClient } from "@server/lib/supabase-admin";
 import { ApiError } from "@server/lib/errors";
 import { parsePagination } from "@server/lib/utils";
 import {
-  isTaskTicket,
   loadTicketRow,
   TICKET_LIST_SELECT,
   type TicketListRow,
 } from "@server/domain/ticket";
 import { findOrCreateContact } from "@server/services/contacts";
-import { getDefaultStatusId, getInboundEmailStatusId } from "@server/services/statuses";
+import { getDefaultStatusId } from "@server/services/statuses";
 import {
   filterTicketIdsByCustomFields,
   loadCustomFieldsMap,
@@ -25,16 +19,6 @@ import {
   loadTagsForTickets,
   setTicketTags,
 } from "@server/services/tags";
-import {
-  formatMessageRow,
-  listEnrichedMessages,
-} from "@server/services/messages";
-import {
-  openAgentOutboundConversation,
-  openConversationTicket,
-} from "@server/services/conversation-open";
-import { prepareAgentInitialOutbound } from "@server/services/outbound-replies";
-import { getUnreadCountsByTicket } from "@server/services/message-reads";
 import {
   removeTicketFromAllLaneOrders,
   syncTicketLaneOrderOnStatusChange,
@@ -84,7 +68,6 @@ export async function listTickets(
   const contactId = searchParams.get("contact_id");
   const origin = searchParams.get("origin");
   const kind = searchParams.get("kind");
-  const channel = searchParams.get("channel");
   const tag = searchParams.get("tag");
 
   if (statusId) query = query.eq("status_id", statusId);
@@ -92,7 +75,6 @@ export async function listTickets(
   if (contactId) query = query.eq("contact_id", contactId);
   if (origin) query = query.eq("origin", origin);
   if (kind) query = query.eq("kind", kind);
-  if (channel) query = query.eq("channel", channel);
   if (filteredIds) query = query.in("id", filteredIds);
 
   if (tag) {
@@ -130,18 +112,15 @@ function formatTicketListItem(
   tagsMap: Map<string, { id: string; name: string; color: string }[]>,
 ) {
   const custom_fields = fieldsMap.get(t.id) ?? {};
-  const preview =
-    t.kind === "task" && t.body?.trim()
-      ? t.body.trim().replace(/\s+/g, " ").slice(0, 120)
-      : "";
+  const preview = t.body?.trim()
+    ? t.body.trim().replace(/\s+/g, " ").slice(0, 120)
+    : "";
 
   return {
     id: t.id,
     title: t.title,
     kind: t.kind,
     body: t.body ?? null,
-    channel: t.channel ?? null,
-    contact_address: t.contact_address ?? null,
     origin: t.origin,
     contact_id: t.contact_id,
     status_id: t.status_id,
@@ -159,8 +138,6 @@ function formatTicketListItem(
     tags: tagsMap.get(t.id) ?? [],
     card_surface: buildTicketCardSurface({
       kind: t.kind,
-      channel: t.channel ?? null,
-      contact_address: t.contact_address ?? null,
       custom_fields,
       preview,
       origin: t.origin,
@@ -168,7 +145,7 @@ function formatTicketListItem(
   };
 }
 
-export async function getTicketSummary(id: string, userId?: string) {
+export async function getTicketSummary(id: string) {
   const db = createAdminClient();
   const { data, error } = await db
     .from("tickets")
@@ -186,46 +163,20 @@ export async function getTicketSummary(id: string, userId?: string) {
     loadTagsForTickets([id]),
   ]);
   const base = formatTicketListItem(row, fieldsMap, tagsMap);
-
-  let unread_count = 0;
-  if (!isTaskTicket(row) && userId) {
-    const counts = await getUnreadCountsByTicket([id], userId);
-    unread_count = counts.get(id) ?? 0;
-  }
-
-  return { ...base, unread_count };
+  return { ...base, unread_count: 0 };
 }
 
-export async function getTicket(id: string, userId?: string) {
-  const summary = await getTicketSummary(id, userId);
-
-  if (isTaskTicket({ kind: summary.kind })) {
-    return {
-      ...summary,
-      messages: [] as ReturnType<typeof formatMessageRow>[],
-    };
-  }
-
-  const messages = await listEnrichedMessages(id, userId);
-  return { ...summary, messages };
+export async function getTicket(id: string) {
+  return getTicketSummary(id);
 }
 
-export type ContextMessageRow = {
-  id: string;
-  body: string;
-  visibility: string;
-  author_type: string;
-  author_id: string | null;
-  created_at: string;
-};
-
-/** Ticket + messages for markdown context export — no attachments or read enrichment. */
+/** Ticket for markdown context export. */
 export async function getTicketForContext(id: string) {
   const db = createAdminClient();
   const { data, error } = await db
     .from("tickets")
     .select(
-      "id, title, kind, body, contact_address, contact_id, contacts(id, username), status_types(id, name)",
+      "id, title, kind, body, contact_id, contacts(id, username), status_types(id, name)",
     )
     .eq("id", id)
     .single();
@@ -237,7 +188,6 @@ export async function getTicketForContext(id: string) {
     title: string;
     kind: TicketListRow["kind"];
     body: string | null;
-    contact_address: string | null;
     contact_id: string | null;
     contacts: TicketListRow["contacts"];
     status_types: { id: string; name: string } | null;
@@ -246,12 +196,11 @@ export async function getTicketForContext(id: string) {
   const fieldsMap = await loadCustomFieldsMap(db, "ticket", [id]);
   const tagsMap = await loadTagsForTickets([id]);
 
-  const base = {
+  return {
     id: row.id,
     title: row.title,
     kind: row.kind,
     body: row.body ?? null,
-    contact_address: row.contact_address ?? null,
     contact_id: row.contact_id,
     contact: row.contacts
       ? { id: row.contacts.id, username: row.contacts.username }
@@ -259,37 +208,17 @@ export async function getTicketForContext(id: string) {
     status: row.status_types,
     custom_fields: fieldsMap.get(id) ?? {},
     tags: tagsMap.get(id) ?? [],
-    messages: [] as ContextMessageRow[],
   };
-
-  if (isTaskTicket({ kind: row.kind })) {
-    return base;
-  }
-
-  const { data: messages } = await db
-    .from("messages")
-    .select("id, body, visibility, author_type, author_id, created_at")
-    .eq("ticket_id", id)
-    .eq("visibility", "public")
-    .or("email_delivery_status.is.null,email_delivery_status.neq.draft")
-    .order("created_at");
-
-  return { ...base, messages: (messages ?? []) as ContextMessageRow[] };
 }
 
 export type CreateTicketResult = {
   ticket: Awaited<ReturnType<typeof getTicket>>;
-  /** Present when the create opened an agent-initiated outbound email. */
-  outboundMessageId?: string;
 };
 
 export async function createTicket(
   input: CreateTicketInput,
   auth: AuthContext,
 ): Promise<CreateTicketResult> {
-  if (input.kind === "conversation") {
-    return createConversationTicket(input, auth);
-  }
   return createTaskTicket(input, auth);
 }
 
@@ -334,120 +263,6 @@ async function createTaskTicket(
   return { ticket: await getTicket(ticket.id) };
 }
 
-async function createConversationTicket(
-  input: Extract<CreateTicketInput, { kind: "conversation" }>,
-  auth: AuthContext,
-): Promise<CreateTicketResult> {
-  const db = createAdminClient();
-  const contactAddress = input.contact_address.trim().toLowerCase();
-  const contact = await findOrCreateContact(contactAddress);
-
-  if (input.outbound) {
-    return createOutboundConversationTicket(input, auth, contactAddress, contact.id);
-  }
-
-  const statusId =
-    input.status_id?.trim() || (await getInboundEmailStatusId());
-
-  const { ticketId } = await openConversationTicket({
-    origin: input.origin ?? "api",
-    title: input.title,
-    contactAddress,
-    contactId: contact.id,
-    statusId,
-    assigneeId: input.assignee_id ?? null,
-    threadSubject: input.title,
-    firstMessage: {
-      body: input.message!.body,
-      authorId: contact.id,
-      channel: "api",
-    },
-  });
-
-  if (input.tags?.length) await setTicketTags(ticketId, input.tags);
-  await setCustomFields(db, "ticket", ticketId, input.custom_fields);
-
-  const created = await getTicket(ticketId);
-  await recordTicketCreatedActivity(
-    { id: created.id, title: created.title, kind: created.kind },
-    auth,
-  );
-
-  return { ticket: created };
-}
-
-async function createOutboundConversationTicket(
-  input: Extract<CreateTicketInput, { kind: "conversation" }>,
-  auth: AuthContext,
-  contactAddress: string,
-  contactId: string,
-): Promise<CreateTicketResult> {
-  const outbound = input.outbound!;
-  if (!isChannelOperational("email")) {
-    throw ApiError.serviceUnavailable(
-      "Email channel is disabled or integration is not configured",
-    );
-  }
-
-  assertChannelReadyToSend("email", {
-    contact_address: contactAddress,
-    custom_fields: {},
-  });
-
-  const prepared = await prepareAgentInitialOutbound(
-    { title: input.title, contact_address: contactAddress },
-    {
-      body: outbound.body,
-      email: {
-        cc: outbound.cc,
-        subject: outbound.subject,
-      },
-    },
-  );
-
-  assertSendRecipientMatchesLockedFields(
-    "email",
-    { contact_address: contactAddress, custom_fields: {} },
-    prepared.emailTo,
-  );
-
-  const db = createAdminClient();
-  const statusId =
-    input.status_id?.trim() || (await getDefaultStatusId());
-  const channel = auth.type === "api_key" ? "api" : "admin";
-
-  const { ticketId, messageId } = await openAgentOutboundConversation({
-    origin: input.origin ?? "api",
-    title: input.title,
-    contactAddress,
-    contactId,
-    statusId,
-    assigneeId: input.assignee_id ?? null,
-    threadSubject: prepared.emailSubject,
-    auth,
-    agentMessage: {
-      body: prepared.body,
-      authorId: auth.userId,
-      channel,
-      emailFrom: prepared.emailFrom,
-      emailTo: prepared.emailTo,
-      emailCc: prepared.emailCc,
-      emailSubject: prepared.emailSubject,
-    },
-  });
-
-  if (input.tags?.length) await setTicketTags(ticketId, input.tags);
-  await setCustomFields(db, "ticket", ticketId, input.custom_fields);
-
-  const created = await getTicket(ticketId);
-  await recordTicketCreatedActivity(
-    { id: created.id, title: created.title, kind: created.kind },
-    auth,
-  );
-
-  return { ticket: created, outboundMessageId: messageId };
-}
-
 export async function updateTicket(
   id: string,
   input: {
@@ -461,10 +276,6 @@ export async function updateTicket(
   options?: { auth?: AuthContext; boardMoveHandled?: boolean },
 ) {
   const ticket = await loadTicketRow(id);
-
-  if (input.body !== undefined && !isTaskTicket(ticket)) {
-    throw ApiError.badRequest("Only tickets support a description body");
-  }
 
   const shouldRecordActivity = Boolean(options?.auth);
   const diffScope = shouldRecordActivity

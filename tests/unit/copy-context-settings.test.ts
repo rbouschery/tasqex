@@ -58,13 +58,11 @@ describe("buildTicketContextMarkdown", () => {
     title: "Billing issue",
     kind: "task" as const,
     body: "Customer cannot update card.",
-    contact_address: "user@example.com",
     contact_id: "contact-1",
     contact: { id: "contact-1", username: "user@example.com" },
     status: { id: "status-1", name: "Open" },
     custom_fields: { priority: "High" },
     tags: [{ id: "tag-1", name: "billing", color: "#000" }],
-    messages: [],
   };
 
   it("includes prepend text and ticket custom fields by default", () => {
@@ -77,7 +75,6 @@ describe("buildTicketContextMarkdown", () => {
       [],
       [{ id: "f1", key: "priority", label: "Priority", type: "text", group: "ticket", options: null, required: false, position: 0, created_at: "", updated_at: "" }],
       {},
-      new Map(),
     );
 
     expect(markdown.startsWith("Project: Acme\n\n# Billing issue")).toBe(true);
@@ -132,7 +129,6 @@ describe("buildTicketContextMarkdown", () => {
       ],
       [],
       { tier: "Gold", active: false, tags: ["vip", "beta"], notes: "   " },
-      new Map(),
     );
 
     expect(markdown).toContain("**Tier:** Gold");
@@ -152,7 +148,6 @@ describe("buildTicketContextMarkdown", () => {
       [],
       [],
       {},
-      new Map(),
     );
 
     expect(markdown).not.toContain("**Contact:**");

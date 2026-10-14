@@ -1,7 +1,6 @@
 /**
  * Quick sanity check that local Supabase env is wired.
  * Does not start services — run after `pnpm db:env` and before `pnpm dev`.
- * Email, Resend, and tunnel vars: use `pnpm config:check` (reads ticqex.config.json).
  */
 import { loadEnvLocalIfPresent } from "./lib/load-env-local";
 
@@ -29,9 +28,7 @@ if (failed) {
   console.error(
     `\n${failed} required variable(s) missing. Run pnpm db:env for Supabase keys.`,
   );
-  console.error("For email/Resend/tunnel vars, run pnpm config:check.");
   process.exit(1);
 }
 
 console.log("\nSupabase env looks ready for pnpm dev");
-console.log("Run pnpm config:check if email or integrations are enabled.");

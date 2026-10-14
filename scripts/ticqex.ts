@@ -9,8 +9,6 @@ import {
   runSupabase,
 } from "./lib/run-command";
 import {
-  defaultTicqexConfig,
-  loadTicqexConfig,
   resolveConfigPath,
   type TicqexConfig,
 } from "@server/config";
@@ -19,19 +17,12 @@ import {
   setEnvLine,
   writeEnvFile,
 } from "./lib/env-file";
-import { provisionResendWebhooks } from "./lib/resend-webhooks";
-import {
-  promptUseTunnelAsAppUrl,
-  resolveLocalWebhookHttpsUrl,
-} from "./lib/local-tunnel";
-import { isHttpsAppUrl } from "@shared/integrations/resend/webhook-endpoints";
 
 type DbSetupMode = "skip" | "start" | "reset";
 type SupabaseTarget = "local" | "skip";
 
 const ROOT = path.resolve(import.meta.dirname, "..");
 const ENV_EXAMPLE = path.join(ROOT, ".env.example");
-const CONFIG_EXAMPLE = path.join(ROOT, "config/ticqex.config.example.json");
 
 function rootPath(value: string): string {
   return path.isAbsolute(value) ? value : path.join(ROOT, value);
@@ -46,7 +37,7 @@ function printRootUsage(): void {
   console.log(`Usage: pnpm ticqex <command> [options]
 
 Commands:
-  init          Interactive local setup (Supabase, env, channels, config sync)
+  init          Interactive local setup (Supabase, env, config sync)
 
 Options:
   --help        Show help for ticqex or a subcommand.
@@ -112,17 +103,6 @@ function hasSupabaseEnv(content: string): boolean {
     "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY",
     "SUPABASE_SECRET_KEY",
   ].every((key) => Boolean(getEnvValue(content, key)));
-}
-
-function readConfig(): TicqexConfig {
-  try {
-    return loadTicqexConfig(CONFIG_FILE);
-  } catch {
-    if (fs.existsSync(CONFIG_EXAMPLE)) {
-      return loadTicqexConfig(CONFIG_EXAMPLE);
-    }
-    return defaultTicqexConfig();
-  }
 }
 
 function writeConfig(config: TicqexConfig): void {
@@ -270,161 +250,18 @@ async function setupSupabase(
   return rl;
 }
 
-async function configureChannelsAndIntegrations(
-  rl: ReadlineInterface,
-): Promise<void> {
-  console.log("\nAvailable channels: email");
-  console.log("Available integrations: resend");
-
-  const currentConfig = readConfig();
-  const enableEmail = await promptYesNo(
-    rl,
-    "Enable the email channel?",
-    currentConfig.channels.email?.enabled ?? true,
-  );
-
+async function configureApp(rl: ReadlineInterface): Promise<void> {
   let envContent = readEnvContent();
-  const nextConfig: TicqexConfig = {
-    version: 1,
-    channels: {
-      email: {
-        enabled: enableEmail,
-        integration: enableEmail ? "resend" : null,
-      },
-    },
-    integrations: {
-      resend: {
-        enabled: enableEmail,
-      },
-    },
-  };
-
-  if (enableEmail) {
-    console.log("\nConfigure Resend email integration.");
-    console.log(
-      "Inbound email webhooks require a public HTTPS URL. For local dev, use a tunnel such as `ngrok http 3000`.",
-    );
-
-    for (const entry of [
-      {
-        key: "RESEND_API_KEY",
-        label: "Resend API key",
-        required: true,
-      },
-      {
-        key: "NEXT_PUBLIC_APP_URL",
-        label: "App URL (local UI; HTTPS tunnel required for inbound email)",
-        required: true,
-        defaultValue: "http://localhost:3000",
-      },
-    ] as const) {
-      const value = await promptEnvValue(rl, envContent, entry.key, entry);
-      if (value) {
-        envContent = setEnvLine(envContent, entry.key, value);
-      }
-    }
-
-    const resendApiKey = getEnvValue(envContent, "RESEND_API_KEY");
-    const appUrl = getEnvValue(envContent, "NEXT_PUBLIC_APP_URL");
-    let webhookAppUrl = appUrl && isHttpsAppUrl(appUrl) ? appUrl : null;
-
-    if (appUrl && !webhookAppUrl) {
-      const tunnelUrl = await resolveLocalWebhookHttpsUrl({
-        rl,
-        localAppUrl: appUrl,
-      });
-      if (tunnelUrl) {
-        webhookAppUrl = tunnelUrl;
-        if (await promptUseTunnelAsAppUrl(rl, webhookAppUrl)) {
-          envContent = setEnvLine(
-            envContent,
-            "NEXT_PUBLIC_APP_URL",
-            webhookAppUrl,
-          );
-        }
-      }
-    }
-
-    const hasWebhookSecret = Boolean(
-      getEnvValue(envContent, "RESEND_WEBHOOK_SECRET"),
-    );
-    const provisionWebhooks =
-      resendApiKey &&
-      webhookAppUrl &&
-      (await promptYesNo(
-        rl,
-        "Create Resend webhook via API (saves signing secret to .env.local)?",
-        true,
-      ));
-
-    if (provisionWebhooks && webhookAppUrl) {
-      try {
-        const result = await provisionResendWebhooks({
-          apiKey: resendApiKey,
-          appUrl: webhookAppUrl,
-        });
-        envContent = setEnvLine(
-          envContent,
-          "RESEND_WEBHOOK_SECRET",
-          result.signingSecret,
-        );
-        console.log("\nResend webhook:");
-        console.log(
-          `  ${result.created ? "created" : "reused"}: ${result.endpoint}`,
-        );
-      } catch (error) {
-        const message = error instanceof Error ? error.message : String(error);
-        console.error(`\nCould not provision Resend webhook: ${message}`);
-        console.log(
-          "Add the signing secret manually from the Resend dashboard, or run `pnpm resend:setup-webhooks --app-url https://your-host` later.",
-        );
-      }
-    } else if (resendApiKey && !webhookAppUrl && !hasWebhookSecret) {
-      console.log(
-        "\nSkipped Resend webhook API setup because no HTTPS tunnel URL was provided. Inbound email will not work until NEXT_PUBLIC_APP_URL is HTTPS and Resend webhooks are configured.",
-      );
-    }
-
-    if (!getEnvValue(envContent, "RESEND_WEBHOOK_SECRET")) {
-      const webhookSecret = await promptEnvValue(
-        rl,
-        envContent,
-        "RESEND_WEBHOOK_SECRET",
-        {
-          label: "Resend webhook signing secret",
-          required: !webhookAppUrl,
-        },
-      );
-      if (webhookSecret) {
-        envContent = setEnvLine(
-          envContent,
-          "RESEND_WEBHOOK_SECRET",
-          webhookSecret,
-        );
-      }
-    }
-
-    for (const entry of [
-      {
-        key: "SUPPORT_EMAIL",
-        label: "Support sender email",
-        required: true,
-      },
-      {
-        key: "SUPPORT_FROM_NAME",
-        label: "Support sender name",
-        required: true,
-        defaultValue: "Support",
-      },
-    ] as const) {
-      const value = await promptEnvValue(rl, envContent, entry.key, entry);
-      if (value) {
-        envContent = setEnvLine(envContent, entry.key, value);
-      }
-    }
+  const appUrl = await promptEnvValue(rl, envContent, "NEXT_PUBLIC_APP_URL", {
+    label: "App URL",
+    required: true,
+    defaultValue: "http://localhost:3000",
+  });
+  if (appUrl) {
+    envContent = setEnvLine(envContent, "NEXT_PUBLIC_APP_URL", appUrl);
   }
 
-  writeConfig(nextConfig);
+  writeConfig({ version: 1, channels: {}, integrations: {} });
   writeEnvFile(ENV_FILE, envContent);
 
   console.log("\nWrote:");
@@ -448,7 +285,7 @@ async function init(args: string[]): Promise<void> {
     ensureWorkspacePackagesBuilt();
     console.log("Ticqex init\n");
     rl = await setupSupabase(rl, supabaseTarget);
-    await configureChannelsAndIntegrations(rl);
+    await configureApp(rl);
   } finally {
     rl.close();
   }

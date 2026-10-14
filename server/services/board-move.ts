@@ -81,7 +81,7 @@ export async function moveTicketOnBoard(
         ticket: {
           id: ticket.id as string,
           title: ticket.title as string,
-          kind: ticket.kind as "task" | "conversation",
+          kind: ticket.kind as "task",
         },
         fromStatusId: actualFromStatusId,
         toStatusId: input.to_status_id,

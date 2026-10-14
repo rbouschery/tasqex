@@ -168,7 +168,6 @@ async function resolveRestrictedTicketIds(
   db: ReturnType<typeof createAdminClient>,
   filter: TicketFilter,
   searchQuery: string,
-  userId: string | undefined,
 ): Promise<{
   filterActive: boolean;
   searchActive: boolean;
@@ -178,7 +177,7 @@ async function resolveRestrictedTicketIds(
   const searchActive = searchQuery.trim().length > 0;
 
   const filteredIds = filterActive
-    ? await resolveFilteredTicketIds(db, filter, { userId })
+    ? await resolveFilteredTicketIds(db, filter)
     : null;
 
   const searchIds = searchActive
@@ -279,7 +278,7 @@ export async function resolveBoardQueryContext(
 ): Promise<BoardQueryContext> {
   const db = createAdminClient();
   const { filterActive, searchActive, restrictedIds } =
-    await resolveRestrictedTicketIds(db, filter, searchQuery, userId);
+    await resolveRestrictedTicketIds(db, filter, searchQuery);
 
   const { data: statuses, error: statusErr } = await db
     .from("status_types")
@@ -320,7 +319,7 @@ export async function resolveLaneQueryContext(
 ): Promise<LaneQueryContext> {
   const db = createAdminClient();
   const { filterActive, searchActive, restrictedIds } =
-    await resolveRestrictedTicketIds(db, filter, searchQuery, userId);
+    await resolveRestrictedTicketIds(db, filter, searchQuery);
 
   const { data: statusRow, error: statusErr } = await db
     .from("status_types")

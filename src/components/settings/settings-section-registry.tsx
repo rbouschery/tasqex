@@ -6,7 +6,6 @@ import { AppearanceSettingsSection } from "@/components/settings/sections/appear
 import { ApiMcpSettingsSection } from "@/components/settings/sections/api-mcp-section";
 import { BoardSettingsSection } from "@/components/settings/sections/board-section";
 import { CustomFieldsSettingsSection } from "@/components/settings/sections/custom-fields-section";
-import { EmailSettingsSection } from "@/components/settings/sections/email-section";
 
 const SETTINGS_SECTION_COMPONENTS: Record<
   string,
@@ -32,14 +31,6 @@ const SETTINGS_SECTION_COMPONENTS: Record<
   },
   "settings.custom-fields": function CustomFieldsSectionContent() {
     return <CustomFieldsSettingsSection />;
-  },
-  "settings.email": function EmailSectionContent(props) {
-    return (
-      <EmailSettingsSection
-        emailSignature={props.settings?.email_signature ?? ""}
-        onSignatureSaved={props.onReload}
-      />
-    );
   },
 };
 

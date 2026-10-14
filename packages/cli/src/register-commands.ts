@@ -107,39 +107,12 @@ export function createProgram(): Command {
   registerOperationCommand(tickets, "context", "Get ticket context", "ticqex_get_ticket_context");
   registerOperationCommand(tickets, "update", "Update ticket", "ticqex_update_ticket");
   registerOperationCommand(tickets, "delete", "Delete ticket", "ticqex_delete_ticket");
-  registerOperationCommand(tickets, "read", "Mark ticket read", "ticqex_mark_ticket_read");
-
-  const ticketMessages = tickets.command("messages").description("Ticket message operations");
-  registerOperationCommand(ticketMessages, "list", "List messages", "ticqex_list_ticket_messages");
-  registerOperationCommand(ticketMessages, "create", "Create message", "ticqex_create_ticket_message");
-  registerOperationCommand(ticketMessages, "set-read", "Set message read state", "ticqex_set_message_read");
 
   const ticketComments = tickets.command("comments").description("Ticket comment operations");
   registerOperationCommand(ticketComments, "list", "List comments", "ticqex_list_ticket_comments");
   registerOperationCommand(ticketComments, "create", "Create comment", "ticqex_create_ticket_comment");
   registerOperationCommand(ticketComments, "update", "Update comment", "ticqex_update_ticket_comment");
   registerOperationCommand(ticketComments, "delete", "Delete comment", "ticqex_delete_ticket_comment");
-
-  const ticketDrafts = tickets.command("drafts").description("Ticket draft operations");
-  registerOperationCommand(ticketDrafts, "list", "List drafts", "ticqex_list_ticket_drafts");
-  registerOperationCommand(ticketDrafts, "create", "Create draft", "ticqex_create_ticket_draft");
-  registerOperationCommand(ticketDrafts, "update", "Update draft", "ticqex_update_ticket_draft");
-  registerOperationCommand(ticketDrafts, "send", "Send draft", "ticqex_send_ticket_draft");
-  registerOperationCommand(ticketDrafts, "delete", "Delete draft", "ticqex_delete_ticket_draft");
-
-  const ticketAttachments = tickets.command("attachments").description("Ticket attachment operations");
-  registerOperationCommand(
-    ticketAttachments,
-    "stage-upload",
-    "Stage attachment upload",
-    "ticqex_stage_ticket_attachment_upload",
-  );
-  registerOperationCommand(
-    ticketAttachments,
-    "get-url",
-    "Get attachment URL",
-    "ticqex_get_attachment_url",
-  );
 
   const board = program.command("board").description("Board operations");
   registerOperationCommand(board, "get", "Get board", "ticqex_get_board");
@@ -211,26 +184,6 @@ export function createProgram(): Command {
   const settings = program.command("settings").description("Settings operations");
   registerOperationCommand(settings, "get", "Get settings", "ticqex_get_settings");
   registerOperationCommand(settings, "patch", "Patch settings", "ticqex_patch_settings");
-
-  const emailSnippets = program.command("email-snippets").description("Email snippet operations");
-  registerOperationCommand(
-    emailSnippets,
-    "list",
-    "List email snippets",
-    "ticqex_list_email_snippets",
-  );
-  registerOperationCommand(
-    emailSnippets,
-    "create",
-    "Create email snippet",
-    "ticqex_create_email_snippet",
-  );
-  registerOperationCommand(
-    emailSnippets,
-    "delete",
-    "Delete email snippet",
-    "ticqex_delete_email_snippet",
-  );
 
   const apiKeys = program.command("api-keys").description("API key management (admin, REST-only)");
   registerOperationCommand(apiKeys, "list", "List API keys", "ticqex_list_api_keys");
