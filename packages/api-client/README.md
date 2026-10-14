@@ -21,8 +21,8 @@ const client = new TicqexClient({
 const ticket = await client.get<{ id: string }>("/tickets/550e8400-e29b-41d4-a716-446655440000");
 
 const created = await client.post("/tickets", {
-  subject: "Login issue",
-  contact_email: "user@example.com",
+  title: "Login issue",
+  kind: "task",
 });
 
 const tickets = await client.get("/tickets", { page: 1, per_page: 25 });
@@ -49,7 +49,7 @@ const client = new TicqexClient({
 });
 
 try {
-  await client.post("/tickets", { subject: "Missing contact" });
+  await client.post("/tickets", { title: "Missing contact", kind: "task" });
 } catch (error) {
   if (error instanceof TicqexApiError) {
     console.error(error.status, error.code, error.message);
@@ -64,8 +64,8 @@ await client.get("/users/me");
 await client.get("/board");
 await client.get("/tickets", { page: 1, per_page: 25 });
 await client.post("/tickets", {
-  subject: "Login issue",
-  contact_email: "user@example.com",
+  title: "Login issue",
+  kind: "task",
 });
 await client.patch("/tickets/<ticket-id>", {
   status_id: "<status-id>",

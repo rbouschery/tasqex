@@ -10,7 +10,7 @@ Prerequisites: **Node.js 20+** (development pinned to Node 22 — see
 
 ```bash
 pnpm install
-pnpm ticqex init     # interactive Supabase + env setup
+pnpm ticqex init     # interactive local Supabase + env setup
 pnpm dev             # http://localhost:3000
 ```
 
@@ -62,7 +62,7 @@ PRs must pass lint, build, and unit tests in CI before review.
 
 ## Commit & PR conventions
 
-- Write clear, imperative commit messages (e.g. `fix: dedupe inbound emails`).
+- Write clear, imperative commit messages (e.g. `fix: keep the last admin`).
 - Reference related issues (`Closes #123`) where applicable.
 - Keep PRs reviewable; split large work into smaller PRs when possible.
 

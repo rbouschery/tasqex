@@ -8,3 +8,5 @@ Used by:
 - `pnpm openapi:generate` — OpenAPI spec generation
 
 Each operation maps an MCP tool name to an HTTP method and path template.
+Invite preview and redeem are public REST operations and are not MCP tools.
+API key management and the activity log are REST-only as well.

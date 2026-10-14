@@ -31,8 +31,8 @@ Please include:
 
 ## Scope
 
-In scope: authentication and session handling, API key handling, webhook
-signature verification, access control on `/api/v1/*`, SQL/RLS issues, and
+In scope: authentication and session handling, API key handling, organization
+invite tokens, access control on `/api/v1/*`, SQL/RLS issues, and
 secret/credential exposure.
 
 Out of scope: vulnerabilities in third-party dependencies (report upstream),

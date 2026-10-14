@@ -420,7 +420,7 @@ export function buildOpenApiDocument(): OpenApiDocument {
       title: "Ticqex API",
       version: "0.1.0",
       description:
-        "REST JSON API for Ticqex at /api/v1. Authenticate with Authorization: Bearer tq_live_* (API key) or a staff Supabase JWT.",
+        "REST JSON API for the Ticqex task board at /api/v1. Authenticate with Authorization: Bearer tq_live_* (API key) or a member Supabase JWT. Invite preview and redeem are public.",
     },
     servers: [
       {

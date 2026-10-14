@@ -13,11 +13,9 @@ contribution process lives in [CONTRIBUTING.md](./CONTRIBUTING.md).
 1. `pnpm install`
 2. `pnpm ticqex init`
    - Supabase: choose `local` then `start` or `reset`.
-   - For UI/API/MCP only, disable the email channel.
-   - For email, provide `RESEND_API_KEY`, support sender env vars, and the webhook secret.
-3. If inbound email is needed locally, `NEXT_PUBLIC_APP_URL` must be a public HTTPS tunnel URL, not `http://localhost:3000`. Use `ngrok http 3000` or another HTTPS tunnel, then register webhooks with `pnpm resend:setup-webhooks --app-url <https-url>`.
-4. Run `pnpm config:check`, `pnpm env:verify`, and `pnpm dev`.
-5. Verify `http://localhost:3000/api/health`, then sign in with the seed admin credentials.
+   - Set `NEXT_PUBLIC_APP_URL` (invite links use it; `http://localhost:3000` is fine locally).
+3. Run `pnpm config:check`, `pnpm env:verify`, and `pnpm dev`.
+4. Verify `http://localhost:3000/api/health`, then sign in with the seed admin credentials.
 
 Manual fallback:
 
@@ -44,36 +42,27 @@ Only do this when the user explicitly asks for cloud setup. Remote migrations af
 3. Copy Supabase env vars from Project Settings -> API Keys:
    `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SECRET_KEY`.
 4. Create/import the Vercel project and set Production + Preview env vars:
-   Supabase vars, `NEXT_PUBLIC_APP_URL`, and, if email is enabled, `RESEND_API_KEY`,
-   `RESEND_WEBHOOK_SECRET`, `SUPPORT_EMAIL`, `SUPPORT_FROM_NAME`.
+   Supabase vars and `NEXT_PUBLIC_APP_URL` (invite links use this origin).
 5. Deploy once with `vercel deploy --prod`.
-6. If email is enabled, create a Resend API key, verify the sender/domain, run
-   `RESEND_API_KEY=re_... pnpm resend:setup-webhooks --app-url https://<vercel-host>`,
-   then copy the generated webhook secret into Vercel and redeploy.
-7. Seed the first admin against cloud with `NEXT_PUBLIC_SUPABASE_URL`,
+6. Seed the first admin against cloud with `NEXT_PUBLIC_SUPABASE_URL`,
    `SUPABASE_SECRET_KEY`, `SEED_ADMIN_EMAIL`, and `SEED_ADMIN_PASSWORD` in the shell:
    `pnpm db:seed-admin`.
-8. Verify `https://<vercel-host>/api/health`, sign in, and test inbound email if enabled.
+7. Verify `https://<vercel-host>/api/health`, sign in, and create an invite from
+   Settings → Organization.
 
 ## What this project is
 
-Ticqex is an agentic infrastructure layer for support ticket management, meant to
-plug into the agent(s) and AI workflow of your choice. It provides the data model,
-APIs, and human supervision surface; you bring the intelligence. Every ticket
-action is exposed over a typed REST API (`/api/v1/*`) and an MCP server, so AI
-agents are first-class operators alongside humans, who supervise on a realtime
-Kanban admin. A composable, registry-based channel/integration layer adapts the
-platform to each deployment; email parsing ships onboard (inbound → tickets,
-outbound via Resend).
-Built on Supabase (Postgres, Auth, Realtime) and Next.js (App Router), async
-email work runs in-process via Next.js `after()` — there is no external job
-runner.
+Ticqex is a collaborative task manager. People and API clients share one
+Kanban board. Tasks, comments, tags, and custom fields are available in the
+admin UI, a typed REST API (`/api/v1/*`), and an MCP server. One database is
+one organization: admins invite members with a link, and removing a member
+deactivates that account. Another organization means another deployment.
+Built on Supabase (Postgres, Auth, Realtime) and Next.js (App Router).
 
 ## Tech stack
 
 - **Next.js 16** (App Router) + **React 19**, TypeScript everywhere
 - **Supabase** (Postgres, Auth, RLS) — local stack via Docker
-- **Resend** for inbound/outbound email (Svix-signed webhooks)
 - **Tailwind v4** + shadcn/ui + Radix for the admin UI
 - **Vitest** for unit + integration tests
 - **pnpm** is the only supported package manager
@@ -84,9 +73,9 @@ runner.
 |------|---------|
 | `src/app/` | Next.js App Router — admin UI, API routes (`/api/v1/*`), webhooks, MCP |
 | `src/components/` | React components (board, settings, account) |
-| `server/services/` | Business logic (tickets, board, messages, contacts, …) |
-| `server/channels/` | Product channel behavior (email today) |
-| `server/integrations/` | External providers (Resend) |
+| `server/services/` | Business logic (tasks, board, comments, organization, …) |
+| `server/channels/` | Channel registry (empty in this build) |
+| `server/integrations/` | Integration registry (empty in this build) |
 | `server/lib/`, `server/middleware/` | Route handlers, auth, validation, errors |
 | `shared/` | Code shared between client and server (config, registries, schemas) |
 | `packages/` | Published workspace packages (`@ticqex/cli`, `@ticqex/api-client`, `@ticqex/api-spec`) |
@@ -160,8 +149,8 @@ return `{"status":"ok","checks":{"app":"ok","database":"ok"}}`.
   (`PUBLISHABLE_KEY` / `SECRET_KEY`), not legacy JWT anon/service-role keys.
 - **Stale Supabase state:** `supabase start` may report "already running" while
   the DB container exited → `pnpm db:stop && pnpm db:start`.
-- **Webhook verification** uses Svix headers (`svix-id/-timestamp/-signature`),
-  not a plain HMAC of the body. Verify against the raw request body string.
-- **Inbound `email.received` payloads omit the body** — it is fetched via the
-  Resend API in `resolveInbound()` before the ticket message is created.
+- **Invites are links, not emails.** `NEXT_PUBLIC_APP_URL` is the origin of
+  `/invite/<token>`. Redeeming a link creates or reactivates the account.
+  Inactive users cannot sign in or call the API.
+- **The last admin** cannot be removed or demoted to `member`.
 

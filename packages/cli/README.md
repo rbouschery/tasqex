@@ -50,7 +50,7 @@ Execute any MCP-parity operation by name from a shell, script, or agent runtime:
 ```bash
 ticqex call ticqex_get_me
 ticqex call ticqex_list_tickets --input '{"page":1,"per_page":20}'
-ticqex call ticqex_create_ticket --input '{"subject":"Login issue","contact_email":"user@example.com"}'
+ticqex call ticqex_create_ticket --input '{"title":"Login issue","kind":"task"}'
 ```
 
 Friendly command groups mirror the API:
@@ -58,6 +58,7 @@ Friendly command groups mirror the API:
 ```bash
 ticqex users me
 ticqex tickets list --page 1 --per-page 20
+ticqex organization invites create --input '{"email":"ada@example.com","role":"member"}'
 ticqex board get
 ticqex board move-ticket --input '{"ticket_id":"<uuid>","status_id":"<uuid>"}'
 ```
