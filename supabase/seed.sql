@@ -45,7 +45,7 @@ INSERT INTO public.tickets (
 SELECT
   'Welcome to ticqex',
   'task',
-  'This is a sample task on the board. Edit the description in the ticket modal.',
+  'This is a sample task on the board. Edit the description to make it yours.',
   c.id,
   s.id,
   'manual'

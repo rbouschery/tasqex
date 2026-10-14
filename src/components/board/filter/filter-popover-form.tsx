@@ -186,8 +186,8 @@ export function FilterPopoverForm({
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="true">Has unread messages</SelectItem>
-              <SelectItem value="false">Fully read</SelectItem>
+              <SelectItem value="true">Unread</SelectItem>
+              <SelectItem value="false">Read</SelectItem>
             </SelectContent>
           </Select>
         </div>

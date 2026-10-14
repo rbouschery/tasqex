@@ -99,16 +99,16 @@ export function createProgram(): Command {
   registerOperationCommand(users, "me", "Get current user", "ticqex_get_me");
   registerOperationCommand(users, "list", "List users", "ticqex_list_users");
 
-  const tickets = program.command("tickets").description("Ticket operations");
-  registerOperationCommand(tickets, "list", "List tickets", "ticqex_list_tickets");
-  registerOperationCommand(tickets, "create", "Create ticket", "ticqex_create_ticket");
-  registerOperationCommand(tickets, "get", "Get ticket", "ticqex_get_ticket");
-  registerOperationCommand(tickets, "summary", "Get ticket summary", "ticqex_get_ticket_summary");
-  registerOperationCommand(tickets, "context", "Get ticket context", "ticqex_get_ticket_context");
-  registerOperationCommand(tickets, "update", "Update ticket", "ticqex_update_ticket");
-  registerOperationCommand(tickets, "delete", "Delete ticket", "ticqex_delete_ticket");
+  const tickets = program.command("tickets").description("Task operations");
+  registerOperationCommand(tickets, "list", "List tasks", "ticqex_list_tickets");
+  registerOperationCommand(tickets, "create", "Create task", "ticqex_create_ticket");
+  registerOperationCommand(tickets, "get", "Get task", "ticqex_get_ticket");
+  registerOperationCommand(tickets, "summary", "Get task summary", "ticqex_get_ticket_summary");
+  registerOperationCommand(tickets, "context", "Get task context", "ticqex_get_ticket_context");
+  registerOperationCommand(tickets, "update", "Update task", "ticqex_update_ticket");
+  registerOperationCommand(tickets, "delete", "Delete task", "ticqex_delete_ticket");
 
-  const ticketComments = tickets.command("comments").description("Ticket comment operations");
+  const ticketComments = tickets.command("comments").description("Task comment operations");
   registerOperationCommand(ticketComments, "list", "List comments", "ticqex_list_ticket_comments");
   registerOperationCommand(ticketComments, "create", "Create comment", "ticqex_create_ticket_comment");
   registerOperationCommand(ticketComments, "update", "Update comment", "ticqex_update_ticket_comment");
@@ -139,7 +139,7 @@ export function createProgram(): Command {
   registerOperationCommand(
     boardLanes,
     "tickets",
-    "List lane tickets",
+    "List lane tasks",
     "ticqex_get_board_lane_tickets",
   );
   registerOperationCommand(

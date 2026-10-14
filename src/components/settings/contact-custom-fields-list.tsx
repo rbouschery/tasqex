@@ -81,7 +81,7 @@ export function ContactCustomFieldsList({
               <Checkbox
                 checked={field.show_open_in_ticket}
                 disabled={savingVisibilityId === field.id}
-                aria-label={`Show ${field.label} openly in ticket`}
+                aria-label={`Show ${field.label} openly in task`}
                 onCheckedChange={(checked) =>
                   onShowOpenChange(field, checked === true)
                 }

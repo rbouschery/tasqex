@@ -54,7 +54,7 @@ export function registerBoardTools(server: McpServer) {
     "ticqex_get_board_lane_tickets",
     {
       title: "Get Board Lane Tickets",
-      description: "Load a page of tickets for one board lane.",
+      description: "Load a page of tasks for one board lane.",
       inputSchema: {
         status_id: uuid,
         offset: z.number().int().min(0),
@@ -124,7 +124,7 @@ export function registerBoardTools(server: McpServer) {
     "ticqex_move_ticket_on_board",
     {
       title: "Move Ticket On Board",
-      description: "Move/reorder a ticket on the board and persist lane ordering.",
+      description: "Move or reorder a task on the board and persist lane ordering.",
       inputSchema: boardMoveTicketSchema.shape,
     },
     async (input, auth) =>

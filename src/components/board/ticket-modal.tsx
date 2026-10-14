@@ -304,7 +304,7 @@ export function TicketModal({
       toast.success("Context copied");
     } catch {
       toast.error("Could not copy context", {
-        description: "Failed to copy ticket context to clipboard.",
+        description: "Failed to copy task context to clipboard.",
       });
     }
   }
@@ -402,13 +402,13 @@ export function TicketModal({
               {headerLoading && !displayTitle ? (
                 <Skeleton className="h-6 w-48" />
               ) : (
-                displayTitle || "Ticket"
+                displayTitle || "Task"
               )}
             </DialogTitle>
             {displaySeed && (
               <>
                 <Badge variant="outline" className="shrink-0">
-                  Ticket
+                  Task
                 </Badge>
                 {statusOptions.length > 0 && effectiveStatusId && (
                   <TicketStatusCombobox
@@ -440,7 +440,7 @@ export function TicketModal({
                   type="button"
                   variant="ghost"
                   size="icon-sm"
-                  aria-label="Ticket actions"
+                  aria-label="Task actions"
                 >
                   <DotsThreeVerticalIcon />
                 </Button>
@@ -504,7 +504,7 @@ export function TicketModal({
               <AlertDescription>
                 {summaryQuery.error instanceof Error
                   ? summaryQuery.error.message
-                  : "Failed to load ticket"}
+                  : "Failed to load task"}
               </AlertDescription>
             </Alert>
           </div>

@@ -57,7 +57,7 @@ export function registerStatusTools(server: McpServer) {
     "ticqex_delete_status",
     {
       title: "Delete Status",
-      description: "Delete a board status, optionally reassigning tickets. Admin only.",
+      description: "Delete a board status, optionally reassigning tasks. Admin only.",
       inputSchema: { id: uuid, options: deleteStatusSchema.optional() },
       admin: true,
     },

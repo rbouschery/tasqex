@@ -90,15 +90,15 @@ const TAG_METADATA: Record<
   },
   board: {
     displayName: "Board",
-    description: "Kanban board views, lane ordering, and ticket moves.",
+    description: "Kanban board views, lane ordering, and task moves.",
   },
   contacts: {
     displayName: "Contacts",
-    description: "Customer and contact records linked to tickets.",
+    description: "People and contacts linked to tasks.",
   },
   custom_fields: {
     displayName: "Custom fields",
-    description: "Ticket and contact field definitions and ordering.",
+    description: "Task and contact field definitions and ordering.",
   },
   settings: {
     displayName: "Settings",
@@ -106,19 +106,19 @@ const TAG_METADATA: Record<
   },
   statuses: {
     displayName: "Statuses",
-    description: "Ticket workflow statuses and lane ordering.",
+    description: "Task workflow statuses and lane ordering.",
   },
   tags: {
     displayName: "Tags",
-    description: "Labels applied to tickets for filtering and organization.",
+    description: "Labels applied to tasks for filtering and organization.",
   },
   tickets: {
-    displayName: "Tickets",
-    description: "Tickets and comments.",
+    displayName: "Tasks",
+    description: "Tasks and comments.",
   },
   users: {
     displayName: "Users",
-    description: "Staff users and the authenticated session identity.",
+    description: "Team members and the authenticated session identity.",
   },
 };
 
@@ -127,13 +127,13 @@ const QUERY_PARAM_DESCRIPTIONS: Record<string, string> = {
   per_page: "Number of items per page.",
   offset: "Zero-based offset for pagination.",
   limit: "Maximum number of items to return.",
-  status_id: "Filter tickets by status UUID.",
-  assignee_id: "Filter tickets by assignee user UUID.",
-  contact_id: "Filter tickets by contact UUID.",
-  origin: "Filter tickets by origin (manual or api).",
-  kind: "Filter tickets by kind.",
+  status_id: "Filter tasks by status UUID.",
+  assignee_id: "Filter tasks by assignee user UUID.",
+  contact_id: "Filter tasks by contact UUID.",
+  origin: "Filter tasks by origin (manual or api).",
+  kind: "Filter tasks by kind.",
   channel: "Filter tickets by channel identifier.",
-  tag: "Filter tickets by tag name.",
+  tag: "Filter tasks by tag name.",
   filter: "Board filter expression.",
   sort: "Sort order for board or lane results.",
   q: "Search query for the board.",

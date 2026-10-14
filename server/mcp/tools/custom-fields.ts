@@ -22,7 +22,7 @@ export function registerCustomFieldTools(server: McpServer) {
     "ticqex_list_custom_fields",
     {
       title: "List Custom Fields",
-      description: "List custom field definitions. Ticket field card/ticket visibility is configured via global settings (`ticket_field_visibility` / `ticket_field_layout`).",
+      description: "List custom field definitions. Task field card and detail visibility is configured via global settings (`ticket_field_visibility` / `ticket_field_layout`).",
       inputSchema: { group: z.enum(["ticket", "contact"]).optional() },
     },
     async ({ group }) => toolResult(await listDefinitions(createAdminClient(), group)),
@@ -80,7 +80,7 @@ export function registerCustomFieldTools(server: McpServer) {
     "ticqex_reorder_custom_fields",
     {
       title: "Reorder Custom Fields",
-      description: "Reorder custom field definitions within a ticket or contact group. Admin only.",
+      description: "Reorder custom field definitions within a task or contact group. Admin only.",
       inputSchema: reorderCustomFieldsSchema.shape,
       admin: true,
     },

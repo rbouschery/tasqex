@@ -133,7 +133,7 @@ export function TicketDetailsSection({
                 value={body ?? ""}
                 onChange={(e) => onBodyChange(e.target.value)}
                 rows={8}
-                placeholder="Describe this ticket…"
+                placeholder="Describe this task…"
                 className="min-h-[160px] resize-y"
               />
             </div>

@@ -35,7 +35,7 @@ function CoreVisibilityHeader() {
     >
       <span>Field</span>
       <span className="text-center">Card</span>
-      <span className="text-center">In ticket</span>
+      <span className="text-center">In task</span>
     </div>
   );
 }
@@ -51,7 +51,7 @@ function CustomFieldsVisibilityHeader() {
       <span aria-hidden className="block w-0" />
       <span>Field</span>
       <span className="text-center">Card</span>
-      <span className="text-center">In ticket</span>
+      <span className="text-center">In task</span>
       <span aria-hidden className="block w-0" />
     </div>
   );
@@ -82,7 +82,7 @@ function VisibilityToggles({
         <Checkbox
           checked={entry.showInTicket}
           disabled={disabled || entry.locked}
-          aria-label={`Show ${entry.label} in ticket`}
+          aria-label={`Show ${entry.label} in task`}
           onCheckedChange={(checked) =>
             onChange({ showInTicket: checked === true })
           }
@@ -177,7 +177,7 @@ export function TicketFieldVisibilitySection({
       <SortableCustomFieldsList
         fields={fields}
         group="ticket"
-        emptyMessage="No custom ticket fields yet."
+        emptyMessage="No custom task fields yet."
         onReorder={onReorder}
         header={<CustomFieldsVisibilityHeader />}
         renderRow={(field) => {

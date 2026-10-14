@@ -39,7 +39,7 @@ export function useBoardTicketModalContext() {
   const context = useContext(BoardTicketModalContext);
   if (!context) {
     throw new Error(
-      "Board ticket modal routes must be rendered inside KanbanBoard.",
+      "Board task modal routes must be rendered inside KanbanBoard.",
     );
   }
   return context;

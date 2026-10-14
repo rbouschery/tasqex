@@ -19,28 +19,28 @@ tags:
     description: Create and revoke API keys for REST, MCP, and CLI access.
     x-displayName: API keys
   - name: board
-    description: Kanban board views, lane ordering, and ticket moves.
+    description: Kanban board views, lane ordering, and task moves.
     x-displayName: Board
   - name: contacts
-    description: Customer and contact records linked to tickets.
+    description: People and contacts linked to tasks.
     x-displayName: Contacts
   - name: custom_fields
-    description: Ticket and contact field definitions and ordering.
+    description: Task and contact field definitions and ordering.
     x-displayName: Custom fields
   - name: settings
     description: Workspace configuration and preferences.
     x-displayName: Settings
   - name: statuses
-    description: Ticket workflow statuses and lane ordering.
+    description: Task workflow statuses and lane ordering.
     x-displayName: Statuses
   - name: tags
-    description: Labels applied to tickets for filtering and organization.
+    description: Labels applied to tasks for filtering and organization.
     x-displayName: Tags
   - name: tickets
-    description: Tickets and comments.
-    x-displayName: Tickets
+    description: Tasks and comments.
+    x-displayName: Tasks
   - name: users
-    description: Staff users and the authenticated session identity.
+    description: Team members and the authenticated session identity.
     x-displayName: Users
 paths:
   /users/me:
@@ -181,37 +181,37 @@ paths:
           required: false
           schema:
             type: string
-          description: Filter tickets by status UUID.
+          description: Filter tasks by status UUID.
         - name: assignee_id
           in: query
           required: false
           schema:
             type: string
-          description: Filter tickets by assignee user UUID.
+          description: Filter tasks by assignee user UUID.
         - name: contact_id
           in: query
           required: false
           schema:
             type: string
-          description: Filter tickets by contact UUID.
+          description: Filter tasks by contact UUID.
         - name: origin
           in: query
           required: false
           schema:
             type: string
-          description: Filter tickets by origin (manual or api).
+          description: Filter tasks by origin (manual or api).
         - name: kind
           in: query
           required: false
           schema:
             type: string
-          description: Filter tickets by kind.
+          description: Filter tasks by kind.
         - name: tag
           in: query
           required: false
           schema:
             type: string
-          description: Filter tickets by tag name.
+          description: Filter tasks by tag name.
         - name: custom_fields.{key}
           in: query
           required: false

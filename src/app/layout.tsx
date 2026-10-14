@@ -15,7 +15,7 @@ const calSans = localFont({
 
 export const metadata: Metadata = {
   title: "Ticqex",
-  description: "Agent-first support platform",
+  description: "Collaborative task management",
   manifest: "/manifest.json",
   appleWebApp: {
     title: "Ticqex",

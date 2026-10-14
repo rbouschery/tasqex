@@ -37,7 +37,7 @@ export function registerTicketTools(server: McpServer) {
     "ticqex_list_tickets",
     {
       title: "List Tickets",
-      description: "List tickets using the same filters as GET /api/v1/tickets.",
+      description: "List tasks using the same filters as GET /api/v1/tickets.",
       inputSchema: {
         ...paginationInput,
         status_id: uuid.optional(),
@@ -57,7 +57,7 @@ export function registerTicketTools(server: McpServer) {
     "ticqex_create_ticket",
     {
       title: "Create Ticket",
-      description: "Create a task ticket.",
+      description: "Create a task.",
       inputSchema: createTicketMcpInputSchema.shape,
     },
     async (input, auth) => {
@@ -75,7 +75,7 @@ export function registerTicketTools(server: McpServer) {
     "ticqex_get_ticket",
     {
       title: "Get Ticket",
-      description: "Get a ticket.",
+      description: "Get a task.",
       inputSchema: { id: uuid },
     },
     async ({ id }) => toolResult(await getTicket(id)),
@@ -86,7 +86,7 @@ export function registerTicketTools(server: McpServer) {
     "ticqex_get_ticket_summary",
     {
       title: "Get Ticket Summary",
-      description: "Get a ticket summary.",
+      description: "Get a task summary.",
       inputSchema: { id: uuid },
     },
     async ({ id }) => toolResult(await getTicketSummary(id)),
@@ -97,7 +97,7 @@ export function registerTicketTools(server: McpServer) {
     "ticqex_get_ticket_context",
     {
       title: "Get Ticket Context",
-      description: "Get a markdown context export for a ticket.",
+      description: "Get a markdown context export for a task.",
       inputSchema: { id: uuid },
     },
     async ({ id }) => toolResult({ markdown: await getTicketContext(id) }),
@@ -108,7 +108,7 @@ export function registerTicketTools(server: McpServer) {
     "ticqex_update_ticket",
     {
       title: "Update Ticket",
-      description: "Update ticket fields, tags, and custom fields.",
+      description: "Update task fields, tags, and custom fields.",
       inputSchema: { id: uuid, patch: updateTicketSchema },
     },
     async ({ id, patch }, auth) =>
@@ -122,7 +122,7 @@ export function registerTicketTools(server: McpServer) {
     "ticqex_delete_ticket",
     {
       title: "Delete Ticket",
-      description: "Delete a ticket.",
+      description: "Delete a task.",
       inputSchema: { id: uuid },
     },
     async ({ id }, auth) => {
@@ -136,7 +136,7 @@ export function registerTicketTools(server: McpServer) {
     "ticqex_list_ticket_comments",
     {
       title: "List Ticket Comments",
-      description: "List internal comments for a ticket using GET /api/v1/tickets/:id/comments.",
+      description: "List comments on a task using GET /api/v1/tickets/:id/comments.",
       inputSchema: { ticket_id: uuid, ...paginationInput },
     },
     async ({ ticket_id, ...input }, auth) =>
@@ -150,7 +150,7 @@ export function registerTicketTools(server: McpServer) {
     "ticqex_create_ticket_comment",
     {
       title: "Create Ticket Comment",
-      description: "Create an internal markdown comment on a ticket.",
+      description: "Create a markdown comment on a task.",
       inputSchema: { ticket_id: uuid, comment: commentInputSchema },
     },
     async ({ ticket_id, comment }, auth) =>
@@ -168,7 +168,7 @@ export function registerTicketTools(server: McpServer) {
     "ticqex_update_ticket_comment",
     {
       title: "Update Ticket Comment",
-      description: "Update an internal ticket comment.",
+      description: "Update a task comment.",
       inputSchema: {
         ticket_id: uuid,
         comment_id: uuid,
@@ -191,7 +191,7 @@ export function registerTicketTools(server: McpServer) {
     "ticqex_delete_ticket_comment",
     {
       title: "Delete Ticket Comment",
-      description: "Hard-delete an internal ticket comment.",
+      description: "Delete a task comment.",
       inputSchema: { ticket_id: uuid, comment_id: uuid },
     },
     async ({ ticket_id, comment_id }, auth) =>

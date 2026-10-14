@@ -36,7 +36,7 @@ export function registerContactTools(server: McpServer) {
     "ticqex_get_contact",
     {
       title: "Get Contact",
-      description: "Get a contact with ticket count and custom fields.",
+      description: "Get a contact with task count and custom fields.",
       inputSchema: { id: uuid },
     },
     async ({ id }) => toolResult(await getContact(id)),
@@ -70,7 +70,7 @@ export function registerContactTools(server: McpServer) {
     "ticqex_delete_contact",
     {
       title: "Delete Contact",
-      description: "Delete a contact with no existing tickets.",
+      description: "Delete a contact with no existing tasks.",
       inputSchema: { id: uuid },
     },
     async ({ id }) => {

@@ -26,7 +26,7 @@ export const CORE_SETTINGS_SECTIONS: readonly SettingsSectionDescriptor[] = [
   {
     id: "custom-fields",
     label: "Custom fields",
-    description: "Typed metadata fields for tickets and contacts.",
+    description: "Typed metadata fields for tasks and contacts.",
     componentKey: "settings.custom-fields",
     order: 40,
   },

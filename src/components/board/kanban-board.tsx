@@ -462,10 +462,10 @@ export function KanbanBoard({ children }: { children?: ReactNode }) {
           size="sm"
           className="shrink-0"
           onClick={() => setShowCreate(true)}
-          aria-label="New ticket"
+          aria-label="New task"
         >
           <PlusIcon />
-          <span className="hidden sm:inline">New Ticket</span>
+          <span className="hidden sm:inline">New Task</span>
         </Button>
       </div>
 
@@ -485,7 +485,7 @@ export function KanbanBoard({ children }: { children?: ReactNode }) {
       size="icon-lg"
       className="fixed right-4 bottom-4 z-30 size-12 rounded-full shadow-lg sm:hidden"
       onClick={() => setShowCreate(true)}
-      aria-label="New ticket"
+      aria-label="New task"
     >
       <PlusIcon className="size-5" />
     </Button>
@@ -540,7 +540,7 @@ export function KanbanBoard({ children }: { children?: ReactNode }) {
 
       {searchActive && !boardQuery.isFetching && !hasSearchResults ? (
         <p className="px-4 pt-2 text-sm text-muted-foreground">
-          No tickets match &ldquo;{searchQuery.trim()}&rdquo;.
+          No tasks match &ldquo;{searchQuery.trim()}&rdquo;.
         </p>
       ) : null}
 

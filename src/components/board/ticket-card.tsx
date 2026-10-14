@@ -133,7 +133,7 @@ function TicketCardActions({
       toast.success("Context copied");
     } catch {
       toast.error("Could not copy context", {
-        description: "Failed to copy ticket context to clipboard.",
+        description: "Failed to copy task context to clipboard.",
       });
     }
   }
@@ -145,7 +145,7 @@ function TicketCardActions({
       await boardContext.onStatusChange(ticket.id, statusId, toStatusId);
     } catch {
       boardContext.onBoardChange();
-      toast.error("Could not move ticket", {
+      toast.error("Could not move task", {
         description: "The board was refreshed to match the server.",
       });
     } finally {
@@ -168,7 +168,7 @@ function TicketCardActions({
           variant="secondary"
           size="xs"
           className="cursor-wait"
-          aria-label="Ticket is still being created"
+          aria-label="Task is still being created"
           disabled
         >
           Creating...
@@ -192,7 +192,7 @@ function TicketCardActions({
           variant="secondary"
           size="xs"
           className="cursor-pointer"
-          aria-label="Open ticket"
+          aria-label="Open task"
           onClick={onOpen}
         >
           Open
@@ -205,7 +205,7 @@ function TicketCardActions({
                 variant="ghost"
                 size="icon-sm"
                 className="text-muted-foreground hover:text-foreground"
-                aria-label="Ticket actions"
+                aria-label="Task actions"
                 disabled={moving}
               >
                 <DotsThreeVerticalIcon />

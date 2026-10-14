@@ -79,7 +79,7 @@ const FIELD_LABELS: Record<string, string> = {
 };
 
 export const TICKET_KIND_LABELS: Record<string, string> = {
-  task: "Ticket",
+  task: "Task",
 };
 
 function formatKindValue(value: string): string {

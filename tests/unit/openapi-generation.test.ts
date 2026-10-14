@@ -67,8 +67,8 @@ describe("OpenAPI generation", () => {
 
     expect(ticketsTag).toMatchObject({
       name: "tickets",
-      description: expect.stringContaining("Tickets"),
-      "x-displayName": "Tickets",
+      description: expect.stringContaining("Tasks"),
+      "x-displayName": "Tasks",
     });
   });
 });
