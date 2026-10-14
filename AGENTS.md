@@ -6,12 +6,12 @@ contribution process lives in [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## If asked to set up this repo for the user
 
-`pnpm ticqex init` is local-only. Do not use it for Supabase Cloud or Vercel.
+`pnpm tasqex init` is local-only. Do not use it for Supabase Cloud or Vercel.
 
 ### Local setup
 
 1. `pnpm install`
-2. `pnpm ticqex init`
+2. `pnpm tasqex init`
    - Supabase: choose `local` then `start` or `reset`.
    - Set `NEXT_PUBLIC_APP_URL` (invite links use it; `http://localhost:3000` is fine locally).
 3. Run `pnpm config:check`, `pnpm env:verify`, and `pnpm dev`.
@@ -52,7 +52,7 @@ Only do this when the user explicitly asks for cloud setup. Remote migrations af
 
 ## What this project is
 
-Ticqex is a collaborative task manager. People and API clients share one
+Tasqex is a collaborative task manager. People and API clients share one
 Kanban board. Tasks, comments, tags, and custom fields are available in the
 admin UI, a typed REST API (`/api/v1/*`), and an MCP server. One database is
 one organization: admins invite members with a link, and removing a member
@@ -78,11 +78,11 @@ Built on Supabase (Postgres, Auth, Realtime) and Next.js (App Router).
 | `server/integrations/` | Integration registry (empty in this build) |
 | `server/lib/`, `server/middleware/` | Route handlers, auth, validation, errors |
 | `shared/` | Code shared between client and server (config, registries, schemas) |
-| `packages/` | Published workspace packages (`@ticqex/cli`, `@ticqex/api-client`, `@ticqex/api-spec`) |
+| `packages/` | Published workspace packages (`@tasqex/cli`, `@tasqex/api-client`, `@tasqex/api-spec`) |
 | `docs/openapi.yaml` | Generated OpenAPI spec (`pnpm openapi:generate`) |
 | `supabase/migrations/` | Database schema (source of truth) |
-| `scripts/` | Setup/seed/verify CLIs (`pnpm ticqex`, `db:*`, `config:*`) and OpenAPI generator |
-| `config/` | Activation config (`ticqex.config.json`, committed) |
+| `scripts/` | Setup/seed/verify CLIs (`pnpm tasqex`, `db:*`, `config:*`) and OpenAPI generator |
+| `config/` | Activation config (`tasqex.config.json`, committed) |
 | `tests/unit`, `tests/integration` | Vitest suites (helpers in `tests/helpers/`) |
 
 ## Local development
@@ -92,7 +92,7 @@ local Supabase).
 
 ```bash
 pnpm install
-pnpm ticqex init        # interactive: Supabase + channels + env
+pnpm tasqex init        # interactive: Supabase + channels + env
 pnpm dev                # http://localhost:3000
 ```
 

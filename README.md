@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/assets/logo.png" alt="Ticqex" width="96" height="96">
+  <img src="docs/assets/logo.png" alt="Tasqex" width="96" height="96">
 </p>
 
 <p align="center">
@@ -9,25 +9,25 @@
 <hr />
 
 <p align="center">
-  <a href="https://github.com/rbouschery/ticqex/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/rbouschery/ticqex/ci.yml?branch=main&label=CI" alt="CI"></a>
-  <a href="https://www.npmjs.com/package/@ticqex/cli"><img src="https://img.shields.io/npm/v/@ticqex/cli?label=%40ticqex%2Fcli" alt="@ticqex/cli on npm"></a>
-  <a href="https://www.npmjs.com/package/@ticqex/api-client"><img src="https://img.shields.io/npm/v/@ticqex/api-client?label=%40ticqex%2Fapi-client" alt="@ticqex/api-client on npm"></a>
-  <a href="./LICENSE"><img src="https://img.shields.io/github/license/rbouschery/ticqex" alt="License: MIT"></a>
+  <a href="https://github.com/rbouschery/tasqex/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/rbouschery/tasqex/ci.yml?branch=main&label=CI" alt="CI"></a>
+  <a href="https://www.npmjs.com/package/@tasqex/cli"><img src="https://img.shields.io/npm/v/@tasqex/cli?label=%40tasqex%2Fcli" alt="@tasqex/cli on npm"></a>
+  <a href="https://www.npmjs.com/package/@tasqex/api-client"><img src="https://img.shields.io/npm/v/@tasqex/api-client?label=%40tasqex%2Fapi-client" alt="@tasqex/api-client on npm"></a>
+  <a href="./LICENSE"><img src="https://img.shields.io/github/license/rbouschery/tasqex" alt="License: MIT"></a>
   <img src="https://img.shields.io/badge/status-pre--1.0-orange" alt="Status: pre-1.0">
   <img src="https://img.shields.io/badge/open--source-free-brightgreen" alt="Open-Source · Free">
 </p>
 
 <p align="center">
-  <img src="docs/assets/preview.png" alt="Ticqex task board" width="800">
+  <img src="docs/assets/preview.png" alt="Tasqex task board" width="800">
 </p>
 
-## What is Ticqex?
+## What is Tasqex?
 
-Ticqex is a small collaborative task manager. People and API clients work the same Kanban board: tasks move across lanes, comments stay on the task, and tags and custom fields are shared. Every board action is available in the admin UI, the REST API (`/api/v1`), MCP (`/api/mcp`), the TypeScript client, and the CLI.
+Tasqex is a small collaborative task manager. People and API clients work the same Kanban board: tasks move across lanes, comments stay on the task, and tags and custom fields are shared. Every board action is available in the admin UI, the REST API (`/api/v1`), MCP (`/api/mcp`), the TypeScript client, and the CLI.
 
 One deployment is one organization. Admins invite people with a link, choose `admin` or `member`, and can remove members. Running another organization means running another instance.
 
-Ticqex is built with Next.js and Supabase (Postgres, Auth, Realtime).
+Tasqex is built with Next.js and Supabase (Postgres, Auth, Realtime). Roughly based on [ticqex](https://github.com/rbouschery/ticqex).
 
 <p align="center">
   Built by
@@ -40,8 +40,8 @@ Ticqex is built with Next.js and Supabase (Postgres, Auth, Realtime).
 Prerequisites: Node 20+ (dev pinned to 22, see `[.nvmrc](./.nvmrc)`), [pnpm](https://pnpm.io/), [Docker](https://www.docker.com/) (for local Supabase).
 
 ```bash
-pnpm install       # also builds workspace packages (@ticqex/api-spec, etc.)
-pnpm ticqex init   # interactive: local Supabase and env
+pnpm install       # also builds workspace packages (@tasqex/api-spec, etc.)
+pnpm tasqex init   # interactive: local Supabase and env
 pnpm dev
 ```
 
@@ -49,11 +49,11 @@ Open [http://localhost:3000](http://localhost:3000) (not `127.0.0.1`), sign in w
 
 What `init` does:
 
-- **Supabase** — choose `local` to start Docker Supabase, write its keys to `.env.local`, bootstrap required board data, and optionally seed an admin user. Choose `skip` if the database is already set up (`pnpm ticqex init --supabase skip`). `start` applies pending migrations and bootstraps; `reset` wipes the local database first.
+- **Supabase** — choose `local` to start Docker Supabase, write its keys to `.env.local`, bootstrap required board data, and optionally seed an admin user. Choose `skip` if the database is already set up (`pnpm tasqex init --supabase skip`). `start` applies pending migrations and bootstraps; `reset` wipes the local database first.
 - **App URL** — `NEXT_PUBLIC_APP_URL`, used in invite links. `http://localhost:3000` is fine locally.
-- **Config** — writes `config/ticqex.config.json` (`config/ticqex.config.example.json` is the template). Channels and integrations are empty.
+- **Config** — writes `config/tasqex.config.json` (`config/tasqex.config.example.json` is the template). Channels and integrations are empty.
 
-`pnpm ticqex init` is local-only; for production see [Deploy](#deploy-supabase-cloud--vercel).
+`pnpm tasqex init` is local-only; for production see [Deploy](#deploy-supabase-cloud--vercel).
 
 ### Manual setup (without the CLI)
 
@@ -61,7 +61,7 @@ The explicit equivalent of `init`, useful for CI or full control:
 
 ```bash
 pnpm install       # builds workspace packages
-cp config/ticqex.config.example.json config/ticqex.config.json
+cp config/tasqex.config.example.json config/tasqex.config.json
 cp .env.example .env.local
 pnpm db:start        # local Supabase (Docker); if stale: pnpm db:stop && pnpm db:start
 pnpm db:env          # write Supabase keys → .env.local
@@ -76,7 +76,7 @@ pnpm dev
 Settings → Organization is admin-only.
 
 - Rename the workspace.
-- Invite by email and role (`admin` or `member`). Ticqex does not send the email. It returns a link, `/invite/<token>`, for you to copy. `NEXT_PUBLIC_APP_URL` is the link's origin. Links expire after 7 days. Creating another invite for the same address refreshes the pending link.
+- Invite by email and role (`admin` or `member`). Tasqex does not send the email. It returns a link, `/invite/<token>`, for you to copy. `NEXT_PUBLIC_APP_URL` is the link's origin. Links expire after 7 days. Creating another invite for the same address refreshes the pending link.
 - The invited person opens the link, sets a password, and joins. Sign-in is limited to active members.
 - Change a member's role, or remove them. Removal marks the account inactive, revokes their API keys, and blocks sign-in. The last admin cannot be removed or changed to a member.
 
@@ -86,7 +86,7 @@ The same actions are on the API and, except public redeem, on MCP. See [Connect 
 
 You need a Supabase project, a Vercel project connected to this repo, and both CLIs logged in (`supabase login`, `vercel login`). Remote migrations change a real database.
 
-1. **Prepare** — `pnpm install`, then create `config/ticqex.config.json` from the example.
+1. **Prepare** — `pnpm install`, then create `config/tasqex.config.json` from the example.
 2. **Supabase** — link and migrate against your project ref (from `https://<project-ref>.supabase.co`):
   ```bash
    supabase link --project-ref <project-ref>
@@ -128,45 +128,45 @@ MCP tools cover tasks, comments, board moves, contacts, tags, statuses, custom f
 
 ### Published packages
 
-Ticqex publishes two public npm packages:
+Tasqex publishes two public npm packages:
 
-- [`@ticqex/cli`](https://www.npmjs.com/package/@ticqex/cli) — a shell-friendly headless client for agents, scripts, and release checks.
-- [`@ticqex/api-client`](https://www.npmjs.com/package/@ticqex/api-client) — a small TypeScript client for headless REST API integrations.
+- [`@tasqex/cli`](https://www.npmjs.com/package/@tasqex/cli) — a shell-friendly headless client for agents, scripts, and release checks.
+- [`@tasqex/api-client`](https://www.npmjs.com/package/@tasqex/api-client) — a small TypeScript client for headless REST API integrations.
 
-`@ticqex/api-spec` is intentionally internal. The CLI bundles the operation catalog it needs, so consumers do not need to install or depend on the spec package.
+`@tasqex/api-spec` is intentionally internal. The CLI bundles the operation catalog it needs, so consumers do not need to install or depend on the spec package.
 
-### Agent CLI (`@ticqex/cli`)
+### Agent CLI (`@tasqex/cli`)
 
 For shell-based agents and scripts, run the published CLI:
 
 ```bash
-pnpm dlx @ticqex/cli --help
-ticqex auth login --instance https://your-instance.example.com
-ticqex tickets list --page 1 --json
-ticqex call ticqex_create_ticket --input '{"title":"Write the brief","kind":"task"}'
-ticqex organization invites list
+pnpm dlx @tasqex/cli --help
+tasqex auth login --instance https://your-instance.example.com
+tasqex tickets list --page 1 --json
+tasqex call tasqex_create_ticket --input '{"title":"Write the brief","kind":"task"}'
+tasqex organization invites list
 ```
 
-`auth login` prompts for an API key from **Settings → API & MCP**. You can also skip stored credentials and pass `--instance` / `--api-key`, or set `TICQEX_INSTANCE` and `TICQEX_API_KEY`.
+`auth login` prompts for an API key from **Settings → API & MCP**. You can also skip stored credentials and pass `--instance` / `--api-key`, or set `TASQEX_INSTANCE` and `TASQEX_API_KEY`.
 
-When developing from this repo, use `node packages/cli/dist/main.js` after `pnpm --filter @ticqex/cli... build`.
+When developing from this repo, use `node packages/cli/dist/main.js` after `pnpm --filter @tasqex/cli... build`.
 
 See [`packages/cli/README.md`](packages/cli/README.md). Request schemas: [`docs/openapi.yaml`](docs/openapi.yaml).
 
-### TypeScript API client (`@ticqex/api-client`)
+### TypeScript API client (`@tasqex/api-client`)
 
-Install the client when you want to call Ticqex from an app, worker, integration, or agent runtime:
+Install the client when you want to call Tasqex from an app, worker, integration, or agent runtime:
 
 ```bash
-pnpm add @ticqex/api-client
+pnpm add @tasqex/api-client
 ```
 
 ```typescript
-import { TicqexClient } from "@ticqex/api-client";
+import { TasqexClient } from "@tasqex/api-client";
 
-const client = new TicqexClient({
+const client = new TasqexClient({
   baseUrl: "https://your-instance.example.com",
-  apiKey: process.env.TICQEX_API_KEY!,
+  apiKey: process.env.TASQEX_API_KEY!,
 });
 
 const tickets = await client.get("/tickets", { page: 1, per_page: 25 });
@@ -186,8 +186,8 @@ OpenAPI spec: [`docs/openapi.yaml`](docs/openapi.yaml) — regenerate with `pnpm
 | Command                                        | Description                                                             |
 | ---------------------------------------------- | ----------------------------------------------------------------------- |
 | `pnpm dev` / `build` / `lint`                  | Dev server, production build, ESLint                                    |
-| `pnpm ticqex init`                             | Interactive local setup: Supabase, app URL, activation config           |
-| `pnpm config:check`                            | Validate `config/ticqex.config.json` bindings and required env vars     |
+| `pnpm tasqex init`                             | Interactive local setup: Supabase, app URL, activation config           |
+| `pnpm config:check`                            | Validate `config/tasqex.config.json` bindings and required env vars     |
 | `pnpm config:sync`                             | Validate activation JSON and print planned channel field sync (dry-run) |
 | `pnpm env:verify`                              | Check Supabase env vars                                                 |
 | `pnpm db:start` / `db:stop` / `db:reset`       | Local Supabase lifecycle (`reset` wipes local data)                     |
@@ -196,7 +196,7 @@ OpenAPI spec: [`docs/openapi.yaml`](docs/openapi.yaml) — regenerate with `pnpm
 | `pnpm db:seed-admin`                           | Create the first admin from `SEED_ADMIN_*`                              |
 | `pnpm test` / `test:unit` / `test:integration` | Vitest suites under `tests/`                                            |
 | `pnpm openapi:generate` / `openapi:check`      | Generate or verify `docs/openapi.yaml`                                  |
-| `pnpm build:packages` / `test:packages`        | Build and test `@ticqex/*` workspace packages                           |
+| `pnpm build:packages` / `test:packages`        | Build and test `@tasqex/*` workspace packages                           |
 | `pnpm seed:board-load`                         | Optional: large board dataset for manual load testing                   |
 
 
@@ -223,8 +223,8 @@ Integration tests call `server/services` directly, except the MCP route test whi
 | `server/integrations/`              | Integration registry (empty in this build)                          |
 | `server/lib/`, `server/middleware/` | Route handlers, auth, validation, errors                            |
 | `shared/`                           | Code shared between client and server (config, registries, schemas) |
-| `config/`                           | Activation config (`ticqex.config.json`, committed)                 |
-| `scripts/`                          | Setup/seed/verify CLIs (`pnpm ticqex`, `db:*`, `config:*`)          |
+| `config/`                           | Activation config (`tasqex.config.json`, committed)                 |
+| `scripts/`                          | Setup/seed/verify CLIs (`pnpm tasqex`, `db:*`, `config:*`)          |
 | `supabase/migrations/`              | Database schema                                                     |
 | `tests/unit`, `tests/integration`   | Vitest suites (helpers in `tests/helpers/`)                         |
 

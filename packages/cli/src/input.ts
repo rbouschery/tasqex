@@ -1,4 +1,4 @@
-import type { QueryParams } from "@ticqex/api-client";
+import type { QueryParams } from "@tasqex/api-client";
 import type { OperationDefinition } from "./command-catalog.js";
 import { CliUsageError } from "./output.js";
 
@@ -127,7 +127,7 @@ export function buildRequest(
     }
   }
 
-  if (operation.name === "ticqex_list_tickets") {
+  if (operation.name === "tasqex_list_tickets") {
     flattenCustomFieldQuery(input, query);
   }
 

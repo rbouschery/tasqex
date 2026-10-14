@@ -10,7 +10,7 @@ describe("resolveOperation", () => {
         "PATCH",
         "/api/v1/tickets/550e8400-e29b-41d4-a716-446655440000",
       ),
-    ).toBe("ticqex_update_ticket");
+    ).toBe("tasqex_update_ticket");
   });
 
   it("matches nested ticket comment routes", () => {
@@ -19,7 +19,7 @@ describe("resolveOperation", () => {
         "GET",
         "/api/v1/tickets/550e8400-e29b-41d4-a716-446655440000/comments",
       ),
-    ).toBe("ticqex_list_ticket_comments");
+    ).toBe("tasqex_list_ticket_comments");
   });
 
   it("returns null for unknown routes", () => {

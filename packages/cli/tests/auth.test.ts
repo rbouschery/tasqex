@@ -23,8 +23,8 @@ describe("config paths", () => {
 
   it("uses XDG_CONFIG_HOME when set", () => {
     process.env.XDG_CONFIG_HOME = "/tmp/xdg-config";
-    expect(getConfigDir()).toBe("/tmp/xdg-config/ticqex");
-    expect(getConfigPath()).toBe("/tmp/xdg-config/ticqex/config.json");
+    expect(getConfigDir()).toBe("/tmp/xdg-config/tasqex");
+    expect(getConfigPath()).toBe("/tmp/xdg-config/tasqex/config.json");
   });
 });
 
@@ -33,10 +33,10 @@ describe("credential precedence", () => {
   const originalEnv = { ...process.env };
 
   beforeEach(async () => {
-    configRoot = await mkdtemp(join(tmpdir(), "ticqex-cli-auth-"));
+    configRoot = await mkdtemp(join(tmpdir(), "tasqex-cli-auth-"));
     process.env.XDG_CONFIG_HOME = configRoot;
-    delete process.env.TICQEX_INSTANCE;
-    delete process.env.TICQEX_API_KEY;
+    delete process.env.TASQEX_INSTANCE;
+    delete process.env.TASQEX_API_KEY;
     await saveStoredConfig({
       instance: "https://stored.example.com",
       apiKey: "tq_live_stored_key",
@@ -49,8 +49,8 @@ describe("credential precedence", () => {
   });
 
   it("prefers CLI flags over env and stored config", async () => {
-    process.env.TICQEX_INSTANCE = "https://env.example.com";
-    process.env.TICQEX_API_KEY = "tq_live_env_key";
+    process.env.TASQEX_INSTANCE = "https://env.example.com";
+    process.env.TASQEX_API_KEY = "tq_live_env_key";
 
     const resolved = await resolveCredentials({
       instance: "https://flag.example.com",
@@ -65,8 +65,8 @@ describe("credential precedence", () => {
   });
 
   it("prefers env over stored config when flags are absent", async () => {
-    process.env.TICQEX_INSTANCE = "https://env.example.com";
-    process.env.TICQEX_API_KEY = "tq_live_env_key";
+    process.env.TASQEX_INSTANCE = "https://env.example.com";
+    process.env.TASQEX_API_KEY = "tq_live_env_key";
 
     const resolved = await resolveCredentials({});
     expect(resolved).toEqual({
@@ -114,7 +114,7 @@ describe("clearStoredConfig", () => {
   let configRoot: string;
 
   beforeEach(async () => {
-    configRoot = await mkdtemp(join(tmpdir(), "ticqex-cli-clear-"));
+    configRoot = await mkdtemp(join(tmpdir(), "tasqex-cli-clear-"));
     process.env.XDG_CONFIG_HOME = configRoot;
     await saveStoredConfig({
       instance: "https://example.com",

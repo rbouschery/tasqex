@@ -2,17 +2,17 @@
 
 openapi: 3.1.0
 info:
-  title: Ticqex API
+  title: Tasqex API
   version: 0.1.0
-  description: "REST JSON API for the Ticqex task board at /api/v1. Authenticate with Authorization: Bearer tq_live_* (API
+  description: "REST JSON API for the Tasqex task board at /api/v1. Authenticate with Authorization: Bearer tq_live_* (API
     key) or a member Supabase JWT. Invite preview and redeem are public."
 servers:
   - url: https://{instanceHost}/api/v1
-    description: Your Ticqex deployment.
+    description: Your Tasqex deployment.
     variables:
       instanceHost:
         default: your-instance.com
-        description: Hostname of your Ticqex deployment, without protocol or path.
+        description: Hostname of your Tasqex deployment, without protocol or path.
 tags:
   - name: activity
   - name: api_keys
@@ -48,9 +48,9 @@ tags:
 paths:
   /users/me:
     get:
-      operationId: ticqex_get_me
+      operationId: tasqex_get_me
       summary: Get me
-      description: "MCP tool: `ticqex_get_me`."
+      description: "MCP tool: `tasqex_get_me`."
       tags:
         - users
       responses:
@@ -88,9 +88,9 @@ paths:
         - bearerAuth: []
   /users:
     get:
-      operationId: ticqex_list_users
+      operationId: tasqex_list_users
       summary: List users
-      description: "MCP tool: `ticqex_list_users`."
+      description: "MCP tool: `tasqex_list_users`."
       tags:
         - users
       responses:
@@ -128,9 +128,9 @@ paths:
         - bearerAuth: []
   /tickets:
     get:
-      operationId: ticqex_list_tickets
+      operationId: tasqex_list_tickets
       summary: List tickets
-      description: "MCP tool: `ticqex_list_tickets`."
+      description: "MCP tool: `tasqex_list_tickets`."
       tags:
         - tickets
       responses:
@@ -222,9 +222,9 @@ paths:
           schema:
             type: string
     post:
-      operationId: ticqex_create_ticket
+      operationId: tasqex_create_ticket
       summary: Create ticket
-      description: "MCP tool: `ticqex_create_ticket`."
+      description: "MCP tool: `tasqex_create_ticket`."
       tags:
         - tickets
       responses:
@@ -265,12 +265,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ticqex_create_ticketRequest"
+              $ref: "#/components/schemas/tasqex_create_ticketRequest"
   /tickets/{id}:
     get:
-      operationId: ticqex_get_ticket
+      operationId: tasqex_get_ticket
       summary: Get ticket
-      description: "MCP tool: `ticqex_get_ticket`."
+      description: "MCP tool: `tasqex_get_ticket`."
       tags:
         - tickets
       responses:
@@ -314,9 +314,9 @@ paths:
             type: string
             format: uuid
     patch:
-      operationId: ticqex_update_ticket
+      operationId: tasqex_update_ticket
       summary: Update ticket
-      description: "MCP tool: `ticqex_update_ticket`."
+      description: "MCP tool: `tasqex_update_ticket`."
       tags:
         - tickets
       responses:
@@ -364,11 +364,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ticqex_update_ticketRequest"
+              $ref: "#/components/schemas/tasqex_update_ticketRequest"
     delete:
-      operationId: ticqex_delete_ticket
+      operationId: tasqex_delete_ticket
       summary: Delete ticket
-      description: "MCP tool: `ticqex_delete_ticket`."
+      description: "MCP tool: `tasqex_delete_ticket`."
       tags:
         - tickets
       responses:
@@ -413,9 +413,9 @@ paths:
             format: uuid
   /tickets/{id}/summary:
     get:
-      operationId: ticqex_get_ticket_summary
+      operationId: tasqex_get_ticket_summary
       summary: Get ticket summary
-      description: "MCP tool: `ticqex_get_ticket_summary`."
+      description: "MCP tool: `tasqex_get_ticket_summary`."
       tags:
         - tickets
       responses:
@@ -460,9 +460,9 @@ paths:
             format: uuid
   /tickets/{id}/context:
     get:
-      operationId: ticqex_get_ticket_context
+      operationId: tasqex_get_ticket_context
       summary: Get ticket context
-      description: "MCP tool: `ticqex_get_ticket_context`."
+      description: "MCP tool: `tasqex_get_ticket_context`."
       tags:
         - tickets
       responses:
@@ -507,9 +507,9 @@ paths:
             format: uuid
   /tickets/{ticket_id}/comments:
     get:
-      operationId: ticqex_list_ticket_comments
+      operationId: tasqex_list_ticket_comments
       summary: List ticket comments
-      description: "MCP tool: `ticqex_list_ticket_comments`."
+      description: "MCP tool: `tasqex_list_ticket_comments`."
       tags:
         - tickets
       responses:
@@ -565,9 +565,9 @@ paths:
             type: integer
           description: Number of items per page.
     post:
-      operationId: ticqex_create_ticket_comment
+      operationId: tasqex_create_ticket_comment
       summary: Create ticket comment
-      description: "MCP tool: `ticqex_create_ticket_comment`."
+      description: "MCP tool: `tasqex_create_ticket_comment`."
       tags:
         - tickets
       responses:
@@ -615,12 +615,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ticqex_create_ticket_commentRequest"
+              $ref: "#/components/schemas/tasqex_create_ticket_commentRequest"
   /tickets/{ticket_id}/comments/{comment_id}:
     patch:
-      operationId: ticqex_update_ticket_comment
+      operationId: tasqex_update_ticket_comment
       summary: Update ticket comment
-      description: "MCP tool: `ticqex_update_ticket_comment`."
+      description: "MCP tool: `tasqex_update_ticket_comment`."
       tags:
         - tickets
       responses:
@@ -674,11 +674,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ticqex_update_ticket_commentRequest"
+              $ref: "#/components/schemas/tasqex_update_ticket_commentRequest"
     delete:
-      operationId: ticqex_delete_ticket_comment
+      operationId: tasqex_delete_ticket_comment
       summary: Delete ticket comment
-      description: "MCP tool: `ticqex_delete_ticket_comment`."
+      description: "MCP tool: `tasqex_delete_ticket_comment`."
       tags:
         - tickets
       responses:
@@ -729,9 +729,9 @@ paths:
             format: uuid
   /board:
     get:
-      operationId: ticqex_get_board
+      operationId: tasqex_get_board
       summary: Get board
-      description: "MCP tool: `ticqex_get_board`."
+      description: "MCP tool: `tasqex_get_board`."
       tags:
         - board
       responses:
@@ -788,9 +788,9 @@ paths:
           description: Search query for the board.
   /board/filter-options:
     get:
-      operationId: ticqex_get_board_filter_options
+      operationId: tasqex_get_board_filter_options
       summary: Get board filter options
-      description: "MCP tool: `ticqex_get_board_filter_options`."
+      description: "MCP tool: `tasqex_get_board_filter_options`."
       tags:
         - board
       responses:
@@ -828,9 +828,9 @@ paths:
         - bearerAuth: []
   /board/lanes/{status_id}/tickets:
     get:
-      operationId: ticqex_get_board_lane_tickets
+      operationId: tasqex_get_board_lane_tickets
       summary: Get board lane tickets
-      description: "MCP tool: `ticqex_get_board_lane_tickets`."
+      description: "MCP tool: `tasqex_get_board_lane_tickets`."
       tags:
         - board
       responses:
@@ -899,9 +899,9 @@ paths:
           description: Sort order for board or lane results.
   /board/lanes/{status_id}/order:
     put:
-      operationId: ticqex_set_board_lane_order
+      operationId: tasqex_set_board_lane_order
       summary: Set board lane order
-      description: "MCP tool: `ticqex_set_board_lane_order`."
+      description: "MCP tool: `tasqex_set_board_lane_order`."
       tags:
         - board
       responses:
@@ -949,12 +949,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ticqex_set_board_lane_orderRequest"
+              $ref: "#/components/schemas/tasqex_set_board_lane_orderRequest"
   /board/manual-order:
     put:
-      operationId: ticqex_seed_manual_board_orders
+      operationId: tasqex_seed_manual_board_orders
       summary: Seed manual board orders
-      description: "MCP tool: `ticqex_seed_manual_board_orders`."
+      description: "MCP tool: `tasqex_seed_manual_board_orders`."
       tags:
         - board
       responses:
@@ -995,12 +995,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ticqex_seed_manual_board_ordersRequest"
+              $ref: "#/components/schemas/tasqex_seed_manual_board_ordersRequest"
   /board/move-ticket:
     post:
-      operationId: ticqex_move_ticket_on_board
+      operationId: tasqex_move_ticket_on_board
       summary: Move ticket on board
-      description: "MCP tool: `ticqex_move_ticket_on_board`."
+      description: "MCP tool: `tasqex_move_ticket_on_board`."
       tags:
         - board
       responses:
@@ -1041,12 +1041,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ticqex_move_ticket_on_boardRequest"
+              $ref: "#/components/schemas/tasqex_move_ticket_on_boardRequest"
   /contacts:
     get:
-      operationId: ticqex_list_contacts
+      operationId: tasqex_list_contacts
       summary: List contacts
-      description: "MCP tool: `ticqex_list_contacts`."
+      description: "MCP tool: `tasqex_list_contacts`."
       tags:
         - contacts
       responses:
@@ -1083,9 +1083,9 @@ paths:
       security:
         - bearerAuth: []
     post:
-      operationId: ticqex_create_contact
+      operationId: tasqex_create_contact
       summary: Create contact
-      description: "MCP tool: `ticqex_create_contact`."
+      description: "MCP tool: `tasqex_create_contact`."
       tags:
         - contacts
       responses:
@@ -1126,12 +1126,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ticqex_create_contactRequest"
+              $ref: "#/components/schemas/tasqex_create_contactRequest"
   /contacts/{id}:
     get:
-      operationId: ticqex_get_contact
+      operationId: tasqex_get_contact
       summary: Get contact
-      description: "MCP tool: `ticqex_get_contact`."
+      description: "MCP tool: `tasqex_get_contact`."
       tags:
         - contacts
       responses:
@@ -1175,9 +1175,9 @@ paths:
             type: string
             format: uuid
     patch:
-      operationId: ticqex_update_contact
+      operationId: tasqex_update_contact
       summary: Update contact
-      description: "MCP tool: `ticqex_update_contact`."
+      description: "MCP tool: `tasqex_update_contact`."
       tags:
         - contacts
       responses:
@@ -1225,11 +1225,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ticqex_update_contactRequest"
+              $ref: "#/components/schemas/tasqex_update_contactRequest"
     delete:
-      operationId: ticqex_delete_contact
+      operationId: tasqex_delete_contact
       summary: Delete contact
-      description: "MCP tool: `ticqex_delete_contact`."
+      description: "MCP tool: `tasqex_delete_contact`."
       tags:
         - contacts
       responses:
@@ -1274,9 +1274,9 @@ paths:
             format: uuid
   /tags:
     get:
-      operationId: ticqex_list_tags
+      operationId: tasqex_list_tags
       summary: List tags
-      description: "MCP tool: `ticqex_list_tags`."
+      description: "MCP tool: `tasqex_list_tags`."
       tags:
         - tags
       responses:
@@ -1313,9 +1313,9 @@ paths:
       security:
         - bearerAuth: []
     post:
-      operationId: ticqex_create_tag
+      operationId: tasqex_create_tag
       summary: Create tag
-      description: "MCP tool: `ticqex_create_tag`."
+      description: "MCP tool: `tasqex_create_tag`."
       tags:
         - tags
       responses:
@@ -1356,12 +1356,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ticqex_create_tagRequest"
+              $ref: "#/components/schemas/tasqex_create_tagRequest"
   /tags/{id}:
     patch:
-      operationId: ticqex_update_tag
+      operationId: tasqex_update_tag
       summary: Update tag
-      description: "MCP tool: `ticqex_update_tag`."
+      description: "MCP tool: `tasqex_update_tag`."
       tags:
         - tags
       responses:
@@ -1409,11 +1409,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ticqex_update_tagRequest"
+              $ref: "#/components/schemas/tasqex_update_tagRequest"
     delete:
-      operationId: ticqex_delete_tag
+      operationId: tasqex_delete_tag
       summary: Delete tag
-      description: "MCP tool: `ticqex_delete_tag`."
+      description: "MCP tool: `tasqex_delete_tag`."
       tags:
         - tags
       responses:
@@ -1458,9 +1458,9 @@ paths:
             format: uuid
   /statuses:
     get:
-      operationId: ticqex_list_statuses
+      operationId: tasqex_list_statuses
       summary: List statuses
-      description: "MCP tool: `ticqex_list_statuses`."
+      description: "MCP tool: `tasqex_list_statuses`."
       tags:
         - statuses
       responses:
@@ -1497,9 +1497,9 @@ paths:
       security:
         - bearerAuth: []
     post:
-      operationId: ticqex_create_status
+      operationId: tasqex_create_status
       summary: Create status
-      description: "MCP tool: `ticqex_create_status`."
+      description: "MCP tool: `tasqex_create_status`."
       tags:
         - statuses
       responses:
@@ -1540,12 +1540,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ticqex_create_statusRequest"
+              $ref: "#/components/schemas/tasqex_create_statusRequest"
   /statuses/{id}:
     patch:
-      operationId: ticqex_update_status
+      operationId: tasqex_update_status
       summary: Update status
-      description: "MCP tool: `ticqex_update_status`."
+      description: "MCP tool: `tasqex_update_status`."
       tags:
         - statuses
       responses:
@@ -1593,11 +1593,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ticqex_update_statusRequest"
+              $ref: "#/components/schemas/tasqex_update_statusRequest"
     delete:
-      operationId: ticqex_delete_status
+      operationId: tasqex_delete_status
       summary: Delete status
-      description: "MCP tool: `ticqex_delete_status`."
+      description: "MCP tool: `tasqex_delete_status`."
       tags:
         - statuses
       responses:
@@ -1645,12 +1645,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ticqex_delete_statusRequest"
+              $ref: "#/components/schemas/tasqex_delete_statusRequest"
   /statuses/reorder:
     put:
-      operationId: ticqex_reorder_statuses
+      operationId: tasqex_reorder_statuses
       summary: Reorder statuses
-      description: "MCP tool: `ticqex_reorder_statuses`."
+      description: "MCP tool: `tasqex_reorder_statuses`."
       tags:
         - statuses
       responses:
@@ -1691,12 +1691,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ticqex_reorder_statusesRequest"
+              $ref: "#/components/schemas/tasqex_reorder_statusesRequest"
   /custom-fields:
     get:
-      operationId: ticqex_list_custom_fields
+      operationId: tasqex_list_custom_fields
       summary: List custom fields
-      description: "MCP tool: `ticqex_list_custom_fields`."
+      description: "MCP tool: `tasqex_list_custom_fields`."
       tags:
         - custom_fields
       responses:
@@ -1743,9 +1743,9 @@ paths:
               - contact
           description: Filter custom field definitions by group. One of "ticket" or "contact".
     post:
-      operationId: ticqex_create_custom_field
+      operationId: tasqex_create_custom_field
       summary: Create custom field
-      description: "MCP tool: `ticqex_create_custom_field`."
+      description: "MCP tool: `tasqex_create_custom_field`."
       tags:
         - custom_fields
       responses:
@@ -1786,12 +1786,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ticqex_create_custom_fieldRequest"
+              $ref: "#/components/schemas/tasqex_create_custom_fieldRequest"
   /custom-fields/{id}:
     patch:
-      operationId: ticqex_update_custom_field
+      operationId: tasqex_update_custom_field
       summary: Update custom field
-      description: "MCP tool: `ticqex_update_custom_field`."
+      description: "MCP tool: `tasqex_update_custom_field`."
       tags:
         - custom_fields
       responses:
@@ -1839,11 +1839,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ticqex_update_custom_fieldRequest"
+              $ref: "#/components/schemas/tasqex_update_custom_fieldRequest"
     delete:
-      operationId: ticqex_delete_custom_field
+      operationId: tasqex_delete_custom_field
       summary: Delete custom field
-      description: "MCP tool: `ticqex_delete_custom_field`."
+      description: "MCP tool: `tasqex_delete_custom_field`."
       tags:
         - custom_fields
       responses:
@@ -1888,9 +1888,9 @@ paths:
             format: uuid
   /custom-fields/reorder:
     put:
-      operationId: ticqex_reorder_custom_fields
+      operationId: tasqex_reorder_custom_fields
       summary: Reorder custom fields
-      description: "MCP tool: `ticqex_reorder_custom_fields`."
+      description: "MCP tool: `tasqex_reorder_custom_fields`."
       tags:
         - custom_fields
       responses:
@@ -1931,12 +1931,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ticqex_reorder_custom_fieldsRequest"
+              $ref: "#/components/schemas/tasqex_reorder_custom_fieldsRequest"
   /settings:
     get:
-      operationId: ticqex_get_settings
+      operationId: tasqex_get_settings
       summary: Get settings
-      description: "MCP tool: `ticqex_get_settings`."
+      description: "MCP tool: `tasqex_get_settings`."
       tags:
         - settings
       responses:
@@ -1973,9 +1973,9 @@ paths:
       security:
         - bearerAuth: []
     patch:
-      operationId: ticqex_patch_settings
+      operationId: tasqex_patch_settings
       summary: Patch settings
-      description: "MCP tool: `ticqex_patch_settings`."
+      description: "MCP tool: `tasqex_patch_settings`."
       tags:
         - settings
       responses:
@@ -2016,12 +2016,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ticqex_patch_settingsRequest"
+              $ref: "#/components/schemas/tasqex_patch_settingsRequest"
   /api-keys:
     get:
-      operationId: ticqex_list_api_keys
+      operationId: tasqex_list_api_keys
       summary: List api keys
-      description: "Requires admin role. MCP tool: `ticqex_list_api_keys`."
+      description: "Requires admin role. MCP tool: `tasqex_list_api_keys`."
       tags:
         - api_keys
       responses:
@@ -2058,9 +2058,9 @@ paths:
       security:
         - bearerAuth: []
     post:
-      operationId: ticqex_create_api_key
+      operationId: tasqex_create_api_key
       summary: Create api key
-      description: "Requires admin role. MCP tool: `ticqex_create_api_key`."
+      description: "Requires admin role. MCP tool: `tasqex_create_api_key`."
       tags:
         - api_keys
       responses:
@@ -2101,12 +2101,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ticqex_create_api_keyRequest"
+              $ref: "#/components/schemas/tasqex_create_api_keyRequest"
   /organization:
     get:
-      operationId: ticqex_get_organization
+      operationId: tasqex_get_organization
       summary: Get organization
-      description: "MCP tool: `ticqex_get_organization`."
+      description: "MCP tool: `tasqex_get_organization`."
       tags:
         - organization
       responses:
@@ -2143,9 +2143,9 @@ paths:
       security:
         - bearerAuth: []
     patch:
-      operationId: ticqex_update_organization
+      operationId: tasqex_update_organization
       summary: Update organization
-      description: "MCP tool: `ticqex_update_organization`."
+      description: "MCP tool: `tasqex_update_organization`."
       tags:
         - organization
       responses:
@@ -2186,12 +2186,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ticqex_update_organizationRequest"
+              $ref: "#/components/schemas/tasqex_update_organizationRequest"
   /organization/invites:
     get:
-      operationId: ticqex_list_organization_invites
+      operationId: tasqex_list_organization_invites
       summary: List organization invites
-      description: "MCP tool: `ticqex_list_organization_invites`."
+      description: "MCP tool: `tasqex_list_organization_invites`."
       tags:
         - organization
       responses:
@@ -2228,9 +2228,9 @@ paths:
       security:
         - bearerAuth: []
     post:
-      operationId: ticqex_create_organization_invite
+      operationId: tasqex_create_organization_invite
       summary: Create organization invite
-      description: "MCP tool: `ticqex_create_organization_invite`."
+      description: "MCP tool: `tasqex_create_organization_invite`."
       tags:
         - organization
       responses:
@@ -2271,12 +2271,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ticqex_create_organization_inviteRequest"
+              $ref: "#/components/schemas/tasqex_create_organization_inviteRequest"
   /organization/invites/{id}:
     delete:
-      operationId: ticqex_revoke_organization_invite
+      operationId: tasqex_revoke_organization_invite
       summary: Revoke organization invite
-      description: "MCP tool: `ticqex_revoke_organization_invite`."
+      description: "MCP tool: `tasqex_revoke_organization_invite`."
       tags:
         - organization
       responses:
@@ -2321,7 +2321,7 @@ paths:
             format: uuid
   /organization/invites/preview:
     get:
-      operationId: ticqex_preview_organization_invite
+      operationId: tasqex_preview_organization_invite
       summary: Preview organization invite
       description: Public. No authentication required.
       tags:
@@ -2366,7 +2366,7 @@ paths:
             type: string
   /organization/invites/redeem:
     post:
-      operationId: ticqex_redeem_organization_invite
+      operationId: tasqex_redeem_organization_invite
       summary: Redeem organization invite
       description: Public. No authentication required.
       tags:
@@ -2408,12 +2408,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ticqex_redeem_organization_inviteRequest"
+              $ref: "#/components/schemas/tasqex_redeem_organization_inviteRequest"
   /organization/invites/accept:
     post:
-      operationId: ticqex_accept_organization_invite
+      operationId: tasqex_accept_organization_invite
       summary: Accept organization invite
-      description: "MCP tool: `ticqex_accept_organization_invite`."
+      description: "MCP tool: `tasqex_accept_organization_invite`."
       tags:
         - organization
       responses:
@@ -2454,12 +2454,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ticqex_accept_organization_inviteRequest"
+              $ref: "#/components/schemas/tasqex_accept_organization_inviteRequest"
   /users/{id}:
     patch:
-      operationId: ticqex_update_user_role
+      operationId: tasqex_update_user_role
       summary: Update user role
-      description: "MCP tool: `ticqex_update_user_role`."
+      description: "MCP tool: `tasqex_update_user_role`."
       tags:
         - users
       responses:
@@ -2507,11 +2507,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ticqex_update_user_roleRequest"
+              $ref: "#/components/schemas/tasqex_update_user_roleRequest"
     delete:
-      operationId: ticqex_remove_user
+      operationId: tasqex_remove_user
       summary: Remove user
-      description: "MCP tool: `ticqex_remove_user`."
+      description: "MCP tool: `tasqex_remove_user`."
       tags:
         - users
       responses:
@@ -2556,9 +2556,9 @@ paths:
             format: uuid
   /api-keys/{id}:
     delete:
-      operationId: ticqex_revoke_api_key
+      operationId: tasqex_revoke_api_key
       summary: Revoke api key
-      description: "Requires admin role. MCP tool: `ticqex_revoke_api_key`."
+      description: "Requires admin role. MCP tool: `tasqex_revoke_api_key`."
       tags:
         - api_keys
       responses:
@@ -2603,9 +2603,9 @@ paths:
             format: uuid
   /activity:
     get:
-      operationId: ticqex_list_activity
+      operationId: tasqex_list_activity
       summary: List activity
-      description: "Requires admin role. MCP tool: `ticqex_list_activity`."
+      description: "Requires admin role. MCP tool: `tasqex_list_activity`."
       tags:
         - activity
       responses:
@@ -2721,9 +2721,9 @@ paths:
             type: string
   /tickets/{ticket_id}/activity:
     get:
-      operationId: ticqex_list_ticket_activity
+      operationId: tasqex_list_ticket_activity
       summary: List ticket activity
-      description: "MCP tool: `ticqex_list_ticket_activity`."
+      description: "MCP tool: `tasqex_list_ticket_activity`."
       tags:
         - tickets
       responses:
@@ -2813,7 +2813,7 @@ components:
         meta:
           type: object
           additionalProperties: true
-    ticqex_create_ticketRequest:
+    tasqex_create_ticketRequest:
       $schema: https://json-schema.org/draft/2020-12/schema
       type: object
       properties:
@@ -2855,7 +2855,7 @@ components:
         - kind
         - contact
       additionalProperties: false
-    ticqex_update_ticketRequest:
+    tasqex_update_ticketRequest:
       $schema: https://json-schema.org/draft/2020-12/schema
       type: object
       properties:
@@ -2886,7 +2886,7 @@ components:
             type: string
           additionalProperties: {}
       additionalProperties: false
-    ticqex_create_ticket_commentRequest:
+    tasqex_create_ticket_commentRequest:
       $schema: https://json-schema.org/draft/2020-12/schema
       type: object
       properties:
@@ -2897,7 +2897,7 @@ components:
       required:
         - body
       additionalProperties: false
-    ticqex_update_ticket_commentRequest:
+    tasqex_update_ticket_commentRequest:
       $schema: https://json-schema.org/draft/2020-12/schema
       type: object
       properties:
@@ -2908,7 +2908,7 @@ components:
       required:
         - body
       additionalProperties: false
-    ticqex_set_board_lane_orderRequest:
+    tasqex_set_board_lane_orderRequest:
       $schema: https://json-schema.org/draft/2020-12/schema
       type: object
       properties:
@@ -2933,7 +2933,7 @@ components:
       required:
         - ticket_ids
       additionalProperties: false
-    ticqex_seed_manual_board_ordersRequest:
+    tasqex_seed_manual_board_ordersRequest:
       $schema: https://json-schema.org/draft/2020-12/schema
       type: object
       properties:
@@ -2956,7 +2956,7 @@ components:
       required:
         - lanes
       additionalProperties: false
-    ticqex_move_ticket_on_boardRequest:
+    tasqex_move_ticket_on_boardRequest:
       $schema: https://json-schema.org/draft/2020-12/schema
       type: object
       properties:
@@ -3012,7 +3012,7 @@ components:
         - to_status_id
         - target_ticket_ids
       additionalProperties: false
-    ticqex_create_contactRequest:
+    tasqex_create_contactRequest:
       $schema: https://json-schema.org/draft/2020-12/schema
       type: object
       properties:
@@ -3027,7 +3027,7 @@ components:
       required:
         - username
       additionalProperties: false
-    ticqex_update_contactRequest:
+    tasqex_update_contactRequest:
       $schema: https://json-schema.org/draft/2020-12/schema
       type: object
       properties:
@@ -3040,7 +3040,7 @@ components:
             type: string
           additionalProperties: {}
       additionalProperties: false
-    ticqex_create_tagRequest:
+    tasqex_create_tagRequest:
       $schema: https://json-schema.org/draft/2020-12/schema
       type: object
       properties:
@@ -3052,7 +3052,7 @@ components:
       required:
         - name
       additionalProperties: false
-    ticqex_update_tagRequest:
+    tasqex_update_tagRequest:
       $schema: https://json-schema.org/draft/2020-12/schema
       type: object
       properties:
@@ -3062,7 +3062,7 @@ components:
         color:
           type: string
       additionalProperties: false
-    ticqex_create_statusRequest:
+    tasqex_create_statusRequest:
       $schema: https://json-schema.org/draft/2020-12/schema
       type: object
       properties:
@@ -3080,7 +3080,7 @@ components:
       required:
         - name
       additionalProperties: false
-    ticqex_update_statusRequest:
+    tasqex_update_statusRequest:
       $schema: https://json-schema.org/draft/2020-12/schema
       type: object
       properties:
@@ -3096,7 +3096,7 @@ components:
         is_visible:
           type: boolean
       additionalProperties: false
-    ticqex_delete_statusRequest:
+    tasqex_delete_statusRequest:
       $schema: https://json-schema.org/draft/2020-12/schema
       type: object
       properties:
@@ -3105,7 +3105,7 @@ components:
           format: uuid
           pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
       additionalProperties: false
-    ticqex_reorder_statusesRequest:
+    tasqex_reorder_statusesRequest:
       $schema: https://json-schema.org/draft/2020-12/schema
       type: object
       properties:
@@ -3119,7 +3119,7 @@ components:
       required:
         - ids
       additionalProperties: false
-    ticqex_create_custom_fieldRequest:
+    tasqex_create_custom_fieldRequest:
       $schema: https://json-schema.org/draft/2020-12/schema
       type: object
       properties:
@@ -3167,7 +3167,7 @@ components:
         - group
         - key
       additionalProperties: false
-    ticqex_update_custom_fieldRequest:
+    tasqex_update_custom_fieldRequest:
       $schema: https://json-schema.org/draft/2020-12/schema
       type: object
       properties:
@@ -3201,7 +3201,7 @@ components:
           minimum: -9007199254740991
           maximum: 9007199254740991
       additionalProperties: false
-    ticqex_reorder_custom_fieldsRequest:
+    tasqex_reorder_custom_fieldsRequest:
       $schema: https://json-schema.org/draft/2020-12/schema
       type: object
       properties:
@@ -3221,7 +3221,7 @@ components:
         - group
         - ids
       additionalProperties: false
-    ticqex_patch_settingsRequest:
+    tasqex_patch_settingsRequest:
       $schema: https://json-schema.org/draft/2020-12/schema
       type: object
       properties:
@@ -3266,7 +3266,7 @@ components:
               type: string
           additionalProperties: false
       additionalProperties: false
-    ticqex_create_api_keyRequest:
+    tasqex_create_api_keyRequest:
       $schema: https://json-schema.org/draft/2020-12/schema
       type: object
       properties:
@@ -3276,7 +3276,7 @@ components:
       required:
         - name
       additionalProperties: false
-    ticqex_update_organizationRequest:
+    tasqex_update_organizationRequest:
       $schema: https://json-schema.org/draft/2020-12/schema
       type: object
       properties:
@@ -3287,7 +3287,7 @@ components:
       required:
         - name
       additionalProperties: false
-    ticqex_create_organization_inviteRequest:
+    tasqex_create_organization_inviteRequest:
       $schema: https://json-schema.org/draft/2020-12/schema
       type: object
       properties:
@@ -3305,7 +3305,7 @@ components:
         - email
         - role
       additionalProperties: false
-    ticqex_redeem_organization_inviteRequest:
+    tasqex_redeem_organization_inviteRequest:
       $schema: https://json-schema.org/draft/2020-12/schema
       type: object
       properties:
@@ -3324,7 +3324,7 @@ components:
         - token
         - password
       additionalProperties: false
-    ticqex_accept_organization_inviteRequest:
+    tasqex_accept_organization_inviteRequest:
       $schema: https://json-schema.org/draft/2020-12/schema
       type: object
       properties:
@@ -3334,7 +3334,7 @@ components:
       required:
         - token
       additionalProperties: false
-    ticqex_update_user_roleRequest:
+    tasqex_update_user_roleRequest:
       $schema: https://json-schema.org/draft/2020-12/schema
       type: object
       properties:

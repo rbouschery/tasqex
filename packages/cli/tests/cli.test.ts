@@ -20,7 +20,7 @@ describe("cli call command", () => {
   let stderr: string;
 
   beforeEach(async () => {
-    configRoot = await mkdtemp(join(tmpdir(), "ticqex-cli-run-"));
+    configRoot = await mkdtemp(join(tmpdir(), "tasqex-cli-run-"));
     process.env.XDG_CONFIG_HOME = configRoot;
     await saveStoredConfig({
       instance: "https://example.com",
@@ -45,7 +45,7 @@ describe("cli call command", () => {
     await rm(configRoot, { recursive: true, force: true });
   });
 
-  it("executes ticqex_get_me via call subcommand", async () => {
+  it("executes tasqex_get_me via call subcommand", async () => {
     mockFetch((url, init) => {
       expect(url).toBe("https://example.com/api/v1/users/me");
       expect(init?.headers).toMatchObject({
@@ -56,7 +56,7 @@ describe("cli call command", () => {
       });
     });
 
-    const exitCode = await run(["node", "ticqex", "call", "ticqex_get_me"]);
+    const exitCode = await run(["node", "tasqex", "call", "tasqex_get_me"]);
     expect(exitCode).toBe(0);
     expect(JSON.parse(stdout)).toEqual({
       id: "user-1",
@@ -72,7 +72,7 @@ describe("cli call command", () => {
       }),
     );
 
-    const exitCode = await run(["node", "ticqex", "users", "me"]);
+    const exitCode = await run(["node", "tasqex", "users", "me"]);
     expect(exitCode).toBe(0);
     expect(JSON.parse(stdout)).toEqual({
       id: "user-1",
@@ -81,12 +81,12 @@ describe("cli call command", () => {
   });
 
   it("returns usage error for unknown operation", async () => {
-    const exitCode = await run(["node", "ticqex", "call", "ticqex_not_real"]);
+    const exitCode = await run(["node", "tasqex", "call", "tasqex_not_real"]);
     expect(exitCode).toBe(2);
     expect(JSON.parse(stderr)).toEqual({
       error: {
         code: "usage_error",
-        message: "Unknown operation: ticqex_not_real",
+        message: "Unknown operation: tasqex_not_real",
       },
     });
   });
@@ -99,7 +99,7 @@ describe("cli call command", () => {
       ),
     );
 
-    const exitCode = await run(["node", "ticqex", "call", "ticqex_get_me"]);
+    const exitCode = await run(["node", "tasqex", "call", "tasqex_get_me"]);
     expect(exitCode).toBe(1);
     expect(JSON.parse(stderr)).toEqual({
       error: {
@@ -119,7 +119,7 @@ describe("cli call command", () => {
 
     const exitCode = await run([
       "node",
-      "ticqex",
+      "tasqex",
       "tickets",
       "list",
       "--page",

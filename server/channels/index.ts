@@ -6,7 +6,7 @@ export type {
   ChannelKey,
   TicketCardSurface,
 } from "@server/channels/types";
-export type { IntegrationKey } from "@shared/ticqex-keys";
+export type { IntegrationKey } from "@shared/tasqex-keys";
 export { buildTicketCardSurface } from "@shared/channels/card-surface";
 export {
   findMissingRequiredFields,

@@ -8,7 +8,7 @@ export type {
   IntegrationDefinition,
   IntegrationRuntime,
 } from "@server/integrations/types";
-export type { IntegrationKey } from "@shared/ticqex-keys";
+export type { IntegrationKey } from "@shared/tasqex-keys";
 
 const integrations = createRegistry<string, IntegrationDefinition>({});
 

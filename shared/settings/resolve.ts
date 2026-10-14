@@ -1,4 +1,4 @@
-import type { TicqexConfig } from "@shared/ticqex-config/types";
+import type { TasqexConfig } from "@shared/tasqex-config/types";
 import { CORE_SETTINGS_SECTIONS } from "./core-sections";
 import type { SettingsSectionDescriptor, SettingsSectionId } from "./types";
 
@@ -9,7 +9,7 @@ export function isSettingsSectionId(
 }
 
 export function resolveSettingsSections(
-  channels: TicqexConfig["channels"],
+  channels: TasqexConfig["channels"],
   channelSections: readonly SettingsSectionDescriptor[] = [],
 ): SettingsSectionDescriptor[] {
   const merged: SettingsSectionDescriptor[] = [

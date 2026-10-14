@@ -342,7 +342,7 @@ describeIntegration("activity log", () => {
   it("attributes MCP tool success activity to the mcp source", async () => {
     const { userId } = await signInAsSeedAdmin();
     const auth = staffAuth(userId);
-    const operation = "ticqex_list_tickets";
+    const operation = "tasqex_list_tickets";
     const requestId = createActivityRequestId();
 
     const recorded = await runWithActivityRequestContext(
@@ -396,7 +396,7 @@ describeIntegration("activity log", () => {
     await recordFailedAuthActivity({
       requestMethod: "GET",
       requestPath: "/api/v1/tickets",
-      operation: "ticqex_list_tickets",
+      operation: "tasqex_list_tickets",
       statusCode: 401,
       message: "Unauthorized",
       invalidKeyPrefix: "tq_live_inva",

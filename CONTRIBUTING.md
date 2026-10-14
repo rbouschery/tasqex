@@ -1,4 +1,4 @@
-# Contributing to Ticqex
+# Contributing to Tasqex
 
 Thanks for your interest in contributing! This guide covers how to set up the
 project, the standards we follow, and how to submit changes.
@@ -10,7 +10,7 @@ Prerequisites: **Node.js 20+** (development pinned to Node 22 — see
 
 ```bash
 pnpm install
-pnpm ticqex init     # interactive local Supabase + env setup
+pnpm tasqex init     # interactive local Supabase + env setup
 pnpm dev             # http://localhost:3000
 ```
 

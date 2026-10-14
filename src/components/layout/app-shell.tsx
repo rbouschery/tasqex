@@ -40,7 +40,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 className="size-7 rounded-md"
                 priority
               />
-              ticqex
+              tasqex
             </Link>
             <Separator orientation="vertical" className="h-5" />
             <nav className="flex gap-1">

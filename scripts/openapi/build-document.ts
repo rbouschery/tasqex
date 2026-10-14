@@ -5,7 +5,7 @@ import {
   operationSummary,
   toOpenApiPath,
   type OperationDefinition,
-} from "@ticqex/api-spec";
+} from "@tasqex/api-spec";
 import {
   REQUEST_BODY_BY_OPERATION,
 } from "./request-schemas.js";
@@ -248,7 +248,7 @@ function buildParameters(operation: OperationDefinition): OpenApiParameter[] {
     parameters.push(parameter);
   }
 
-  if (operation.name === "ticqex_list_tickets") {
+  if (operation.name === "tasqex_list_tickets") {
     parameters.push({
       name: "custom_fields.{key}",
       in: "query",
@@ -265,8 +265,8 @@ function buildParameters(operation: OperationDefinition): OpenApiParameter[] {
 function successResponse(operation: OperationDefinition): Record<string, unknown> {
   const isList =
     operation.method === "GET" &&
-    (operation.name.startsWith("ticqex_list_") ||
-      operation.name === "ticqex_get_board_lane_tickets");
+    (operation.name.startsWith("tasqex_list_") ||
+      operation.name === "tasqex_get_board_lane_tickets");
 
   const isDelete = operation.method === "DELETE";
 
@@ -336,7 +336,7 @@ function buildOperation(operation: OperationDefinition): OpenApiOperation {
   } else if (operation.admin) {
     descriptionParts.push("Requires admin role.");
   }
-  if (operation.name === "ticqex_get_attachment_url") {
+  if (operation.name === "tasqex_get_attachment_url") {
     descriptionParts.push(
       "By default this endpoint responds with a 302 redirect to a signed URL. Pass format=json to receive `{ data: { url } }` instead.",
     );
@@ -417,20 +417,20 @@ export function buildOpenApiDocument(): OpenApiDocument {
   return {
     openapi: "3.1.0",
     info: {
-      title: "Ticqex API",
+      title: "Tasqex API",
       version: "0.1.0",
       description:
-        "REST JSON API for the Ticqex task board at /api/v1. Authenticate with Authorization: Bearer tq_live_* (API key) or a member Supabase JWT. Invite preview and redeem are public.",
+        "REST JSON API for the Tasqex task board at /api/v1. Authenticate with Authorization: Bearer tq_live_* (API key) or a member Supabase JWT. Invite preview and redeem are public.",
     },
     servers: [
       {
         url: "https://{instanceHost}/api/v1",
-        description: "Your Ticqex deployment.",
+        description: "Your Tasqex deployment.",
         variables: {
           instanceHost: {
             default: "your-instance.com",
             description:
-              "Hostname of your Ticqex deployment, without protocol or path.",
+              "Hostname of your Tasqex deployment, without protocol or path.",
           },
         },
       },

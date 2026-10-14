@@ -96,7 +96,7 @@ export default function LoginPage() {
         <CardHeader className="justify-items-center text-center">
           <Image
             src="/web-app-manifest-192x192.png"
-            alt="Ticqex"
+            alt="Tasqex"
             width={56}
             height={56}
             className="size-14 rounded-xl"

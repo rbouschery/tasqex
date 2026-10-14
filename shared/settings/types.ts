@@ -1,4 +1,4 @@
-import type { ChannelKey } from "@shared/ticqex-keys";
+import type { ChannelKey } from "@shared/tasqex-keys";
 
 /** Client registry keys for section renderers (see settings-section-content). */
 export const SETTINGS_COMPONENT_KEYS = [

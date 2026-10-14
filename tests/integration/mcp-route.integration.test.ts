@@ -71,7 +71,7 @@ describeMcp("MCP route", () => {
     await mcp(created.key, 1, "initialize", {
       protocolVersion: "2025-03-26",
       capabilities: {},
-      clientInfo: { name: "ticqex-vitest", version: "0.1.0" },
+      clientInfo: { name: "tasqex-vitest", version: "0.1.0" },
     });
 
     const tools = await mcp<{ tools: { name: string }[] }>(
@@ -79,14 +79,14 @@ describeMcp("MCP route", () => {
       2,
       "tools/list",
     );
-    expect(tools.tools.some((tool) => tool.name === "ticqex_list_tickets")).toBe(
+    expect(tools.tools.some((tool) => tool.name === "tasqex_list_tickets")).toBe(
       true,
     );
 
     const forbiddenTools = new Set([
-      "ticqex_list_api_keys",
-      "ticqex_create_api_key",
-      "ticqex_revoke_api_key",
+      "tasqex_list_api_keys",
+      "tasqex_create_api_key",
+      "tasqex_revoke_api_key",
     ]);
     const exposedForbiddenTools = tools.tools
       .map((tool) => tool.name)
@@ -94,7 +94,7 @@ describeMcp("MCP route", () => {
     expect(exposedForbiddenTools).toHaveLength(0);
 
     const me = await mcp<{ structuredContent?: unknown }>(created.key, 3, "tools/call", {
-      name: "ticqex_get_me",
+      name: "tasqex_get_me",
       arguments: {},
     });
     expect(me.structuredContent).toBeDefined();

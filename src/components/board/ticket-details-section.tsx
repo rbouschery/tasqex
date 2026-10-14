@@ -17,7 +17,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { usePersistedExpanded } from "@/hooks/use-persisted-expanded";
 
 const UNASSIGNED = "__unassigned__";
-const STORAGE_PREFIX = "ticqex.ticket-details.expanded.v2";
+const STORAGE_PREFIX = "tasqex.ticket-details.expanded.v2";
 
 export function TicketDetailsSection({
   assigneeId,

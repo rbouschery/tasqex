@@ -1,13 +1,13 @@
 import type { AuthInfo } from "@modelcontextprotocol/sdk/server/auth/types.js";
 import { authenticateApiKeyToken } from "@server/middleware/auth";
-import { createTicqexMcpHandler } from "@server/mcp/create-handler";
+import { createTasqexMcpHandler } from "@server/mcp/create-handler";
 import { withApiKeyMcpAuth } from "@server/mcp/with-api-key-auth";
 import { recordFailedAuthActivity } from "@server/services/activity";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
 
-const handler = createTicqexMcpHandler();
+const handler = createTasqexMcpHandler();
 
 async function verifyApiKey(
   _request: Request,
@@ -37,8 +37,8 @@ async function verifyApiKey(
     clientId: auth.apiKeyId ?? auth.userId,
     scopes:
       auth.role === "admin"
-        ? ["ticqex:read", "ticqex:write", "ticqex:admin"]
-        : ["ticqex:read", "ticqex:write"],
+        ? ["tasqex:read", "tasqex:write", "tasqex:admin"]
+        : ["tasqex:read", "tasqex:write"],
     extra: auth,
   };
 }

@@ -2,7 +2,7 @@
 
 import { useCallback, useState } from "react";
 
-const STORAGE_KEY = "ticqex.tags.recent.v1";
+const STORAGE_KEY = "tasqex.tags.recent.v1";
 const MAX_RECENT = 12;
 
 function readRecent(): string[] {

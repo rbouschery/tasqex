@@ -34,7 +34,7 @@ import {
 export function registerTicketTools(server: McpServer) {
   registerAuthedTool(
     server,
-    "ticqex_list_tickets",
+    "tasqex_list_tickets",
     {
       title: "List Tickets",
       description: "List tasks using the same filters as GET /api/v1/tickets.",
@@ -54,7 +54,7 @@ export function registerTicketTools(server: McpServer) {
 
   registerAuthedTool(
     server,
-    "ticqex_create_ticket",
+    "tasqex_create_ticket",
     {
       title: "Create Ticket",
       description: "Create a task.",
@@ -72,7 +72,7 @@ export function registerTicketTools(server: McpServer) {
 
   registerAuthedTool(
     server,
-    "ticqex_get_ticket",
+    "tasqex_get_ticket",
     {
       title: "Get Ticket",
       description: "Get a task.",
@@ -83,7 +83,7 @@ export function registerTicketTools(server: McpServer) {
 
   registerAuthedTool(
     server,
-    "ticqex_get_ticket_summary",
+    "tasqex_get_ticket_summary",
     {
       title: "Get Ticket Summary",
       description: "Get a task summary.",
@@ -94,7 +94,7 @@ export function registerTicketTools(server: McpServer) {
 
   registerAuthedTool(
     server,
-    "ticqex_get_ticket_context",
+    "tasqex_get_ticket_context",
     {
       title: "Get Ticket Context",
       description: "Get a markdown context export for a task.",
@@ -105,7 +105,7 @@ export function registerTicketTools(server: McpServer) {
 
   registerAuthedTool(
     server,
-    "ticqex_update_ticket",
+    "tasqex_update_ticket",
     {
       title: "Update Ticket",
       description: "Update task fields, tags, and custom fields.",
@@ -119,7 +119,7 @@ export function registerTicketTools(server: McpServer) {
 
   registerAuthedTool(
     server,
-    "ticqex_delete_ticket",
+    "tasqex_delete_ticket",
     {
       title: "Delete Ticket",
       description: "Delete a task.",
@@ -133,7 +133,7 @@ export function registerTicketTools(server: McpServer) {
 
   registerAuthedTool(
     server,
-    "ticqex_list_ticket_comments",
+    "tasqex_list_ticket_comments",
     {
       title: "List Ticket Comments",
       description: "List comments on a task using GET /api/v1/tickets/:id/comments.",
@@ -147,7 +147,7 @@ export function registerTicketTools(server: McpServer) {
 
   registerAuthedTool(
     server,
-    "ticqex_create_ticket_comment",
+    "tasqex_create_ticket_comment",
     {
       title: "Create Ticket Comment",
       description: "Create a markdown comment on a task.",
@@ -165,7 +165,7 @@ export function registerTicketTools(server: McpServer) {
 
   registerAuthedTool(
     server,
-    "ticqex_update_ticket_comment",
+    "tasqex_update_ticket_comment",
     {
       title: "Update Ticket Comment",
       description: "Update a task comment.",
@@ -188,7 +188,7 @@ export function registerTicketTools(server: McpServer) {
 
   registerAuthedTool(
     server,
-    "ticqex_delete_ticket_comment",
+    "tasqex_delete_ticket_comment",
     {
       title: "Delete Ticket Comment",
       description: "Delete a task comment.",

@@ -9,9 +9,9 @@ export type StoredConfig = {
 export function getConfigDir(): string {
   const xdgConfigHome = process.env.XDG_CONFIG_HOME;
   if (xdgConfigHome) {
-    return join(xdgConfigHome, "ticqex");
+    return join(xdgConfigHome, "tasqex");
   }
-  return join(homedir(), ".config", "ticqex");
+  return join(homedir(), ".config", "tasqex");
 }
 
 export function getConfigPath(): string {

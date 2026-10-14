@@ -10,7 +10,7 @@ import {
 } from "./lib/run-command";
 import {
   resolveConfigPath,
-  type TicqexConfig,
+  type TasqexConfig,
 } from "@server/config";
 import {
   readOrCreateEnvFile,
@@ -28,24 +28,24 @@ function rootPath(value: string): string {
   return path.isAbsolute(value) ? value : path.join(ROOT, value);
 }
 
-const ENV_FILE = rootPath(process.env.TICQEX_ENV_FILE ?? ".env.local");
+const ENV_FILE = rootPath(process.env.TASQEX_ENV_FILE ?? ".env.local");
 const CONFIG_FILE = resolveConfigPath(
-  process.env.TICQEX_CONFIG_FILE ?? "config/ticqex.config.json",
+  process.env.TASQEX_CONFIG_FILE ?? "config/tasqex.config.json",
 );
 
 function printRootUsage(): void {
-  console.log(`Usage: pnpm ticqex <command> [options]
+  console.log(`Usage: pnpm tasqex <command> [options]
 
 Commands:
   init          Interactive local setup (Supabase, env, config sync)
 
 Options:
-  --help        Show help for ticqex or a subcommand.
+  --help        Show help for tasqex or a subcommand.
 `);
 }
 
 function printInitUsage(): void {
-  console.log(`Usage: pnpm ticqex init [options]
+  console.log(`Usage: pnpm tasqex init [options]
 
 Options:
   --supabase <local|skip>
@@ -105,7 +105,7 @@ function hasSupabaseEnv(content: string): boolean {
   ].every((key) => Boolean(getEnvValue(content, key)));
 }
 
-function writeConfig(config: TicqexConfig): void {
+function writeConfig(config: TasqexConfig): void {
   fs.mkdirSync(path.dirname(CONFIG_FILE), { recursive: true });
   fs.writeFileSync(CONFIG_FILE, `${JSON.stringify(config, null, 2)}\n`);
 }
@@ -283,7 +283,7 @@ async function init(args: string[]): Promise<void> {
 
   try {
     ensureWorkspacePackagesBuilt();
-    console.log("Ticqex init\n");
+    console.log("Tasqex init\n");
     rl = await setupSupabase(rl, supabaseTarget);
     await configureApp(rl);
   } finally {

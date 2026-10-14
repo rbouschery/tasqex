@@ -1,20 +1,20 @@
 {
-  "name": "@ticqex/cli",
+  "name": "@tasqex/cli",
   "version": "0.1.1",
-  "description": "Command-line interface for the Ticqex REST API",
+  "description": "Command-line interface for the Tasqex REST API",
   "license": "MIT",
-  "homepage": "https://github.com/rbouschery/ticqex/tree/main/packages/cli#readme",
+  "homepage": "https://github.com/rbouschery/tasqex/tree/main/packages/cli#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rbouschery/ticqex.git",
+    "url": "https://github.com/rbouschery/tasqex.git",
     "directory": "packages/cli"
   },
   "bugs": {
-    "url": "https://github.com/rbouschery/ticqex/issues"
+    "url": "https://github.com/rbouschery/tasqex/issues"
   },
   "type": "module",
   "bin": {
-    "ticqex": "./dist/main.js"
+    "tasqex": "./dist/main.js"
   },
   "exports": {
     ".": {
@@ -35,11 +35,11 @@
     "node": ">=20"
   },
   "dependencies": {
-    "@ticqex/api-client": "workspace:*",
+    "@tasqex/api-client": "workspace:*",
     "commander": "^15.0.0"
   },
   "devDependencies": {
-    "@ticqex/api-spec": "workspace:*",
+    "@tasqex/api-spec": "workspace:*",
     "@types/node": "^26.6.4",
     "tsup": "^8.5.1",
     "typescript": "^5",

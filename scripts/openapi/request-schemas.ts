@@ -33,46 +33,46 @@ export type RequestBodyKind =
 
 /** REST request bodies keyed by operation name. */
 export const REQUEST_BODY_BY_OPERATION: Record<string, RequestBodyKind> = {
-  ticqex_create_ticket: { kind: "json", schema: createTicketSchema },
-  ticqex_update_ticket: { kind: "json", schema: updateTicketSchema },
-  ticqex_create_ticket_comment: { kind: "json", schema: commentInputSchema },
-  ticqex_update_ticket_comment: { kind: "json", schema: commentUpdateSchema },
-  ticqex_set_board_lane_order: { kind: "json", schema: boardLaneOrderSchema },
-  ticqex_seed_manual_board_orders: {
+  tasqex_create_ticket: { kind: "json", schema: createTicketSchema },
+  tasqex_update_ticket: { kind: "json", schema: updateTicketSchema },
+  tasqex_create_ticket_comment: { kind: "json", schema: commentInputSchema },
+  tasqex_update_ticket_comment: { kind: "json", schema: commentUpdateSchema },
+  tasqex_set_board_lane_order: { kind: "json", schema: boardLaneOrderSchema },
+  tasqex_seed_manual_board_orders: {
     kind: "json",
     schema: seedManualLaneOrdersSchema,
   },
-  ticqex_move_ticket_on_board: { kind: "json", schema: boardMoveTicketSchema },
-  ticqex_create_contact: { kind: "json", schema: createContactSchema },
-  ticqex_update_contact: { kind: "json", schema: updateContactSchema },
-  ticqex_create_tag: { kind: "json", schema: createTagSchema },
-  ticqex_update_tag: { kind: "json", schema: updateTagSchema },
-  ticqex_create_status: { kind: "json", schema: createStatusSchema },
-  ticqex_update_status: { kind: "json", schema: updateStatusSchema },
-  ticqex_delete_status: { kind: "optional-json", schema: deleteStatusSchema },
-  ticqex_reorder_statuses: { kind: "json", schema: reorderStatusesSchema },
-  ticqex_create_custom_field: { kind: "json", schema: createCustomFieldSchema },
-  ticqex_update_custom_field: { kind: "json", schema: updateCustomFieldSchema },
-  ticqex_reorder_custom_fields: {
+  tasqex_move_ticket_on_board: { kind: "json", schema: boardMoveTicketSchema },
+  tasqex_create_contact: { kind: "json", schema: createContactSchema },
+  tasqex_update_contact: { kind: "json", schema: updateContactSchema },
+  tasqex_create_tag: { kind: "json", schema: createTagSchema },
+  tasqex_update_tag: { kind: "json", schema: updateTagSchema },
+  tasqex_create_status: { kind: "json", schema: createStatusSchema },
+  tasqex_update_status: { kind: "json", schema: updateStatusSchema },
+  tasqex_delete_status: { kind: "optional-json", schema: deleteStatusSchema },
+  tasqex_reorder_statuses: { kind: "json", schema: reorderStatusesSchema },
+  tasqex_create_custom_field: { kind: "json", schema: createCustomFieldSchema },
+  tasqex_update_custom_field: { kind: "json", schema: updateCustomFieldSchema },
+  tasqex_reorder_custom_fields: {
     kind: "json",
     schema: reorderCustomFieldsSchema,
   },
-  ticqex_patch_settings: { kind: "json", schema: patchSettingsSchema },
-  ticqex_create_api_key: { kind: "json", schema: createApiKeySchema },
-  ticqex_update_organization: { kind: "json", schema: updateOrganizationSchema },
-  ticqex_create_organization_invite: {
+  tasqex_patch_settings: { kind: "json", schema: patchSettingsSchema },
+  tasqex_create_api_key: { kind: "json", schema: createApiKeySchema },
+  tasqex_update_organization: { kind: "json", schema: updateOrganizationSchema },
+  tasqex_create_organization_invite: {
     kind: "json",
     schema: createOrganizationInviteSchema,
   },
-  ticqex_redeem_organization_invite: {
+  tasqex_redeem_organization_invite: {
     kind: "json",
     schema: redeemOrganizationInviteSchema,
   },
-  ticqex_accept_organization_invite: {
+  tasqex_accept_organization_invite: {
     kind: "json",
     schema: acceptOrganizationInviteSchema,
   },
-  ticqex_update_user_role: { kind: "json", schema: updateUserRoleSchema },
+  tasqex_update_user_role: { kind: "json", schema: updateUserRoleSchema },
 };
 
 export function listOperationsWithRequestBodies(): string[] {

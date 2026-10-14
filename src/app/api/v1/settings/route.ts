@@ -7,13 +7,13 @@ import {
 } from "@server/lib/validation/schemas";
 import { getSettings, patchSettings } from "@server/services/settings";
 import { loadTicketFieldLayoutContext } from "@server/services/ticket-field-layout";
-import { loadTicqexConfig } from "@server/config";
+import { loadTasqexConfig } from "@server/config";
 import { collectChannelSettingsSections } from "@server/channels/settings-sections";
 import { resolveSettingsSections } from "@shared/settings/resolve";
 
 export async function GET(request: NextRequest) {
   return withAuth(request, async () => {
-    const channels = loadTicqexConfig().channels;
+    const channels = loadTasqexConfig().channels;
     const settings = await getSettings();
     const { layout: ticket_field_layout } = await loadTicketFieldLayoutContext({
       settings,

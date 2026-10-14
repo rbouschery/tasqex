@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { OPERATION_CATALOG } from "@ticqex/api-spec";
+import { OPERATION_CATALOG } from "@tasqex/api-spec";
 import {
   buildOpenApiDocument,
   countOpenApiOperations,

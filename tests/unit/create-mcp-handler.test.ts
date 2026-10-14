@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { createTicqexMcpHandler } from "@server/mcp/create-handler";
+import { createTasqexMcpHandler } from "@server/mcp/create-handler";
 
-describe("createTicqexMcpHandler", () => {
+describe("createTasqexMcpHandler", () => {
   it("returns 405 JSON for GET without requiring a session", async () => {
-    const handler = createTicqexMcpHandler();
+    const handler = createTasqexMcpHandler();
     const res = await handler(
       new Request("https://example.com/api/mcp", {
         method: "GET",

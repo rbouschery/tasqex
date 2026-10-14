@@ -15,7 +15,7 @@ INSERT INTO public.tickets (
   origin
 )
 SELECT
-  'Welcome to ticqex',
+  'Welcome to tasqex',
   'task',
   'This is a sample task on the board. Edit the description to make it yours.',
   c.id,
@@ -31,6 +31,6 @@ INSERT INTO public.ticket_tags (ticket_id, tag_id)
 SELECT t.id, tag.id
 FROM public.tickets t
 CROSS JOIN public.tags tag
-WHERE t.title = 'Welcome to ticqex'
+WHERE t.title = 'Welcome to tasqex'
   AND tag.name = 'feature request'
 LIMIT 1;

@@ -9,7 +9,7 @@ import { registerTagTools } from "./tools/tags";
 import { registerTicketTools } from "./tools/tickets";
 import { registerUserTools } from "./tools/users";
 
-export function registerTicqexTools(server: McpServer) {
+export function registerTasqexTools(server: McpServer) {
   registerUserTools(server);
   registerOrganizationTools(server);
   registerTicketTools(server);

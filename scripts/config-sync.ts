@@ -2,21 +2,21 @@ import path from "node:path";
 import process from "node:process";
 import { getChannelDefinition } from "@server/channels";
 import {
-  loadTicqexConfig,
+  loadTasqexConfig,
   resolveConfigPath,
-  validateTicqexConfig,
+  validateTasqexConfig,
 } from "@server/config";
 import { loadEnvLocalIfPresent } from "./lib/load-env-local";
 
 loadEnvLocalIfPresent();
 
-const configPath = resolveConfigPath(process.env.TICQEX_CONFIG_FILE);
+const configPath = resolveConfigPath(process.env.TASQEX_CONFIG_FILE);
 
 function main(): void {
   console.log(`Syncing ${path.relative(process.cwd(), configPath)}\n`);
 
-  const config = loadTicqexConfig(configPath);
-  const validation = validateTicqexConfig(config, process.env);
+  const config = loadTasqexConfig(configPath);
+  const validation = validateTasqexConfig(config, process.env);
 
   if (!validation.ok) {
     console.error("Config sync aborted due to validation errors:");

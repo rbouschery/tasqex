@@ -1,6 +1,6 @@
-import type { IntegrationKey } from "@shared/ticqex-keys";
+import type { IntegrationKey } from "@shared/tasqex-keys";
 
-export type { IntegrationKey } from "@shared/ticqex-keys";
+export type { IntegrationKey } from "@shared/tasqex-keys";
 
 export type IntegrationCapability = string;
 

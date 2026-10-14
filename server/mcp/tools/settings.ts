@@ -1,5 +1,5 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { loadTicqexConfig } from "@server/config";
+import { loadTasqexConfig } from "@server/config";
 import { parseBody, patchSettingsSchema } from "@server/lib/validation/schemas";
 import { getSettings, patchSettings } from "@server/services/settings";
 import { loadTicketFieldLayout } from "@server/services/ticket-field-layout";
@@ -8,7 +8,7 @@ import { registerAuthedTool, toolResult } from "../core";
 export function registerSettingsTools(server: McpServer) {
   registerAuthedTool(
     server,
-    "ticqex_get_settings",
+    "tasqex_get_settings",
     {
       title: "Get Settings",
       description:
@@ -18,14 +18,14 @@ export function registerSettingsTools(server: McpServer) {
     async () =>
       toolResult({
         ...(await getSettings()),
-        channels: loadTicqexConfig().channels,
+        channels: loadTasqexConfig().channels,
         ticket_field_layout: await loadTicketFieldLayout(),
       }),
   );
 
   registerAuthedTool(
     server,
-    "ticqex_patch_settings",
+    "tasqex_patch_settings",
     {
       title: "Patch Settings",
       description:

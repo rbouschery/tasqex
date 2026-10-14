@@ -17,7 +17,7 @@ import { registerAuthedTool, toolResult, uuid } from "../core";
 export function registerBoardTools(server: McpServer) {
   registerAuthedTool(
     server,
-    "ticqex_get_board",
+    "tasqex_get_board",
     {
       title: "Get Board",
       description: "Get the kanban board using optional serialized filter, sort, and search values.",
@@ -40,7 +40,7 @@ export function registerBoardTools(server: McpServer) {
 
   registerAuthedTool(
     server,
-    "ticqex_get_board_filter_options",
+    "tasqex_get_board_filter_options",
     {
       title: "Get Board Filter Options",
       description: "List contacts, assignees, and tags that appear on the visible board.",
@@ -51,7 +51,7 @@ export function registerBoardTools(server: McpServer) {
 
   registerAuthedTool(
     server,
-    "ticqex_get_board_lane_tickets",
+    "tasqex_get_board_lane_tickets",
     {
       title: "Get Board Lane Tickets",
       description: "Load a page of tasks for one board lane.",
@@ -78,7 +78,7 @@ export function registerBoardTools(server: McpServer) {
 
   registerAuthedTool(
     server,
-    "ticqex_set_board_lane_order",
+    "tasqex_set_board_lane_order",
     {
       title: "Set Board Lane Order",
       description: "Persist the current user's manual order for a board lane.",
@@ -103,7 +103,7 @@ export function registerBoardTools(server: McpServer) {
 
   registerAuthedTool(
     server,
-    "ticqex_seed_manual_board_orders",
+    "tasqex_seed_manual_board_orders",
     {
       title: "Seed Manual Board Orders",
       description: "Persist multiple manual board lane orders for the current user.",
@@ -121,7 +121,7 @@ export function registerBoardTools(server: McpServer) {
 
   registerAuthedTool(
     server,
-    "ticqex_move_ticket_on_board",
+    "tasqex_move_ticket_on_board",
     {
       title: "Move Ticket On Board",
       description: "Move or reorder a task on the board and persist lane ordering.",

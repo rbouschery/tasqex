@@ -142,7 +142,7 @@ export function ActivityFiltersBar({
         <Input
           id="activity-operation"
           value={draft.operation ?? ""}
-          placeholder="ticqex_update_ticket"
+          placeholder="tasqex_update_ticket"
           onChange={(event) =>
             setDraft((current) => ({
               ...current,

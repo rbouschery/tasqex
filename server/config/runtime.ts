@@ -2,15 +2,15 @@ import {
   resolveChannelRuntime,
   type ChannelRuntime,
 } from "@server/config/resolve";
-import { loadTicqexConfig } from "@server/config/load";
+import { loadTasqexConfig } from "@server/config/load";
 import {
   getActiveChannels,
   getActiveIntegrations,
-} from "@shared/ticqex-config/validate";
+} from "@shared/tasqex-config/validate";
 
-/** Load and validate ticqex config (shape assertion on every read). */
+/** Load and validate tasqex config (shape assertion on every read). */
 export function loadRuntimeConfig() {
-  return loadTicqexConfig();
+  return loadTasqexConfig();
 }
 
 /** Throws when the channel is missing, disabled, or its integration is not configured. */
@@ -24,7 +24,7 @@ export function requireChannelRuntime(
   }
 
   if (!runtime.binding.enabled) {
-    throw new Error(`Channel "${channelKey}" is not enabled in ticqex config`);
+    throw new Error(`Channel "${channelKey}" is not enabled in tasqex config`);
   }
 
   if (!runtime.integrationKey) {

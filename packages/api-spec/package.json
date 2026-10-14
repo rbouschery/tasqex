@@ -1,16 +1,16 @@
 {
-  "name": "@ticqex/api-spec",
+  "name": "@tasqex/api-spec",
   "version": "0.1.1",
-  "description": "Shared Ticqex API operation catalog for CLI and OpenAPI generation",
+  "description": "Shared Tasqex API operation catalog for CLI and OpenAPI generation",
   "license": "MIT",
-  "homepage": "https://github.com/rbouschery/ticqex/tree/main/packages/api-spec#readme",
+  "homepage": "https://github.com/rbouschery/tasqex/tree/main/packages/api-spec#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rbouschery/ticqex.git",
+    "url": "https://github.com/rbouschery/tasqex.git",
     "directory": "packages/api-spec"
   },
   "bugs": {
-    "url": "https://github.com/rbouschery/ticqex/issues"
+    "url": "https://github.com/rbouschery/tasqex/issues"
   },
   "type": "module",
   "main": "./dist/index.js",

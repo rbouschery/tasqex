@@ -24,7 +24,7 @@ export type RequestOptions = {
   body?: unknown;
 };
 
-export type TicqexClientOptions = {
+export type TasqexClientOptions = {
   baseUrl: string;
   apiKey: string;
 };

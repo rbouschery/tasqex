@@ -19,8 +19,8 @@ if (fs.existsSync(envLocal)) {
   dotenv.config({ path: envLocal });
 }
 
-const email = process.env.SEED_ADMIN_EMAIL ?? "admin@ticqex.local";
-const password = process.env.SEED_ADMIN_PASSWORD ?? "ticqex-admin-change-me";
+const email = process.env.SEED_ADMIN_EMAIL ?? "admin@tasqex.local";
+const password = process.env.SEED_ADMIN_PASSWORD ?? "tasqex-admin-change-me";
 
 async function main() {
   const url = normalizeSupabaseUrl(

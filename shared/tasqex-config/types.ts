@@ -1,6 +1,6 @@
-export const TICQEX_CONFIG_VERSION = 1 as const;
+export const TASQEX_CONFIG_VERSION = 1 as const;
 
-export type { ChannelKey, IntegrationKey } from "@shared/ticqex-keys";
+export type { ChannelKey, IntegrationKey } from "@shared/tasqex-keys";
 
 export type ChannelBinding = {
   enabled: boolean;
@@ -11,8 +11,8 @@ export type IntegrationBinding = {
   enabled: boolean;
 };
 
-export type TicqexConfig = {
-  version: typeof TICQEX_CONFIG_VERSION;
+export type TasqexConfig = {
+  version: typeof TASQEX_CONFIG_VERSION;
   channels: Record<string, ChannelBinding>;
   integrations: Record<string, IntegrationBinding>;
 };

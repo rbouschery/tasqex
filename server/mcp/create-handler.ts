@@ -1,7 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
 import type { AuthInfo } from "@modelcontextprotocol/sdk/server/auth/types.js";
-import { registerTicqexTools } from "@server/mcp/tools";
+import { registerTasqexTools } from "@server/mcp/tools";
 
 export type AuthedRequest = Request & { auth?: AuthInfo };
 
@@ -12,7 +12,7 @@ export type AuthedRequest = Request & { auth?: AuthInfo };
  * text/event-stream. SSE POST bodies work in curl but hang some remote MCP
  * clients (notably Cursor) on serverless hosts.
  */
-export function createTicqexMcpHandler() {
+export function createTasqexMcpHandler() {
   return async (req: AuthedRequest): Promise<Response> => {
     if (req.method === "GET" || req.method === "DELETE") {
       return methodNotAllowed();
@@ -28,10 +28,10 @@ export function createTicqexMcpHandler() {
     });
 
     const server = new McpServer({
-      name: "ticqex",
+      name: "tasqex",
       version: "0.1.0",
     });
-    registerTicqexTools(server);
+    registerTasqexTools(server);
     await server.connect(transport);
 
     return transport.handleRequest(req, { authInfo: req.auth });

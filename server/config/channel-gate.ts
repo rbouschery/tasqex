@@ -1,5 +1,5 @@
 import { resolveChannelRuntime } from "@server/config/resolve";
-import type { TicqexConfig } from "@server/config/types";
+import type { TasqexConfig } from "@server/config/types";
 import type { IntegrationWebhookResult } from "@server/integrations/types";
 
 /** True when the channel is enabled in config and its integration is configured. */
@@ -7,7 +7,7 @@ export function isChannelOperational(
   channelKey: string,
   options: {
     env?: NodeJS.ProcessEnv;
-    config?: TicqexConfig;
+    config?: TasqexConfig;
   } = {},
 ): boolean {
   const runtime = resolveChannelRuntime(channelKey, {

@@ -32,7 +32,7 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.104.1
         version: 5.104.1(react@19.3.0)
-      '@ticqex/api-spec':
+      '@tasqex/api-spec':
         specifier: workspace:*
         version: link:packages/api-spec
       cal-sans:
@@ -153,14 +153,14 @@ importers:
 
   packages/cli:
     dependencies:
-      '@ticqex/api-client':
+      '@tasqex/api-client':
         specifier: workspace:*
         version: link:../api-client
       commander:
         specifier: ^15.0.0
         version: 15.0.0
     devDependencies:
-      '@ticqex/api-spec':
+      '@tasqex/api-spec':
         specifier: workspace:*
         version: link:../api-spec
       '@types/node':

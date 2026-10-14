@@ -18,7 +18,7 @@ import { registerAuthedTool, toolResult, uuid } from "../core";
 export function registerOrganizationTools(server: McpServer) {
   registerAuthedTool(
     server,
-    "ticqex_get_organization",
+    "tasqex_get_organization",
     {
       title: "Get Organization",
       description: "Return the workspace organization.",
@@ -29,7 +29,7 @@ export function registerOrganizationTools(server: McpServer) {
 
   registerAuthedTool(
     server,
-    "ticqex_update_organization",
+    "tasqex_update_organization",
     {
       title: "Update Organization",
       description: "Rename the workspace. Admin only.",
@@ -44,7 +44,7 @@ export function registerOrganizationTools(server: McpServer) {
 
   registerAuthedTool(
     server,
-    "ticqex_list_organization_invites",
+    "tasqex_list_organization_invites",
     {
       title: "List Organization Invites",
       description: "List pending invite links. Admin only.",
@@ -56,7 +56,7 @@ export function registerOrganizationTools(server: McpServer) {
 
   registerAuthedTool(
     server,
-    "ticqex_create_organization_invite",
+    "tasqex_create_organization_invite",
     {
       title: "Create Organization Invite",
       description:
@@ -78,7 +78,7 @@ export function registerOrganizationTools(server: McpServer) {
 
   registerAuthedTool(
     server,
-    "ticqex_revoke_organization_invite",
+    "tasqex_revoke_organization_invite",
     {
       title: "Revoke Organization Invite",
       description: "Revoke a pending invite. Admin only.",
@@ -90,7 +90,7 @@ export function registerOrganizationTools(server: McpServer) {
 
   registerAuthedTool(
     server,
-    "ticqex_accept_organization_invite",
+    "tasqex_accept_organization_invite",
     {
       title: "Accept Organization Invite",
       description:

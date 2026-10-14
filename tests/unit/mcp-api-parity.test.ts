@@ -1,39 +1,39 @@
 import { describe, expect, it } from "vitest";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { registerTicqexTools } from "@server/mcp/tools";
+import { registerTasqexTools } from "@server/mcp/tools";
 
 /** Every user-facing mutation should map to at least one MCP tool (REST is always available). */
 const FRONTEND_MUTATION_MCP_TOOLS: Record<string, string> = {
-  "POST /api/v1/tickets": "ticqex_create_ticket",
-  "PATCH /api/v1/tickets/:id": "ticqex_update_ticket",
-  "DELETE /api/v1/tickets/:id": "ticqex_delete_ticket",
-  "POST /api/v1/tickets/:id/comments": "ticqex_create_ticket_comment",
-  "PATCH /api/v1/tickets/:id/comments/:commentId": "ticqex_update_ticket_comment",
-  "DELETE /api/v1/tickets/:id/comments/:commentId": "ticqex_delete_ticket_comment",
-  "POST /api/v1/board/move-ticket": "ticqex_move_ticket_on_board",
-  "PUT /api/v1/board/manual-order": "ticqex_seed_manual_board_orders",
-  "POST /api/v1/statuses": "ticqex_create_status",
-  "PATCH /api/v1/statuses/:id": "ticqex_update_status",
-  "DELETE /api/v1/statuses/:id": "ticqex_delete_status",
-  "PUT /api/v1/statuses/reorder": "ticqex_reorder_statuses",
-  "POST /api/v1/tags": "ticqex_create_tag",
-  "PATCH /api/v1/tags/:id": "ticqex_update_tag",
-  "DELETE /api/v1/tags/:id": "ticqex_delete_tag",
-  "POST /api/v1/custom-fields": "ticqex_create_custom_field",
-  "PATCH /api/v1/custom-fields/:id": "ticqex_update_custom_field",
-  "DELETE /api/v1/custom-fields/:id": "ticqex_delete_custom_field",
-  "PUT /api/v1/custom-fields/reorder": "ticqex_reorder_custom_fields",
-  "PATCH /api/v1/settings": "ticqex_patch_settings",
-  "PATCH /api/v1/organization": "ticqex_update_organization",
-  "POST /api/v1/organization/invites": "ticqex_create_organization_invite",
-  "DELETE /api/v1/organization/invites/:id": "ticqex_revoke_organization_invite",
-  "PATCH /api/v1/users/:id": "ticqex_update_user_role",
-  "DELETE /api/v1/users/:id": "ticqex_remove_user",
+  "POST /api/v1/tickets": "tasqex_create_ticket",
+  "PATCH /api/v1/tickets/:id": "tasqex_update_ticket",
+  "DELETE /api/v1/tickets/:id": "tasqex_delete_ticket",
+  "POST /api/v1/tickets/:id/comments": "tasqex_create_ticket_comment",
+  "PATCH /api/v1/tickets/:id/comments/:commentId": "tasqex_update_ticket_comment",
+  "DELETE /api/v1/tickets/:id/comments/:commentId": "tasqex_delete_ticket_comment",
+  "POST /api/v1/board/move-ticket": "tasqex_move_ticket_on_board",
+  "PUT /api/v1/board/manual-order": "tasqex_seed_manual_board_orders",
+  "POST /api/v1/statuses": "tasqex_create_status",
+  "PATCH /api/v1/statuses/:id": "tasqex_update_status",
+  "DELETE /api/v1/statuses/:id": "tasqex_delete_status",
+  "PUT /api/v1/statuses/reorder": "tasqex_reorder_statuses",
+  "POST /api/v1/tags": "tasqex_create_tag",
+  "PATCH /api/v1/tags/:id": "tasqex_update_tag",
+  "DELETE /api/v1/tags/:id": "tasqex_delete_tag",
+  "POST /api/v1/custom-fields": "tasqex_create_custom_field",
+  "PATCH /api/v1/custom-fields/:id": "tasqex_update_custom_field",
+  "DELETE /api/v1/custom-fields/:id": "tasqex_delete_custom_field",
+  "PUT /api/v1/custom-fields/reorder": "tasqex_reorder_custom_fields",
+  "PATCH /api/v1/settings": "tasqex_patch_settings",
+  "PATCH /api/v1/organization": "tasqex_update_organization",
+  "POST /api/v1/organization/invites": "tasqex_create_organization_invite",
+  "DELETE /api/v1/organization/invites/:id": "tasqex_revoke_organization_invite",
+  "PATCH /api/v1/users/:id": "tasqex_update_user_role",
+  "DELETE /api/v1/users/:id": "tasqex_remove_user",
 };
 
 /** Read routes the UI uses that should have MCP list/get parity. */
 const FRONTEND_READ_MCP_TOOLS: Record<string, string> = {
-  "GET /api/v1/tickets/:id/comments": "ticqex_list_ticket_comments",
+  "GET /api/v1/tickets/:id/comments": "tasqex_list_ticket_comments",
 };
 
 /** Intentionally REST-only: bootstrap credentials and session auth. */
@@ -47,8 +47,8 @@ const REST_ONLY_MUTATIONS = [
 ] as const;
 
 function listRegisteredMcpToolNames(): string[] {
-  const server = new McpServer({ name: "ticqex-test", version: "0.0.0" });
-  registerTicqexTools(server);
+  const server = new McpServer({ name: "tasqex-test", version: "0.0.0" });
+  registerTasqexTools(server);
   const registered = (
     server as unknown as { _registeredTools: Record<string, { enabled?: boolean }> }
   )._registeredTools;
@@ -69,9 +69,9 @@ describe("MCP / API parity for frontend mutations", () => {
 
   it("does not expose API key management over MCP", () => {
     const forbidden = [
-      "ticqex_list_api_keys",
-      "ticqex_create_api_key",
-      "ticqex_revoke_api_key",
+      "tasqex_list_api_keys",
+      "tasqex_create_api_key",
+      "tasqex_revoke_api_key",
     ];
     for (const name of forbidden) {
       expect(mcpTools).not.toContain(name);
@@ -80,8 +80,8 @@ describe("MCP / API parity for frontend mutations", () => {
   });
 
   it("includes board read tools used by filter/sort UI", () => {
-    expect(mcpTools).toContain("ticqex_get_board");
-    expect(mcpTools).toContain("ticqex_get_board_filter_options");
+    expect(mcpTools).toContain("tasqex_get_board");
+    expect(mcpTools).toContain("tasqex_get_board_filter_options");
   });
 
   it("registers an MCP tool for each frontend REST read route", () => {

@@ -1,11 +1,11 @@
 # Security Policy
 
-We take the security of Ticqex seriously. Thank you for helping keep the project
+We take the security of Tasqex seriously. Thank you for helping keep the project
 and its users safe.
 
 ## Supported versions
 
-Ticqex is pre-1.0 and under active development. Security fixes are applied to the
+Tasqex is pre-1.0 and under active development. Security fixes are applied to the
 `main` branch and the latest release. Older releases are not maintained.
 
 ## Reporting a vulnerability

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { fileURLToPath } from "node:url";
-import { TicqexApiError } from "@ticqex/api-client";
+import { TasqexApiError } from "@tasqex/api-client";
 import { runCli } from "./register-commands.js";
 import { CliUsageError, EXIT_API_ERROR, EXIT_USAGE_ERROR, writeError } from "./output.js";
 
@@ -12,7 +12,7 @@ export async function run(argv: string[]): Promise<number> {
       writeError(error.code, error.message);
       return EXIT_USAGE_ERROR;
     }
-    if (error instanceof TicqexApiError) {
+    if (error instanceof TasqexApiError) {
       writeError(error.code, error.message);
       return EXIT_API_ERROR;
     }

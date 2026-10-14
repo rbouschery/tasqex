@@ -7,10 +7,10 @@ import { getMe, listUsers } from "@server/services/users";
 export function registerUserTools(server: McpServer) {
   registerAuthedTool(
     server,
-    "ticqex_get_me",
+    "tasqex_get_me",
     {
       title: "Get Current User",
-      description: "Return the Ticqex user associated with the API key.",
+      description: "Return the Tasqex user associated with the API key.",
       inputSchema: {},
     },
     async (_input, auth) => toolResult(await getMe(auth.userId)),
@@ -18,7 +18,7 @@ export function registerUserTools(server: McpServer) {
 
   registerAuthedTool(
     server,
-    "ticqex_list_users",
+    "tasqex_list_users",
     {
       title: "List Users",
       description: "List active members available for assignment.",
@@ -29,7 +29,7 @@ export function registerUserTools(server: McpServer) {
 
   registerAuthedTool(
     server,
-    "ticqex_update_user_role",
+    "tasqex_update_user_role",
     {
       title: "Update User Role",
       description: "Change a member's role. Admin only. The last admin stays an admin.",
@@ -44,7 +44,7 @@ export function registerUserTools(server: McpServer) {
 
   registerAuthedTool(
     server,
-    "ticqex_remove_user",
+    "tasqex_remove_user",
     {
       title: "Remove User",
       description:

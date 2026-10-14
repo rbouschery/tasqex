@@ -22,7 +22,7 @@ import {
 export function registerContactTools(server: McpServer) {
   registerAuthedTool(
     server,
-    "ticqex_list_contacts",
+    "tasqex_list_contacts",
     {
       title: "List Contacts",
       description: "List contacts.",
@@ -33,7 +33,7 @@ export function registerContactTools(server: McpServer) {
 
   registerAuthedTool(
     server,
-    "ticqex_get_contact",
+    "tasqex_get_contact",
     {
       title: "Get Contact",
       description: "Get a contact with task count and custom fields.",
@@ -44,7 +44,7 @@ export function registerContactTools(server: McpServer) {
 
   registerAuthedTool(
     server,
-    "ticqex_create_contact",
+    "tasqex_create_contact",
     {
       title: "Create Contact",
       description: "Create a contact.",
@@ -55,7 +55,7 @@ export function registerContactTools(server: McpServer) {
 
   registerAuthedTool(
     server,
-    "ticqex_update_contact",
+    "tasqex_update_contact",
     {
       title: "Update Contact",
       description: "Update a contact.",
@@ -67,7 +67,7 @@ export function registerContactTools(server: McpServer) {
 
   registerAuthedTool(
     server,
-    "ticqex_delete_contact",
+    "tasqex_delete_contact",
     {
       title: "Delete Contact",
       description: "Delete a contact with no existing tasks.",

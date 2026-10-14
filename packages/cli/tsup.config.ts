@@ -9,6 +9,6 @@ export default defineConfig({
   dts: true,
   sourcemap: true,
   splitting: false,
-  external: ["@ticqex/api-client", "commander"],
-  noExternal: ["@ticqex/api-spec"],
+  external: ["@tasqex/api-client", "commander"],
+  noExternal: ["@tasqex/api-spec"],
 });

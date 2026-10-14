@@ -1,4 +1,4 @@
-import { OPERATION_CATALOG, type HttpMethod } from "@ticqex/api-spec";
+import { OPERATION_CATALOG, type HttpMethod } from "@tasqex/api-spec";
 
 function splitPath(path: string): string[] {
   return path.split("/").filter(Boolean);

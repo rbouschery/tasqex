@@ -29,9 +29,9 @@ export function resolveLocalAppUrl(): string {
 }
 
 export const SEED_ADMIN_EMAIL =
-  process.env.SEED_ADMIN_EMAIL ?? "admin@ticqex.local";
+  process.env.SEED_ADMIN_EMAIL ?? "admin@tasqex.local";
 export const SEED_ADMIN_PASSWORD =
-  process.env.SEED_ADMIN_PASSWORD ?? "ticqex-admin-change-me";
+  process.env.SEED_ADMIN_PASSWORD ?? "tasqex-admin-change-me";
 
 export function requireSupabaseEnv(): boolean {
   return Boolean(

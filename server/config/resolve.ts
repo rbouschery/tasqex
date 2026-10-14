@@ -8,27 +8,27 @@ import {
   listIntegrationKeys,
   type IntegrationRuntime,
 } from "@server/integrations";
-import { loadTicqexConfig } from "@server/config/load";
+import { loadTasqexConfig } from "@server/config/load";
 import type {
   ConfigValidationIssue,
   ConfigValidationResult,
-  TicqexConfig,
+  TasqexConfig,
 } from "@server/config/types";
 import {
   validateAppEnv,
   validateConfigBindings,
-} from "@shared/ticqex-config/validate";
-import { assertConfigShape } from "@shared/ticqex-config/load";
+} from "@shared/tasqex-config/validate";
+import { assertConfigShape } from "@shared/tasqex-config/load";
 
 export type ChannelRuntime = {
   channel: ChannelDefinition;
-  binding: TicqexConfig["channels"][keyof TicqexConfig["channels"]];
+  binding: TasqexConfig["channels"][keyof TasqexConfig["channels"]];
   integration: IntegrationRuntime | null;
   integrationKey: string | null;
 };
 
 function validateIntegrationEnv(
-  config: TicqexConfig,
+  config: TasqexConfig,
   env: NodeJS.ProcessEnv,
 ): ConfigValidationIssue[] {
   const issues: ConfigValidationIssue[] = [];
@@ -38,7 +38,7 @@ function validateIntegrationEnv(
 
     const integrationBinding =
       config.integrations[
-        binding.integration as keyof TicqexConfig["integrations"]
+        binding.integration as keyof TasqexConfig["integrations"]
       ];
     if (!integrationBinding?.enabled) {
       issues.push({
@@ -66,7 +66,7 @@ function validateIntegrationEnv(
   return issues;
 }
 
-function configShapeIssues(config: TicqexConfig): ConfigValidationIssue[] {
+function configShapeIssues(config: TasqexConfig): ConfigValidationIssue[] {
   try {
     assertConfigShape(config);
     return [];
@@ -76,8 +76,8 @@ function configShapeIssues(config: TicqexConfig): ConfigValidationIssue[] {
   }
 }
 
-export function validateTicqexConfig(
-  config: TicqexConfig,
+export function validateTasqexConfig(
+  config: TasqexConfig,
   env: NodeJS.ProcessEnv = process.env,
 ): ConfigValidationResult {
   const issues = [
@@ -101,16 +101,16 @@ export function validateTicqexConfig(
 export function resolveChannelRuntime(
   channelKey: string,
   options: {
-    config?: TicqexConfig;
+    config?: TasqexConfig;
     configPath?: string;
     env?: NodeJS.ProcessEnv;
   } = {},
 ): ChannelRuntime | null {
-  const config = options.config ?? loadTicqexConfig(options.configPath);
+  const config = options.config ?? loadTasqexConfig(options.configPath);
   const env = options.env ?? process.env;
   const channel = getChannelDefinition(channelKey);
   const binding =
-    config.channels[channelKey as keyof TicqexConfig["channels"]];
+    config.channels[channelKey as keyof TasqexConfig["channels"]];
 
   if (!channel || !binding) return null;
 
@@ -120,7 +120,7 @@ export function resolveChannelRuntime(
   if (binding.enabled && integrationKey) {
     const integrationBinding =
       config.integrations[
-        integrationKey as keyof TicqexConfig["integrations"]
+        integrationKey as keyof TasqexConfig["integrations"]
       ];
     if (integrationBinding) {
       integration = configureIntegration(integrationKey, env, {

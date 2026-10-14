@@ -1,8 +1,8 @@
-import type { ChannelKey, ConfigValidationIssue, IntegrationKey, TicqexConfig } from "./types";
+import type { ChannelKey, ConfigValidationIssue, IntegrationKey, TasqexConfig } from "./types";
 import {
   CHANNEL_KEYS,
   INTEGRATION_KEYS,
-} from "@shared/ticqex-keys";
+} from "@shared/tasqex-keys";
 
 export function listKnownChannelKeys(): readonly ChannelKey[] {
   return CHANNEL_KEYS;
@@ -12,16 +12,16 @@ export function listKnownIntegrationKeys(): readonly IntegrationKey[] {
   return INTEGRATION_KEYS;
 }
 
-export function getActiveChannels(config: TicqexConfig): ChannelKey[] {
+export function getActiveChannels(config: TasqexConfig): ChannelKey[] {
   return CHANNEL_KEYS.filter((key) => config.channels[key]?.enabled);
 }
 
-export function getActiveIntegrations(config: TicqexConfig): IntegrationKey[] {
+export function getActiveIntegrations(config: TasqexConfig): IntegrationKey[] {
   return INTEGRATION_KEYS.filter((key) => config.integrations[key]?.enabled);
 }
 
 export function validateConfigBindings(
-  config: TicqexConfig,
+  config: TasqexConfig,
   knownChannels: readonly string[],
   knownIntegrations: readonly string[],
 ): ConfigValidationIssue[] {

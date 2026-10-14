@@ -15,21 +15,21 @@ export type OperationDefinition = {
 
 export const OPERATION_CATALOG: OperationDefinition[] = [
   {
-    name: "ticqex_get_me",
+    name: "tasqex_get_me",
     method: "GET",
     pathTemplate: "/users/me",
     pathParams: [],
     queryParams: [],
   },
   {
-    name: "ticqex_list_users",
+    name: "tasqex_list_users",
     method: "GET",
     pathTemplate: "/users",
     pathParams: [],
     queryParams: [],
   },
   {
-    name: "ticqex_list_tickets",
+    name: "tasqex_list_tickets",
     method: "GET",
     pathTemplate: "/tickets",
     pathParams: [],
@@ -45,7 +45,7 @@ export const OPERATION_CATALOG: OperationDefinition[] = [
     ],
   },
   {
-    name: "ticqex_create_ticket",
+    name: "tasqex_create_ticket",
     method: "POST",
     pathTemplate: "/tickets",
     pathParams: [],
@@ -53,28 +53,28 @@ export const OPERATION_CATALOG: OperationDefinition[] = [
     bodyKey: null,
   },
   {
-    name: "ticqex_get_ticket",
+    name: "tasqex_get_ticket",
     method: "GET",
     pathTemplate: "/tickets/:id",
     pathParams: ["id"],
     queryParams: [],
   },
   {
-    name: "ticqex_get_ticket_summary",
+    name: "tasqex_get_ticket_summary",
     method: "GET",
     pathTemplate: "/tickets/:id/summary",
     pathParams: ["id"],
     queryParams: [],
   },
   {
-    name: "ticqex_get_ticket_context",
+    name: "tasqex_get_ticket_context",
     method: "GET",
     pathTemplate: "/tickets/:id/context",
     pathParams: ["id"],
     queryParams: [],
   },
   {
-    name: "ticqex_update_ticket",
+    name: "tasqex_update_ticket",
     method: "PATCH",
     pathTemplate: "/tickets/:id",
     pathParams: ["id"],
@@ -82,21 +82,21 @@ export const OPERATION_CATALOG: OperationDefinition[] = [
     bodyKey: "patch",
   },
   {
-    name: "ticqex_delete_ticket",
+    name: "tasqex_delete_ticket",
     method: "DELETE",
     pathTemplate: "/tickets/:id",
     pathParams: ["id"],
     queryParams: [],
   },
   {
-    name: "ticqex_list_ticket_comments",
+    name: "tasqex_list_ticket_comments",
     method: "GET",
     pathTemplate: "/tickets/:ticket_id/comments",
     pathParams: ["ticket_id"],
     queryParams: ["page", "per_page"],
   },
   {
-    name: "ticqex_create_ticket_comment",
+    name: "tasqex_create_ticket_comment",
     method: "POST",
     pathTemplate: "/tickets/:ticket_id/comments",
     pathParams: ["ticket_id"],
@@ -104,7 +104,7 @@ export const OPERATION_CATALOG: OperationDefinition[] = [
     bodyKey: "comment",
   },
   {
-    name: "ticqex_update_ticket_comment",
+    name: "tasqex_update_ticket_comment",
     method: "PATCH",
     pathTemplate: "/tickets/:ticket_id/comments/:comment_id",
     pathParams: ["ticket_id", "comment_id"],
@@ -112,35 +112,35 @@ export const OPERATION_CATALOG: OperationDefinition[] = [
     bodyKey: "comment",
   },
   {
-    name: "ticqex_delete_ticket_comment",
+    name: "tasqex_delete_ticket_comment",
     method: "DELETE",
     pathTemplate: "/tickets/:ticket_id/comments/:comment_id",
     pathParams: ["ticket_id", "comment_id"],
     queryParams: [],
   },
   {
-    name: "ticqex_get_board",
+    name: "tasqex_get_board",
     method: "GET",
     pathTemplate: "/board",
     pathParams: [],
     queryParams: ["filter", "sort", "q"],
   },
   {
-    name: "ticqex_get_board_filter_options",
+    name: "tasqex_get_board_filter_options",
     method: "GET",
     pathTemplate: "/board/filter-options",
     pathParams: [],
     queryParams: [],
   },
   {
-    name: "ticqex_get_board_lane_tickets",
+    name: "tasqex_get_board_lane_tickets",
     method: "GET",
     pathTemplate: "/board/lanes/:status_id/tickets",
     pathParams: ["status_id"],
     queryParams: ["offset", "limit", "filter", "sort"],
   },
   {
-    name: "ticqex_set_board_lane_order",
+    name: "tasqex_set_board_lane_order",
     method: "PUT",
     pathTemplate: "/board/lanes/:status_id/order",
     pathParams: ["status_id"],
@@ -148,7 +148,7 @@ export const OPERATION_CATALOG: OperationDefinition[] = [
     bodyKey: "order",
   },
   {
-    name: "ticqex_seed_manual_board_orders",
+    name: "tasqex_seed_manual_board_orders",
     method: "PUT",
     pathTemplate: "/board/manual-order",
     pathParams: [],
@@ -156,7 +156,7 @@ export const OPERATION_CATALOG: OperationDefinition[] = [
     bodyKey: null,
   },
   {
-    name: "ticqex_move_ticket_on_board",
+    name: "tasqex_move_ticket_on_board",
     method: "POST",
     pathTemplate: "/board/move-ticket",
     pathParams: [],
@@ -164,21 +164,21 @@ export const OPERATION_CATALOG: OperationDefinition[] = [
     bodyKey: null,
   },
   {
-    name: "ticqex_list_contacts",
+    name: "tasqex_list_contacts",
     method: "GET",
     pathTemplate: "/contacts",
     pathParams: [],
     queryParams: [],
   },
   {
-    name: "ticqex_get_contact",
+    name: "tasqex_get_contact",
     method: "GET",
     pathTemplate: "/contacts/:id",
     pathParams: ["id"],
     queryParams: [],
   },
   {
-    name: "ticqex_create_contact",
+    name: "tasqex_create_contact",
     method: "POST",
     pathTemplate: "/contacts",
     pathParams: [],
@@ -186,7 +186,7 @@ export const OPERATION_CATALOG: OperationDefinition[] = [
     bodyKey: null,
   },
   {
-    name: "ticqex_update_contact",
+    name: "tasqex_update_contact",
     method: "PATCH",
     pathTemplate: "/contacts/:id",
     pathParams: ["id"],
@@ -194,21 +194,21 @@ export const OPERATION_CATALOG: OperationDefinition[] = [
     bodyKey: null,
   },
   {
-    name: "ticqex_delete_contact",
+    name: "tasqex_delete_contact",
     method: "DELETE",
     pathTemplate: "/contacts/:id",
     pathParams: ["id"],
     queryParams: [],
   },
   {
-    name: "ticqex_list_tags",
+    name: "tasqex_list_tags",
     method: "GET",
     pathTemplate: "/tags",
     pathParams: [],
     queryParams: [],
   },
   {
-    name: "ticqex_create_tag",
+    name: "tasqex_create_tag",
     method: "POST",
     pathTemplate: "/tags",
     pathParams: [],
@@ -216,7 +216,7 @@ export const OPERATION_CATALOG: OperationDefinition[] = [
     bodyKey: null,
   },
   {
-    name: "ticqex_update_tag",
+    name: "tasqex_update_tag",
     method: "PATCH",
     pathTemplate: "/tags/:id",
     pathParams: ["id"],
@@ -224,21 +224,21 @@ export const OPERATION_CATALOG: OperationDefinition[] = [
     bodyKey: null,
   },
   {
-    name: "ticqex_delete_tag",
+    name: "tasqex_delete_tag",
     method: "DELETE",
     pathTemplate: "/tags/:id",
     pathParams: ["id"],
     queryParams: [],
   },
   {
-    name: "ticqex_list_statuses",
+    name: "tasqex_list_statuses",
     method: "GET",
     pathTemplate: "/statuses",
     pathParams: [],
     queryParams: [],
   },
   {
-    name: "ticqex_create_status",
+    name: "tasqex_create_status",
     method: "POST",
     pathTemplate: "/statuses",
     pathParams: [],
@@ -246,7 +246,7 @@ export const OPERATION_CATALOG: OperationDefinition[] = [
     bodyKey: null,
   },
   {
-    name: "ticqex_update_status",
+    name: "tasqex_update_status",
     method: "PATCH",
     pathTemplate: "/statuses/:id",
     pathParams: ["id"],
@@ -254,14 +254,14 @@ export const OPERATION_CATALOG: OperationDefinition[] = [
     bodyKey: null,
   },
   {
-    name: "ticqex_delete_status",
+    name: "tasqex_delete_status",
     method: "DELETE",
     pathTemplate: "/statuses/:id",
     pathParams: ["id"],
     queryParams: [],
   },
   {
-    name: "ticqex_reorder_statuses",
+    name: "tasqex_reorder_statuses",
     method: "PUT",
     pathTemplate: "/statuses/reorder",
     pathParams: [],
@@ -269,14 +269,14 @@ export const OPERATION_CATALOG: OperationDefinition[] = [
     bodyKey: null,
   },
   {
-    name: "ticqex_list_custom_fields",
+    name: "tasqex_list_custom_fields",
     method: "GET",
     pathTemplate: "/custom-fields",
     pathParams: [],
     queryParams: ["group"],
   },
   {
-    name: "ticqex_create_custom_field",
+    name: "tasqex_create_custom_field",
     method: "POST",
     pathTemplate: "/custom-fields",
     pathParams: [],
@@ -284,7 +284,7 @@ export const OPERATION_CATALOG: OperationDefinition[] = [
     bodyKey: null,
   },
   {
-    name: "ticqex_update_custom_field",
+    name: "tasqex_update_custom_field",
     method: "PATCH",
     pathTemplate: "/custom-fields/:id",
     pathParams: ["id"],
@@ -292,14 +292,14 @@ export const OPERATION_CATALOG: OperationDefinition[] = [
     bodyKey: null,
   },
   {
-    name: "ticqex_delete_custom_field",
+    name: "tasqex_delete_custom_field",
     method: "DELETE",
     pathTemplate: "/custom-fields/:id",
     pathParams: ["id"],
     queryParams: [],
   },
   {
-    name: "ticqex_reorder_custom_fields",
+    name: "tasqex_reorder_custom_fields",
     method: "PUT",
     pathTemplate: "/custom-fields/reorder",
     pathParams: [],
@@ -307,14 +307,14 @@ export const OPERATION_CATALOG: OperationDefinition[] = [
     bodyKey: null,
   },
   {
-    name: "ticqex_get_settings",
+    name: "tasqex_get_settings",
     method: "GET",
     pathTemplate: "/settings",
     pathParams: [],
     queryParams: [],
   },
   {
-    name: "ticqex_patch_settings",
+    name: "tasqex_patch_settings",
     method: "PATCH",
     pathTemplate: "/settings",
     pathParams: [],
@@ -322,7 +322,7 @@ export const OPERATION_CATALOG: OperationDefinition[] = [
     bodyKey: null,
   },
   {
-    name: "ticqex_list_api_keys",
+    name: "tasqex_list_api_keys",
     method: "GET",
     pathTemplate: "/api-keys",
     pathParams: [],
@@ -330,14 +330,14 @@ export const OPERATION_CATALOG: OperationDefinition[] = [
     admin: true,
   },
   {
-    name: "ticqex_get_organization",
+    name: "tasqex_get_organization",
     method: "GET",
     pathTemplate: "/organization",
     pathParams: [],
     queryParams: [],
   },
   {
-    name: "ticqex_update_organization",
+    name: "tasqex_update_organization",
     method: "PATCH",
     pathTemplate: "/organization",
     pathParams: [],
@@ -345,14 +345,14 @@ export const OPERATION_CATALOG: OperationDefinition[] = [
     bodyKey: null,
   },
   {
-    name: "ticqex_list_organization_invites",
+    name: "tasqex_list_organization_invites",
     method: "GET",
     pathTemplate: "/organization/invites",
     pathParams: [],
     queryParams: [],
   },
   {
-    name: "ticqex_create_organization_invite",
+    name: "tasqex_create_organization_invite",
     method: "POST",
     pathTemplate: "/organization/invites",
     pathParams: [],
@@ -360,14 +360,14 @@ export const OPERATION_CATALOG: OperationDefinition[] = [
     bodyKey: null,
   },
   {
-    name: "ticqex_revoke_organization_invite",
+    name: "tasqex_revoke_organization_invite",
     method: "DELETE",
     pathTemplate: "/organization/invites/:id",
     pathParams: ["id"],
     queryParams: [],
   },
   {
-    name: "ticqex_preview_organization_invite",
+    name: "tasqex_preview_organization_invite",
     method: "GET",
     pathTemplate: "/organization/invites/preview",
     pathParams: [],
@@ -375,7 +375,7 @@ export const OPERATION_CATALOG: OperationDefinition[] = [
     public: true,
   },
   {
-    name: "ticqex_redeem_organization_invite",
+    name: "tasqex_redeem_organization_invite",
     method: "POST",
     pathTemplate: "/organization/invites/redeem",
     pathParams: [],
@@ -384,7 +384,7 @@ export const OPERATION_CATALOG: OperationDefinition[] = [
     public: true,
   },
   {
-    name: "ticqex_accept_organization_invite",
+    name: "tasqex_accept_organization_invite",
     method: "POST",
     pathTemplate: "/organization/invites/accept",
     pathParams: [],
@@ -392,7 +392,7 @@ export const OPERATION_CATALOG: OperationDefinition[] = [
     bodyKey: null,
   },
   {
-    name: "ticqex_update_user_role",
+    name: "tasqex_update_user_role",
     method: "PATCH",
     pathTemplate: "/users/:id",
     pathParams: ["id"],
@@ -400,14 +400,14 @@ export const OPERATION_CATALOG: OperationDefinition[] = [
     bodyKey: null,
   },
   {
-    name: "ticqex_remove_user",
+    name: "tasqex_remove_user",
     method: "DELETE",
     pathTemplate: "/users/:id",
     pathParams: ["id"],
     queryParams: [],
   },
   {
-    name: "ticqex_create_api_key",
+    name: "tasqex_create_api_key",
     method: "POST",
     pathTemplate: "/api-keys",
     pathParams: [],
@@ -416,7 +416,7 @@ export const OPERATION_CATALOG: OperationDefinition[] = [
     admin: true,
   },
   {
-    name: "ticqex_revoke_api_key",
+    name: "tasqex_revoke_api_key",
     method: "DELETE",
     pathTemplate: "/api-keys/:id",
     pathParams: ["id"],
@@ -424,7 +424,7 @@ export const OPERATION_CATALOG: OperationDefinition[] = [
     admin: true,
   },
   {
-    name: "ticqex_list_activity",
+    name: "tasqex_list_activity",
     method: "GET",
     pathTemplate: "/activity",
     pathParams: [],
@@ -448,7 +448,7 @@ export const OPERATION_CATALOG: OperationDefinition[] = [
     admin: true,
   },
   {
-    name: "ticqex_list_ticket_activity",
+    name: "tasqex_list_ticket_activity",
     method: "GET",
     pathTemplate: "/tickets/:ticket_id/activity",
     pathParams: ["ticket_id"],
@@ -493,6 +493,6 @@ export function inferOperationTag(pathTemplate: string): string {
 }
 
 export function operationSummary(name: string): string {
-  const withoutPrefix = name.replace(/^ticqex_/, "").replaceAll("_", " ");
+  const withoutPrefix = name.replace(/^tasqex_/, "").replaceAll("_", " ");
   return withoutPrefix.charAt(0).toUpperCase() + withoutPrefix.slice(1);
 }

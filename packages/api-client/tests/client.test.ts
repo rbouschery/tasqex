@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { normalizeBaseUrl, TicqexClient } from "../src/index.js";
-import { TicqexApiError } from "../src/errors.js";
+import { normalizeBaseUrl, TasqexClient } from "../src/index.js";
+import { TasqexApiError } from "../src/errors.js";
 
 type FetchCall = {
   url: string;
@@ -41,13 +41,13 @@ describe("normalizeBaseUrl", () => {
   });
 });
 
-describe("TicqexClient", () => {
+describe("TasqexClient", () => {
   it("builds requests against normalized base URL and /api/v1 prefix", async () => {
     const { calls } = mockFetch(() =>
       Response.json({ data: { ok: true } }),
     );
 
-    const client = new TicqexClient({
+    const client = new TasqexClient({
       baseUrl: "https://example.com/api/v1/",
       apiKey: "test-key",
     });
@@ -62,7 +62,7 @@ describe("TicqexClient", () => {
       Response.json({ data: { ok: true } }),
     );
 
-    const client = new TicqexClient({
+    const client = new TasqexClient({
       baseUrl: "https://example.com",
       apiKey: "secret-token",
     });
@@ -79,7 +79,7 @@ describe("TicqexClient", () => {
       Response.json({ data: [] }),
     );
 
-    const client = new TicqexClient({
+    const client = new TasqexClient({
       baseUrl: "https://example.com",
       apiKey: "key",
     });
@@ -106,7 +106,7 @@ describe("TicqexClient", () => {
       Response.json({ data: { id: "1" } }),
     );
 
-    const client = new TicqexClient({
+    const client = new TasqexClient({
       baseUrl: "https://example.com",
       apiKey: "key",
     });
@@ -120,7 +120,7 @@ describe("TicqexClient", () => {
     expect(headers["Content-Type"]).toBe("application/json");
   });
 
-  it("parses API error envelopes into TicqexApiError", async () => {
+  it("parses API error envelopes into TasqexApiError", async () => {
     mockFetch(() =>
       Response.json(
         { error: { code: "not_found", message: "Ticket not found" } },
@@ -128,17 +128,17 @@ describe("TicqexClient", () => {
       ),
     );
 
-    const client = new TicqexClient({
+    const client = new TasqexClient({
       baseUrl: "https://example.com",
       apiKey: "key",
     });
 
     await expect(client.get("/tickets/missing")).rejects.toMatchObject({
-      name: "TicqexApiError",
+      name: "TasqexApiError",
       status: 404,
       code: "not_found",
       message: "Ticket not found",
-    } satisfies Partial<TicqexApiError>);
+    } satisfies Partial<TasqexApiError>);
   });
 
   it("returns parsed data from success envelopes", async () => {
@@ -149,7 +149,7 @@ describe("TicqexClient", () => {
       }),
     );
 
-    const client = new TicqexClient({
+    const client = new TasqexClient({
       baseUrl: "https://example.com",
       apiKey: "key",
     });

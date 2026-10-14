@@ -1,16 +1,16 @@
 {
-  "name": "ticqex",
+  "name": "tasqex",
   "version": "0.1.0",
   "private": true,
   "description": "Collaborative task board for a team, with a realtime Kanban, comments, tags, and a REST and MCP API. Built on Next.js and Supabase.",
   "license": "MIT",
-  "homepage": "https://github.com/rbouschery/ticqex#readme",
+  "homepage": "https://github.com/rbouschery/tasqex#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rbouschery/ticqex.git"
+    "url": "https://github.com/rbouschery/tasqex.git"
   },
   "bugs": {
-    "url": "https://github.com/rbouschery/ticqex/issues"
+    "url": "https://github.com/rbouschery/tasqex/issues"
   },
   "keywords": [
     "tasks",
@@ -27,7 +27,7 @@
   "scripts": {
     "postinstall": "pnpm build:packages",
     "dev": "next dev",
-    "build": "pnpm --filter @ticqex/api-spec build && next build",
+    "build": "pnpm --filter @tasqex/api-spec build && next build",
     "start": "next start",
     "lint": "eslint",
     "db:start": "supabase start",
@@ -37,7 +37,7 @@
     "db:env": "tsx scripts/sync-supabase-env.ts",
     "env:verify": "tsx scripts/verify-env.ts",
     "db:seed-admin": "tsx scripts/seed.ts",
-    "ticqex": "tsx scripts/ticqex.ts",
+    "tasqex": "tsx scripts/tasqex.ts",
     "config:check": "tsx scripts/config-check.ts",
     "config:sync": "tsx scripts/config-sync.ts",
     "supabase": "supabase",
@@ -45,10 +45,10 @@
     "test:watch": "vitest",
     "test:unit": "vitest run --project unit",
     "test:integration": "vitest run --project integration",
-    "build:packages": "pnpm --filter @ticqex/api-spec --filter @ticqex/api-client --filter @ticqex/cli build",
-    "test:packages": "pnpm --filter @ticqex/api-spec --filter @ticqex/api-client --filter @ticqex/cli test",
-    "openapi:generate": "pnpm --filter @ticqex/api-spec build && tsx scripts/generate-openapi.ts",
-    "openapi:check": "pnpm --filter @ticqex/api-spec build && tsx scripts/generate-openapi.ts --check",
+    "build:packages": "pnpm --filter @tasqex/api-spec --filter @tasqex/api-client --filter @tasqex/cli build",
+    "test:packages": "pnpm --filter @tasqex/api-spec --filter @tasqex/api-client --filter @tasqex/cli test",
+    "openapi:generate": "pnpm --filter @tasqex/api-spec build && tsx scripts/generate-openapi.ts",
+    "openapi:check": "pnpm --filter @tasqex/api-spec build && tsx scripts/generate-openapi.ts --check",
     "seed:board-load": "tsx --env-file=.env.local scripts/seed-board-load.ts"
   },
   "dependencies": {
@@ -60,7 +60,7 @@
     "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.117.2",
     "@tanstack/react-query": "^5.104.1",
-    "@ticqex/api-spec": "workspace:*",
+    "@tasqex/api-spec": "workspace:*",
     "cal-sans": "^1.0.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

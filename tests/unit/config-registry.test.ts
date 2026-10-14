@@ -1,25 +1,25 @@
 import { describe, expect, it } from "vitest";
 import {
   isChannelOperational,
-  validateTicqexConfig,
-  type TicqexConfig,
+  validateTasqexConfig,
+  type TasqexConfig,
 } from "@server/config";
 
-const emptyConfig: TicqexConfig = {
+const emptyConfig: TasqexConfig = {
   version: 1,
   channels: {},
   integrations: {},
 };
 
-describe("validateTicqexConfig", () => {
+describe("validateTasqexConfig", () => {
   it("accepts an empty channel and integration config", () => {
-    const result = validateTicqexConfig(emptyConfig, {});
+    const result = validateTasqexConfig(emptyConfig, {});
     expect(result.ok).toBe(true);
     expect(result.issues).toEqual([]);
   });
 
   it("rejects unknown channel keys", () => {
-    const result = validateTicqexConfig({
+    const result = validateTasqexConfig({
       version: 1,
       channels: {
         email: { enabled: true, integration: "resend" },

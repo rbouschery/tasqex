@@ -3,16 +3,16 @@ export type {
   ConfigValidationIssue,
   ConfigValidationResult,
   IntegrationBinding,
-  TicqexConfig,
+  TasqexConfig,
 } from "@server/config/types";
 export {
-  defaultTicqexConfig,
-  loadTicqexConfig,
+  defaultTasqexConfig,
+  loadTasqexConfig,
   resolveConfigPath,
 } from "@server/config/load";
 export {
   resolveChannelRuntime,
-  validateTicqexConfig,
+  validateTasqexConfig,
   type ChannelRuntime,
 } from "@server/config/resolve";
 export {
