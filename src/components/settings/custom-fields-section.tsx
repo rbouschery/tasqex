@@ -277,7 +277,7 @@ export function CustomFieldsSection() {
       <div className="space-y-6">
         <Card>
           <CardHeader>
-            <CardTitle>Ticket fields</CardTitle>
+            <CardTitle>Task fields</CardTitle>
           </CardHeader>
           <CardContent>
             <Skeleton className="h-16 w-full" />
@@ -305,7 +305,7 @@ export function CustomFieldsSection() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Ticket fields</CardTitle>
+          <CardTitle>Task fields</CardTitle>
         </CardHeader>
         <CardContent>
           <TicketFieldVisibilitySection

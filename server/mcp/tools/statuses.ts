@@ -18,7 +18,7 @@ import { registerAuthedTool, toolResult, uuid } from "../core";
 export function registerStatusTools(server: McpServer) {
   registerAuthedTool(
     server,
-    "ticqex_list_statuses",
+    "tasqex_list_statuses",
     {
       title: "List Statuses",
       description: "List board statuses.",
@@ -29,7 +29,7 @@ export function registerStatusTools(server: McpServer) {
 
   registerAuthedTool(
     server,
-    "ticqex_create_status",
+    "tasqex_create_status",
     {
       title: "Create Status",
       description: "Create a board status. Admin only.",
@@ -41,7 +41,7 @@ export function registerStatusTools(server: McpServer) {
 
   registerAuthedTool(
     server,
-    "ticqex_update_status",
+    "tasqex_update_status",
     {
       title: "Update Status",
       description: "Update a board status. Admin only.",
@@ -54,10 +54,10 @@ export function registerStatusTools(server: McpServer) {
 
   registerAuthedTool(
     server,
-    "ticqex_delete_status",
+    "tasqex_delete_status",
     {
       title: "Delete Status",
-      description: "Delete a board status, optionally reassigning tickets. Admin only.",
+      description: "Delete a board status, optionally reassigning tasks. Admin only.",
       inputSchema: { id: uuid, options: deleteStatusSchema.optional() },
       admin: true,
     },
@@ -70,7 +70,7 @@ export function registerStatusTools(server: McpServer) {
 
   registerAuthedTool(
     server,
-    "ticqex_reorder_statuses",
+    "tasqex_reorder_statuses",
     {
       title: "Reorder Statuses",
       description: "Replace board status order. Admin only.",

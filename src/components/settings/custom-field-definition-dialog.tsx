@@ -179,7 +179,7 @@ function CustomFieldDefinitionForm({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="ticket">Tickets</SelectItem>
+                <SelectItem value="ticket">Tasks</SelectItem>
                 <SelectItem value="contact">Contacts</SelectItem>
               </SelectContent>
             </Select>
@@ -316,7 +316,7 @@ export function CustomFieldDefinitionDialog({
           </DialogTitle>
           <DialogDescription>
             {mode === "create"
-              ? "Define a typed field for tickets or contacts. Values are set via API and agents."
+              ? "Define a typed field for tasks or contacts. Values are set via API and agents."
               : "Update the label, type, and options. Group and key cannot be changed."}
           </DialogDescription>
         </DialogHeader>

@@ -240,14 +240,14 @@ function DeleteStatusDialog({
           <DialogDescription>
             This removes the status type from your workspace.
             {hasTickets
-              ? ` ${status.ticket_count} ticket(s) currently use this status.`
-              : " No tickets use this status."}
+              ? ` ${status.ticket_count} task(s) currently use this status.`
+              : " No tasks use this status."}
           </DialogDescription>
         </DialogHeader>
         {hasTickets && (
           <div className="space-y-2">
             <Label htmlFor="reassign-status">
-              Reassign {status.ticket_count} ticket(s) to
+              Reassign {status.ticket_count} task(s) to
             </Label>
             <Select value={reassignTo} onValueChange={onReassignChange}>
               <SelectTrigger id="reassign-status" className="w-full">

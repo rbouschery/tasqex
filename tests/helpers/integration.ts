@@ -29,9 +29,9 @@ export function resolveLocalAppUrl(): string {
 }
 
 export const SEED_ADMIN_EMAIL =
-  process.env.SEED_ADMIN_EMAIL ?? "admin@ticqex.local";
+  process.env.SEED_ADMIN_EMAIL ?? "admin@tasqex.local";
 export const SEED_ADMIN_PASSWORD =
-  process.env.SEED_ADMIN_PASSWORD ?? "ticqex-admin-change-me";
+  process.env.SEED_ADMIN_PASSWORD ?? "tasqex-admin-change-me";
 
 export function requireSupabaseEnv(): boolean {
   return Boolean(
@@ -102,12 +102,10 @@ export async function getFirstContactId(db = adminDb()): Promise<string> {
 
 export type MinimalTicketInput = {
   title: string;
-  kind?: "task" | "conversation";
+  kind?: "task";
   status_id?: string;
   contact_id?: string | null;
   assignee_id?: string | null;
-  channel?: string | null;
-  contact_address?: string | null;
   body?: string | null;
   origin?: string;
 };
@@ -125,8 +123,6 @@ export async function insertMinimalTicket(
       status_id: statusId,
       contact_id: input.contact_id ?? null,
       assignee_id: input.assignee_id ?? null,
-      channel: input.channel ?? null,
-      contact_address: input.contact_address ?? null,
       body: input.body ?? null,
       origin: input.origin ?? "manual",
     })
@@ -136,28 +132,6 @@ export async function insertMinimalTicket(
     throw new Error(error?.message ?? "ticket insert failed");
   }
   return { id: ticket.id as string };
-}
-
-export async function insertContactMessage(
-  ticketId: string,
-  body: string,
-  db = adminDb(),
-): Promise<{ id: string }> {
-  const { data: message, error } = await db
-    .from("messages")
-    .insert({
-      ticket_id: ticketId,
-      body,
-      visibility: "public",
-      author_type: "contact",
-      channel: "email",
-    })
-    .select("id")
-    .single();
-  if (error || !message) {
-    throw new Error(error?.message ?? "message insert failed");
-  }
-  return { id: message.id as string };
 }
 
 /** Enough tickets in one lane to trigger board browse cap (no seed:board-load). */
@@ -175,8 +149,7 @@ export async function seedMinimalBoardLoad(db = adminDb()): Promise<{
     throw new Error(statusErr?.message ?? "No statuses found");
   }
 
-  const contactId = await getFirstContactId(db);
-  const laneCount = statuses.filter(() => true).length;
+  const laneCount = statuses.length;
   const perLane = perLaneTicketLimit(laneCount);
   const bulkCount = perLane + 50;
   const statusId = statuses[0]!.id as string;
@@ -212,10 +185,8 @@ export async function seedMinimalBoardLoad(db = adminDb()): Promise<{
     .from("tickets")
     .insert({
       title: needleTitle,
-      kind: "conversation",
-      channel: "email",
-      contact_address: `needle-${runId}@example.com`,
-      contact_id: contactId,
+      kind: "task",
+      body: `Hidden keyword ${NEEDLE_SECRET} buried in the task body.`,
       status_id: statusId,
       origin: "manual",
       updated_at: needleUpdatedAt,
@@ -226,15 +197,6 @@ export async function seedMinimalBoardLoad(db = adminDb()): Promise<{
   if (needleErr || !needle) {
     throw new Error(needleErr?.message ?? "needle insert failed");
   }
-
-  const { error: msgErr } = await db.from("messages").insert({
-    ticket_id: needle.id,
-    body: `Contact follow-up with hidden keyword ${NEEDLE_SECRET} buried in the thread.`,
-    visibility: "public",
-    author_type: "contact",
-    channel: "admin",
-  });
-  if (msgErr) throw new Error(msgErr.message);
 
   const needleId = needle.id as string;
   ticketIds.push(needleId);

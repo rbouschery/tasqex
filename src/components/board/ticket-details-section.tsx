@@ -17,7 +17,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { usePersistedExpanded } from "@/hooks/use-persisted-expanded";
 
 const UNASSIGNED = "__unassigned__";
-const STORAGE_PREFIX = "ticqex.ticket-details.expanded.v2";
+const STORAGE_PREFIX = "tasqex.ticket-details.expanded.v2";
 
 export function TicketDetailsSection({
   assigneeId,
@@ -133,7 +133,7 @@ export function TicketDetailsSection({
                 value={body ?? ""}
                 onChange={(e) => onBodyChange(e.target.value)}
                 rows={8}
-                placeholder="Describe this ticket…"
+                placeholder="Describe this task…"
                 className="min-h-[160px] resize-y"
               />
             </div>

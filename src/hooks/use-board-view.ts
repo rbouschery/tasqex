@@ -14,8 +14,8 @@ import {
   type BoardSort,
 } from "@shared/board-sort";
 
-const LEGACY_FILTER_KEY = "ticqex.board.filter.v2";
-const STORAGE_KEY = "ticqex.board.view.v1";
+const LEGACY_FILTER_KEY = "tasqex.board.filter.v2";
+const STORAGE_KEY = "tasqex.board.view.v1";
 
 type BoardViewState = {
   filter: TicketFilter;

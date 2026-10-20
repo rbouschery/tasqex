@@ -1,15 +1,15 @@
 import { describe, expect, it } from "vitest";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { registerTicqexTools } from "@server/mcp/tools";
+import { registerTasqexTools } from "@server/mcp/tools";
 import {
   MCP_TOOL_NAMES,
   REST_ONLY_ADMIN_OPERATIONS,
   listOperationNames,
-} from "@ticqex/api-spec";
+} from "@tasqex/api-spec";
 
 function listRegisteredMcpToolNames(): string[] {
-  const server = new McpServer({ name: "ticqex-test", version: "0.0.0" });
-  registerTicqexTools(server);
+  const server = new McpServer({ name: "tasqex-test", version: "0.0.0" });
+  registerTasqexTools(server);
   const registered = (
     server as unknown as { _registeredTools: Record<string, { enabled?: boolean }> }
   )._registeredTools;

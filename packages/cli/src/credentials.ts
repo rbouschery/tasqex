@@ -64,8 +64,8 @@ export async function resolveCredentials(
 ): Promise<ResolvedCredentials | null> {
   const flagInstance = overrides.instance?.trim();
   const flagApiKey = overrides.apiKey?.trim();
-  const envInstance = process.env.TICQEX_INSTANCE?.trim();
-  const envApiKey = process.env.TICQEX_API_KEY?.trim();
+  const envInstance = process.env.TASQEX_INSTANCE?.trim();
+  const envApiKey = process.env.TASQEX_API_KEY?.trim();
   const stored = await loadStoredConfig();
 
   const instance =

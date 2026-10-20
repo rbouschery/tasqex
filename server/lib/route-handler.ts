@@ -159,6 +159,16 @@ export async function withAuth(
   }
 }
 
+export async function withPublic(
+  handler: () => Promise<Response>,
+): Promise<Response> {
+  try {
+    return await handler();
+  } catch (err) {
+    return handleRouteError(err);
+  }
+}
+
 export async function parseJsonBody<T>(request: NextRequest): Promise<T> {
   try {
     return (await request.json()) as T;

@@ -51,7 +51,7 @@ export function McpSettingsSection() {
   const [selectedClientId, setSelectedClientId] =
     useState<ClientId>("cursor");
 
-  const endpoint = `${origin || "https://your-ticqex-app.vercel.app"}/api/mcp`;
+  const endpoint = `${origin || "https://your-tasqex-app.vercel.app"}/api/mcp`;
 
   const clientExamples = useMemo<ClientExample[]>(
     () =>
@@ -65,7 +65,7 @@ export function McpSettingsSection() {
           config: JSON.stringify(
             {
               mcpServers: {
-                ticqex: {
+                tasqex: {
                   command: "npx",
                   args: [
                     "-y",
@@ -87,7 +87,7 @@ export function McpSettingsSection() {
           description: "Stdio bridge for remote MCP in Codex config.",
           filename: "~/.codex/config.toml",
           config: `# ~/.codex/config.toml
-[mcp_servers.ticqex]
+[mcp_servers.tasqex]
 command = "npx"
 args = [
   "-y",
@@ -100,9 +100,9 @@ args = [
         {
           id: "claude-code",
           name: "Claude Code",
-          description: "Add Ticqex as a remote HTTP MCP server.",
+          description: "Add Tasqex as a remote HTTP MCP server.",
           filename: "terminal",
-          config: `claude mcp add --transport http ticqex "${endpoint}" \\
+          config: `claude mcp add --transport http tasqex "${endpoint}" \\
   --header "Authorization: Bearer ${PLACEHOLDER_API_KEY}"`,
         },
       ],
@@ -128,7 +128,7 @@ args = [
             {endpoint}
           </code>
           <p className="text-sm text-muted-foreground">
-            The MCP server exposes the same core operations as the Ticqex API:
+            The MCP server exposes the same core operations as the Tasqex API:
             tickets, board, contacts, settings, tags, statuses, custom fields,
             snippets, users, and API keys.
             Create or copy an API key from the API keys section above, then use

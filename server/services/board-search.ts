@@ -35,15 +35,12 @@ export async function resolveSearchTicketIds(
     contactMatches,
     assigneeMatches,
     tagRows,
-    messageMatches,
     fieldMatches,
   ] = await Promise.all([
     db
       .from("tickets")
       .select("id")
-      .or(
-        `title.ilike.${pattern},body.ilike.${pattern},contact_address.ilike.${pattern}`,
-      ),
+      .or(`title.ilike.${pattern},body.ilike.${pattern}`),
     db
       .from("tickets")
       .select("id, contacts!inner(username)")
@@ -53,12 +50,6 @@ export async function resolveSearchTicketIds(
       .select("id, users:assignee_id!inner(username)")
       .ilike("users.username", pattern),
     db.from("tags").select("id").ilike("name", pattern),
-    db
-      .from("messages")
-      .select("ticket_id")
-      .eq("visibility", "public")
-      .or("email_delivery_status.is.null,email_delivery_status.neq.draft")
-      .ilike("body", pattern),
     db
       .from("custom_field_values")
       .select("entity_id")
@@ -70,16 +61,11 @@ export async function resolveSearchTicketIds(
   if (contactMatches.error) throw ApiError.internal(contactMatches.error.message);
   if (assigneeMatches.error) throw ApiError.internal(assigneeMatches.error.message);
   if (tagRows.error) throw ApiError.internal(tagRows.error.message);
-  if (messageMatches.error) throw ApiError.internal(messageMatches.error.message);
   if (fieldMatches.error) throw ApiError.internal(fieldMatches.error.message);
 
   addRows(ids, ticketMatches.data);
   addRows(ids, contactMatches.data);
   addRows(ids, assigneeMatches.data);
-  addRows(
-    ids,
-    messageMatches.data?.map((row) => ({ id: row.ticket_id as string })) ?? null,
-  );
   addRows(
     ids,
     fieldMatches.data?.map((row) => ({ id: row.entity_id as string })) ?? null,

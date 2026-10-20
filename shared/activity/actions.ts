@@ -10,12 +10,6 @@ export const ACTIVITY_ACTIONS = {
   COMMENT_CREATED: "comment.created",
   COMMENT_UPDATED: "comment.updated",
   COMMENT_DELETED: "comment.deleted",
-  MESSAGE_CREATED: "message.created",
-  MESSAGE_DRAFT_CREATED: "message.draft_created",
-  MESSAGE_DRAFT_UPDATED: "message.draft_updated",
-  MESSAGE_DRAFT_DELETED: "message.draft_deleted",
-  MESSAGE_DRAFT_SENT: "message.draft_sent",
-  MESSAGE_INBOUND: "message.inbound",
 } as const;
 
 export type ActivityAction =
@@ -34,7 +28,6 @@ export const ACTIVITY_SOURCES = {
   API: "api",
   MCP: "mcp",
   SYSTEM: "system",
-  EMAIL: "email",
 } as const;
 
 export type ActivitySource =
@@ -53,6 +46,6 @@ export type ActivityActorType =
 
 /** Activity-read endpoints hidden by default in global UI to reduce refresh noise. */
 export const SELF_REFERENTIAL_ACTIVITY_OPERATIONS = new Set([
-  "ticqex_list_activity",
-  "ticqex_list_ticket_activity",
+  "tasqex_list_activity",
+  "tasqex_list_ticket_activity",
 ]);

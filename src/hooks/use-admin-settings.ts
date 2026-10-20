@@ -5,16 +5,8 @@ import { apiFetch } from "@/lib/api-client";
 import type { SettingsSectionDescriptor } from "@shared/settings/types";
 
 export type AdminSettings = {
-  email_signature?: string;
-  channels?: {
-    email?: {
-      enabled: boolean;
-      integration: string | null;
-    };
-  };
+  channels?: Record<string, { enabled: boolean; integration: string | null }>;
   sections?: SettingsSectionDescriptor[];
-  default_inbound_status_id?: string | null;
-  email_thread_order?: "oldest_first" | "newest_first";
   comment_thread_order?: "oldest_first" | "newest_first";
   ticket_field_layout?: import("@shared/ticket-fields").ResolvedTicketFieldLayout;
 };

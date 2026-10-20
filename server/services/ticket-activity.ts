@@ -10,8 +10,6 @@ import {
 import type { AuthContext } from "@server/middleware/auth";
 import {
   ACTIVITY_ACTIONS,
-  ACTIVITY_ACTOR_TYPES,
-  ACTIVITY_SOURCES,
   type ActivityAction,
 } from "@shared/activity/actions";
 import type { ActivityChange } from "@shared/activity/types";
@@ -231,7 +229,7 @@ export async function recordTicketCreatedActivity(
 ) {
   await recordDomainActivity({
     action: ACTIVITY_ACTIONS.TICKET_CREATED,
-    summary: `Created ticket "${ticket.title}"`,
+    summary: `Created task "${ticket.title}"`,
     target_type: "ticket",
     target_id: ticket.id,
     ticket_id: ticket.id,
@@ -250,7 +248,7 @@ export async function recordTicketUpdatedActivity(
 
   await recordDomainActivity({
     action: ACTIVITY_ACTIONS.TICKET_UPDATED,
-    summary: `Updated ticket "${ticket.title}"`,
+    summary: `Updated task "${ticket.title}"`,
     target_type: "ticket",
     target_id: ticket.id,
     ticket_id: ticket.id,
@@ -270,7 +268,7 @@ export async function recordTicketDeletedActivity(
 ) {
   await recordDomainActivity({
     action: ACTIVITY_ACTIONS.TICKET_DELETED,
-    summary: `Deleted ticket "${ticket.title}"`,
+    summary: `Deleted task "${ticket.title}"`,
     target_type: "ticket",
     target_id: ticket.id,
     ticket_id: ticket.id,
@@ -296,7 +294,7 @@ export async function recordTicketStatusChangedActivity(input: {
 
   await recordDomainActivity({
     action: ACTIVITY_ACTIONS.TICKET_STATUS_CHANGED,
-    summary: `Moved ticket "${input.ticket.title}" from ${fromLabel} to ${toLabel}`,
+    summary: `Moved task "${input.ticket.title}" from ${fromLabel} to ${toLabel}`,
     target_type: "ticket",
     target_id: input.ticket.id,
     ticket_id: input.ticket.id,
@@ -321,7 +319,7 @@ export async function recordCommentCreatedActivity(input: {
 }) {
   await recordTicketScopedActivity({
     action: ACTIVITY_ACTIONS.COMMENT_CREATED,
-    summary: "Added comment on ticket",
+    summary: "Added comment",
     ticketId: input.ticketId,
     targetType: "comment",
     targetId: input.commentId,
@@ -339,7 +337,7 @@ export async function recordCommentUpdatedActivity(input: {
 }) {
   await recordTicketScopedActivity({
     action: ACTIVITY_ACTIONS.COMMENT_UPDATED,
-    summary: "Updated comment on ticket",
+    summary: "Updated comment",
     ticketId: input.ticketId,
     targetType: "comment",
     targetId: input.commentId,
@@ -363,135 +361,11 @@ export async function recordCommentDeletedActivity(input: {
 }) {
   await recordTicketScopedActivity({
     action: ACTIVITY_ACTIONS.COMMENT_DELETED,
-    summary: "Deleted comment on ticket",
+    summary: "Deleted comment",
     ticketId: input.ticketId,
     targetType: "comment",
     targetId: input.commentId,
     auth: input.auth,
     body: input.body,
-  });
-}
-
-export async function recordAgentReplyActivity(input: {
-  ticketId: string;
-  messageId: string;
-  body: string;
-  channel: string;
-  auth: AuthContext;
-}) {
-  await recordTicketScopedActivity({
-    action: ACTIVITY_ACTIONS.MESSAGE_CREATED,
-    summary: "Sent agent reply",
-    ticketId: input.ticketId,
-    targetType: "message",
-    targetId: input.messageId,
-    auth: input.auth,
-    body: input.body,
-    metadata: { channel: input.channel },
-  });
-}
-
-export async function recordMessageDraftCreatedActivity(input: {
-  ticketId: string;
-  messageId: string;
-  body: string;
-  auth: AuthContext;
-}) {
-  await recordTicketScopedActivity({
-    action: ACTIVITY_ACTIONS.MESSAGE_DRAFT_CREATED,
-    summary: "Created message draft",
-    ticketId: input.ticketId,
-    targetType: "message",
-    targetId: input.messageId,
-    auth: input.auth,
-    body: input.body,
-  });
-}
-
-export async function recordMessageDraftUpdatedActivity(input: {
-  ticketId: string;
-  messageId: string;
-  previousBody: string;
-  body: string;
-  auth: AuthContext;
-}) {
-  await recordTicketScopedActivity({
-    action: ACTIVITY_ACTIONS.MESSAGE_DRAFT_UPDATED,
-    summary: "Updated message draft",
-    ticketId: input.ticketId,
-    targetType: "message",
-    targetId: input.messageId,
-    auth: input.auth,
-    changes: [
-      {
-        field: "body",
-        label: "Draft",
-        from: messagePreview(input.previousBody),
-        to: messagePreview(input.body),
-      },
-    ],
-  });
-}
-
-export async function recordMessageDraftDeletedActivity(input: {
-  ticketId: string;
-  messageId: string;
-  body: string;
-  auth: AuthContext;
-}) {
-  await recordTicketScopedActivity({
-    action: ACTIVITY_ACTIONS.MESSAGE_DRAFT_DELETED,
-    summary: "Deleted message draft",
-    ticketId: input.ticketId,
-    targetType: "message",
-    targetId: input.messageId,
-    auth: input.auth,
-    body: input.body,
-  });
-}
-
-export async function recordMessageDraftSentActivity(input: {
-  ticketId: string;
-  messageId: string;
-  body: string;
-  emailSubject: string | null;
-  auth: AuthContext;
-}) {
-  await recordTicketScopedActivity({
-    action: ACTIVITY_ACTIONS.MESSAGE_DRAFT_SENT,
-    summary: "Sent message draft",
-    ticketId: input.ticketId,
-    targetType: "message",
-    targetId: input.messageId,
-    auth: input.auth,
-    body: input.body,
-    metadata: { email_subject: input.emailSubject },
-  });
-}
-
-export async function recordInboundMessageActivity(input: {
-  ticketId: string;
-  messageId: string;
-  body: string;
-  authorId: string;
-  channel: "email" | "api";
-  emailFrom?: string | null;
-  emailSubject?: string | null;
-}) {
-  await recordDomainActivity({
-    action: ACTIVITY_ACTIONS.MESSAGE_INBOUND,
-    summary: "Received inbound message",
-    source:
-      input.channel === "email" ? ACTIVITY_SOURCES.EMAIL : ACTIVITY_SOURCES.API,
-    target_type: "message",
-    target_id: input.messageId,
-    ticket_id: input.ticketId,
-    actor_type: ACTIVITY_ACTOR_TYPES.CONTACT,
-    actor_user_id: input.authorId,
-    metadata: {
-      body_preview: messagePreview(input.body),
-      email_from: input.emailFrom,
-      email_subject: input.emailSubject,
-    },
   });
 }

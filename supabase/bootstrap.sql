@@ -14,14 +14,16 @@ WHERE NOT EXISTS (SELECT 1 FROM public.status_types);
 
 INSERT INTO public.global_settings (
   id,
-  visible_status_ids,
-  default_inbound_status_id
+  visible_status_ids
 )
 SELECT
   1,
   COALESCE(
     (SELECT array_agg(id ORDER BY position) FROM public.status_types),
     '{}'::uuid[]
-  ),
-  (SELECT id FROM public.status_types ORDER BY position ASC LIMIT 1)
+  )
 WHERE NOT EXISTS (SELECT 1 FROM public.global_settings WHERE id = 1);
+
+INSERT INTO public.organizations (name)
+SELECT 'Workspace'
+WHERE NOT EXISTS (SELECT 1 FROM public.organizations);

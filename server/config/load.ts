@@ -2,11 +2,11 @@ import fs from "node:fs";
 import path from "node:path";
 import {
   assertConfigShape,
-  loadTicqexConfig as loadSharedConfig,
+  loadTasqexConfig as loadSharedConfig,
   resolveConfigPath as resolveSharedConfigPath,
   resolveExampleConfigPath,
-} from "@shared/ticqex-config/load";
-import type { TicqexConfig } from "@shared/ticqex-config/types";
+} from "@shared/tasqex-config/load";
+import type { TasqexConfig } from "@shared/tasqex-config/types";
 
 function projectRoot(): string {
   return path.join(/* turbopackIgnore: true */ process.cwd(), ".");
@@ -22,18 +22,18 @@ export function resolveConfigPath(configPath?: string): string {
   return resolveSharedConfigPath(projectRoot());
 }
 
-function readAndAssertConfig(filePath: string): TicqexConfig {
+function readAndAssertConfig(filePath: string): TasqexConfig {
   if (!fs.existsSync(filePath)) {
     throw new Error(`Missing config file ${filePath}`);
   }
 
   const raw = fs.readFileSync(filePath, "utf8");
-  const config = JSON.parse(raw) as TicqexConfig;
+  const config = JSON.parse(raw) as TasqexConfig;
   assertConfigShape(config);
   return config;
 }
 
-export function loadTicqexConfig(configPath?: string): TicqexConfig {
+export function loadTasqexConfig(configPath?: string): TasqexConfig {
   if (configPath) {
     return readAndAssertConfig(resolveConfigPath(configPath));
   }
@@ -43,8 +43,8 @@ export function loadTicqexConfig(configPath?: string): TicqexConfig {
   return config;
 }
 
-export function defaultTicqexConfig(): TicqexConfig {
-  return loadTicqexConfig();
+export function defaultTasqexConfig(): TasqexConfig {
+  return loadTasqexConfig();
 }
 
 export { resolveExampleConfigPath };

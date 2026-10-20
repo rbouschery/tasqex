@@ -1,6 +1,6 @@
 import { createInterface } from "node:readline/promises";
 import { stdin as input, stdout as output } from "node:process";
-import { TicqexClient, TicqexApiError } from "@ticqex/api-client";
+import { TasqexClient, TasqexApiError } from "@tasqex/api-client";
 import {
   clearStoredConfig,
   formatApiKeyPrefix,
@@ -10,8 +10,8 @@ import {
 } from "./credentials.js";
 import { CliUsageError, writeJson } from "./output.js";
 
-function createClient(instance: string, apiKey: string): TicqexClient {
-  return new TicqexClient({ baseUrl: instance, apiKey });
+function createClient(instance: string, apiKey: string): TasqexClient {
+  return new TasqexClient({ baseUrl: instance, apiKey });
 }
 
 async function promptForApiKey(): Promise<string> {
@@ -48,7 +48,7 @@ export async function authLogin(
       user,
     });
   } catch (error) {
-    if (error instanceof TicqexApiError) {
+    if (error instanceof TasqexApiError) {
       throw error;
     }
     throw error;

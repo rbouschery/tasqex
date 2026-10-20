@@ -1,12 +1,12 @@
-import type { ChannelKey } from "@shared/ticqex-keys";
+import type { ChannelKey } from "@shared/tasqex-keys";
 
 /** Client registry keys for section renderers (see settings-section-content). */
 export const SETTINGS_COMPONENT_KEYS = [
   "settings.appearance",
+  "settings.organization",
   "settings.api-mcp",
   "settings.board",
   "settings.custom-fields",
-  "settings.email",
 ] as const;
 
 /** Known renderer keys shipped in the admin UI (see settings-section-registry). */

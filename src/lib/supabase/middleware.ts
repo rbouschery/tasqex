@@ -78,9 +78,26 @@ export async function updateSession(request: NextRequest) {
   }
 
   const isLogin = pathname.startsWith("/login");
+  const isInvite = pathname.startsWith("/invite");
   const isPublicApi = pathname.startsWith("/api/auth");
 
-  if (!user && !isLogin && !isPublicApi) {
+  if (user) {
+    const { data: profile } = await supabase
+      .from("users")
+      .select("active")
+      .eq("id", user.id)
+      .maybeSingle();
+
+    if (profile && profile.active === false && !isInvite) {
+      await supabase.auth.signOut();
+      const url = request.nextUrl.clone();
+      url.pathname = "/login";
+      url.searchParams.set("error", "inactive");
+      return redirectWithSession(url, supabaseResponse);
+    }
+  }
+
+  if (!user && !isLogin && !isPublicApi && !isInvite) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     return NextResponse.redirect(url);
@@ -89,8 +106,16 @@ export async function updateSession(request: NextRequest) {
   if (user && isLogin) {
     const url = request.nextUrl.clone();
     url.pathname = "/board";
-    return NextResponse.redirect(url);
+    return redirectWithSession(url, supabaseResponse);
   }
 
   return supabaseResponse;
+}
+
+function redirectWithSession(url: URL, sessionResponse: NextResponse) {
+  const redirectResponse = NextResponse.redirect(url);
+  for (const cookie of sessionResponse.cookies.getAll()) {
+    redirectResponse.cookies.set(cookie);
+  }
+  return redirectResponse;
 }

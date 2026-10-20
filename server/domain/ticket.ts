@@ -4,9 +4,7 @@ import type { TicketOrigin } from "@shared/channels/types";
 
 export type { TicketOrigin } from "@shared/channels/types";
 
-export type TicketKind = "task" | "conversation";
-
-export type TicketChannel = "email";
+export type TicketKind = "task";
 
 /** Nested shapes from `tickets` list/detail select with joins. */
 export type TicketListContact = {
@@ -32,8 +30,6 @@ export type TicketListRow = {
   title: string;
   kind: TicketKind;
   body: string | null;
-  channel: string | null;
-  contact_address: string | null;
   contact_id: string | null;
   status_id: string;
   assignee_id: string | null;
@@ -53,13 +49,11 @@ export type BoardTicketRow = {
   id: string;
   title: string;
   kind: TicketKind;
-  channel: string | null;
   origin: TicketOrigin;
   contact_id: string | null;
   status_id: string;
   assignee_id: string | null;
   body: string | null;
-  contact_address: string | null;
   created_at: string;
   updated_at: string;
   contacts: { id: string; username: string } | null;
@@ -67,14 +61,12 @@ export type BoardTicketRow = {
 };
 
 export const BOARD_TICKET_SELECT =
-  "id, title, kind, channel, origin, contact_id, status_id, assignee_id, body, contact_address, created_at, updated_at, contacts(id, username), users:assignee_id(id, username)";
+  "id, title, kind, origin, contact_id, status_id, assignee_id, body, created_at, updated_at, contacts(id, username), users:assignee_id(id, username)";
 
 export type TicketRow = {
   id: string;
   kind: TicketKind;
   body: string | null;
-  channel: string | null;
-  contact_address: string | null;
   contact_id: string | null;
   status_id: string;
   title: string;
@@ -85,27 +77,11 @@ export function isTaskTicket(ticket: Pick<TicketRow, "kind">): boolean {
   return ticket.kind === "task";
 }
 
-export function isConversationTicket(
-  ticket: Pick<TicketRow, "kind">,
-): boolean {
-  return ticket.kind === "conversation";
-}
-
-export function canSendEmail(
-  ticket: Pick<TicketRow, "kind" | "channel">,
-): boolean {
-  return (
-    isConversationTicket(ticket) && ticket.channel === "email"
-  );
-}
-
 export async function loadTicketRow(id: string): Promise<TicketRow> {
   const db = createAdminClient();
   const { data, error } = await db
     .from("tickets")
-    .select(
-      "id, kind, body, channel, contact_address, contact_id, status_id, title, origin",
-    )
+    .select("id, kind, body, contact_id, status_id, title, origin")
     .eq("id", id)
     .single();
   if (error || !data) throw ApiError.notFound("Ticket not found");

@@ -5,7 +5,7 @@ import {
   operationSummary,
   toOpenApiPath,
   type OperationDefinition,
-} from "@ticqex/api-spec";
+} from "@tasqex/api-spec";
 import {
   REQUEST_BODY_BY_OPERATION,
 } from "./request-schemas.js";
@@ -28,7 +28,7 @@ type OpenApiOperation = {
   parameters?: OpenApiParameter[];
   requestBody?: Record<string, unknown>;
   responses: Record<string, unknown>;
-  security: [{ bearerAuth: [] }];
+  security: Array<{ bearerAuth: [] }>;
 };
 
 type OpenApiTag = {
@@ -90,23 +90,15 @@ const TAG_METADATA: Record<
   },
   board: {
     displayName: "Board",
-    description: "Kanban board views, lane ordering, and ticket moves.",
+    description: "Kanban board views, lane ordering, and task moves.",
   },
   contacts: {
     displayName: "Contacts",
-    description: "Customer and contact records linked to tickets.",
+    description: "People and contacts linked to tasks.",
   },
   custom_fields: {
     displayName: "Custom fields",
-    description: "Ticket and contact field definitions and ordering.",
-  },
-  email_snippets: {
-    displayName: "Email snippets",
-    description: "Reusable canned responses for outbound email.",
-  },
-  messages: {
-    displayName: "Messages",
-    description: "Message attachments and signed download URLs.",
+    description: "Task and contact field definitions and ordering.",
   },
   settings: {
     displayName: "Settings",
@@ -114,19 +106,23 @@ const TAG_METADATA: Record<
   },
   statuses: {
     displayName: "Statuses",
-    description: "Ticket workflow statuses and lane ordering.",
+    description: "Task workflow statuses and lane ordering.",
   },
   tags: {
     displayName: "Tags",
-    description: "Labels applied to tickets for filtering and organization.",
+    description: "Labels applied to tasks for filtering and organization.",
   },
   tickets: {
-    displayName: "Tickets",
-    description: "Tickets, messages, drafts, comments, and read state.",
+    displayName: "Tasks",
+    description: "Tasks and comments.",
+  },
+  organization: {
+    displayName: "Organization",
+    description: "The single workspace, its members, and invite links.",
   },
   users: {
     displayName: "Users",
-    description: "Staff users and the authenticated session identity.",
+    description: "Team members and the authenticated session identity.",
   },
 };
 
@@ -135,13 +131,13 @@ const QUERY_PARAM_DESCRIPTIONS: Record<string, string> = {
   per_page: "Number of items per page.",
   offset: "Zero-based offset for pagination.",
   limit: "Maximum number of items to return.",
-  status_id: "Filter tickets by status UUID.",
-  assignee_id: "Filter tickets by assignee user UUID.",
-  contact_id: "Filter tickets by contact UUID.",
-  origin: "Filter tickets by origin (for example email, api, or manual).",
-  kind: "Filter tickets by kind.",
+  status_id: "Filter tasks by status UUID.",
+  assignee_id: "Filter tasks by assignee user UUID.",
+  contact_id: "Filter tasks by contact UUID.",
+  origin: "Filter tasks by origin (manual or api).",
+  kind: "Filter tasks by kind.",
   channel: "Filter tickets by channel identifier.",
-  tag: "Filter tickets by tag name.",
+  tag: "Filter tasks by tag name.",
   filter: "Board filter expression.",
   sort: "Sort order for board or lane results.",
   q: "Search query for the board.",
@@ -191,27 +187,6 @@ function buildSharedSchemas(): Record<string, JsonSchema> {
         meta: {
           type: "object",
           additionalProperties: true,
-        },
-      },
-    },
-    AttachmentUrlData: {
-      type: "object",
-      required: ["url"],
-      properties: {
-        url: {
-          type: "string",
-          format: "uri",
-          description: "Time-limited signed URL for the attachment.",
-        },
-      },
-    },
-    AttachmentUploadRequest: {
-      type: "object",
-      required: ["file"],
-      properties: {
-        file: {
-          type: "string",
-          format: "binary",
         },
       },
     },
@@ -273,7 +248,7 @@ function buildParameters(operation: OperationDefinition): OpenApiParameter[] {
     parameters.push(parameter);
   }
 
-  if (operation.name === "ticqex_list_tickets") {
+  if (operation.name === "tasqex_list_tickets") {
     parameters.push({
       name: "custom_fields.{key}",
       in: "query",
@@ -288,40 +263,10 @@ function buildParameters(operation: OperationDefinition): OpenApiParameter[] {
 }
 
 function successResponse(operation: OperationDefinition): Record<string, unknown> {
-  if (operation.name === "ticqex_get_attachment_url") {
-    return {
-      "302": {
-        description:
-          "Redirects to a time-limited signed URL for the attachment. This is the default response when format is omitted.",
-        headers: {
-          Location: {
-            description: "Signed attachment URL.",
-            schema: { type: "string", format: "uri" },
-          },
-        },
-      },
-      "200": {
-        description:
-          'Returned when format=json. Wraps the signed URL in the standard `{ data: { url } }` envelope.',
-        content: {
-          "application/json": {
-            schema: {
-              type: "object",
-              required: ["data"],
-              properties: {
-                data: { $ref: "#/components/schemas/AttachmentUrlData" },
-              },
-            },
-          },
-        },
-      },
-    };
-  }
-
   const isList =
     operation.method === "GET" &&
-    (operation.name.startsWith("ticqex_list_") ||
-      operation.name === "ticqex_get_board_lane_tickets");
+    (operation.name.startsWith("tasqex_list_") ||
+      operation.name === "tasqex_get_board_lane_tickets");
 
   const isDelete = operation.method === "DELETE";
 
@@ -372,17 +317,6 @@ function buildRequestBody(
     return undefined;
   }
 
-  if (bodyKind.kind === "multipart") {
-    return {
-      required: true,
-      content: {
-        "multipart/form-data": {
-          schema: { $ref: "#/components/schemas/AttachmentUploadRequest" },
-        },
-      },
-    };
-  }
-
   const componentName = `${operation.name}Request`;
   return {
     required: bodyKind.kind === "json",
@@ -397,15 +331,19 @@ function buildRequestBody(
 function buildOperation(operation: OperationDefinition): OpenApiOperation {
   const tag = inferOperationTag(operation.pathTemplate);
   const descriptionParts: string[] = [];
-  if (operation.admin) {
+  if (operation.public) {
+    descriptionParts.push("Public. No authentication required.");
+  } else if (operation.admin) {
     descriptionParts.push("Requires admin role.");
   }
-  if (operation.name === "ticqex_get_attachment_url") {
+  if (operation.name === "tasqex_get_attachment_url") {
     descriptionParts.push(
       "By default this endpoint responds with a 302 redirect to a signed URL. Pass format=json to receive `{ data: { url } }` instead.",
     );
   }
-  descriptionParts.push(`MCP tool: \`${operation.name}\`.`);
+  if (!operation.public) {
+    descriptionParts.push(`MCP tool: \`${operation.name}\`.`);
+  }
 
   const parameters = buildParameters(operation);
   const requestBody = buildRequestBody(operation);
@@ -450,7 +388,7 @@ function buildOperation(operation: OperationDefinition): OpenApiOperation {
         },
       },
     },
-    security: [{ bearerAuth: [] }],
+    security: operation.public ? [] : [{ bearerAuth: [] }],
   };
 
   if (parameters.length > 0) {
@@ -479,20 +417,20 @@ export function buildOpenApiDocument(): OpenApiDocument {
   return {
     openapi: "3.1.0",
     info: {
-      title: "Ticqex API",
+      title: "Tasqex API",
       version: "0.1.0",
       description:
-        "REST JSON API for Ticqex at /api/v1. Authenticate with Authorization: Bearer tq_live_* (API key) or a staff Supabase JWT.",
+        "REST JSON API for the Tasqex task board at /api/v1. Authenticate with Authorization: Bearer tq_live_* (API key) or a member Supabase JWT. Invite preview and redeem are public.",
     },
     servers: [
       {
         url: "https://{instanceHost}/api/v1",
-        description: "Your Ticqex deployment.",
+        description: "Your Tasqex deployment.",
         variables: {
           instanceHost: {
             default: "your-instance.com",
             description:
-              "Hostname of your Ticqex deployment, without protocol or path.",
+              "Hostname of your Tasqex deployment, without protocol or path.",
           },
         },
       },

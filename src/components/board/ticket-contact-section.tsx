@@ -57,7 +57,7 @@ function TicketContactSectionBody({
 }) {
   const queryClient = useQueryClient();
   const { expanded, toggleExpanded, hydrated } = usePersistedExpanded(
-    "ticqex.ticket-contact.expanded.v1",
+    "tasqex.ticket-contact.expanded.v1",
     false,
   );
   const [showAllFields, setShowAllFields] = useState(false);

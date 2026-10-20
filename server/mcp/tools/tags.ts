@@ -10,7 +10,7 @@ import { registerAuthedTool, toolResult, uuid } from "../core";
 export function registerTagTools(server: McpServer) {
   registerAuthedTool(
     server,
-    "ticqex_list_tags",
+    "tasqex_list_tags",
     {
       title: "List Tags",
       description: "List tags.",
@@ -21,7 +21,7 @@ export function registerTagTools(server: McpServer) {
 
   registerAuthedTool(
     server,
-    "ticqex_create_tag",
+    "tasqex_create_tag",
     {
       title: "Create Tag",
       description: "Create a tag. Admin only.",
@@ -33,7 +33,7 @@ export function registerTagTools(server: McpServer) {
 
   registerAuthedTool(
     server,
-    "ticqex_update_tag",
+    "tasqex_update_tag",
     {
       title: "Update Tag",
       description: "Update a tag. Admin only.",
@@ -46,7 +46,7 @@ export function registerTagTools(server: McpServer) {
 
   registerAuthedTool(
     server,
-    "ticqex_delete_tag",
+    "tasqex_delete_tag",
     {
       title: "Delete Tag",
       description: "Delete a tag. Admin only.",

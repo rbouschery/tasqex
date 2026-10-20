@@ -6,13 +6,8 @@ import {
   type TicketFilter,
   type TicketFilterCondition,
 } from "@server/domain/ticket-filter";
-import { getTicketIdsByUnreadState } from "@server/services/message-reads";
 import { usesMultiselectFilterSemantics } from "@shared/custom-fields";
 import { customFieldCandidateValues } from "@shared/ticket-filter/evaluate";
-
-type FilterContext = {
-  userId?: string;
-};
 
 function intersectSets(a: Set<string> | null, b: Set<string>): Set<string> {
   if (a === null) return b;
@@ -214,7 +209,7 @@ async function evaluateScalarCondition(
   db: SupabaseClient,
   condition: Extract<
     TicketFilterCondition,
-    { field: "assignee_id" | "contact_id" | "kind" | "channel" | "origin" }
+    { field: "assignee_id" | "contact_id" | "kind" | "origin" }
   >,
 ): Promise<Set<string>> {
   const column = condition.field;
@@ -242,7 +237,6 @@ async function evaluateScalarCondition(
 async function evaluateCondition(
   db: SupabaseClient,
   condition: TicketFilterCondition,
-  ctx: FilterContext,
 ): Promise<Set<string>> {
   const normalized = normalizeCondition(condition);
 
@@ -250,7 +244,6 @@ async function evaluateCondition(
     case "assignee_id":
     case "contact_id":
     case "kind":
-    case "channel":
     case "origin":
       return evaluateScalarCondition(db, normalized);
     case "tag": {
@@ -261,10 +254,10 @@ async function evaluateCondition(
       return matching;
     }
     case "unread": {
-      if (!ctx.userId) return new Set();
       const wantsUnread =
         normalized.op === "eq" ? normalized.value : !normalized.value;
-      return getTicketIdsByUnreadState(ctx.userId, wantsUnread);
+      if (wantsUnread) return new Set();
+      return queryTicketIds(db, (query) => query);
     }
     case "ticket_field":
       return getTicketIdsByCustomField(
@@ -283,12 +276,11 @@ async function evaluateCondition(
 export async function resolveFilteredTicketIds(
   db: SupabaseClient,
   filter: TicketFilter,
-  ctx: FilterContext = {},
 ): Promise<string[] | null> {
   if (filter.length === 0) return null;
 
   const sets = await Promise.all(
-    filter.map((condition) => evaluateCondition(db, condition, ctx)),
+    filter.map((condition) => evaluateCondition(db, condition)),
   );
 
   let ids: Set<string> | null = null;

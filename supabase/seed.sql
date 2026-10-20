@@ -17,17 +17,19 @@ WHERE NOT EXISTS (SELECT 1 FROM public.status_types);
 
 INSERT INTO public.global_settings (
   id,
-  visible_status_ids,
-  default_inbound_status_id
+  visible_status_ids
 )
 SELECT
   1,
   COALESCE(
     (SELECT array_agg(id ORDER BY position) FROM public.status_types),
     '{}'::uuid[]
-  ),
-  (SELECT id FROM public.status_types ORDER BY position ASC LIMIT 1)
+  )
 WHERE NOT EXISTS (SELECT 1 FROM public.global_settings WHERE id = 1);
+
+INSERT INTO public.organizations (name)
+SELECT 'Workspace'
+WHERE NOT EXISTS (SELECT 1 FROM public.organizations);
 
 -- Optional demo tickets/contacts/tags.
 INSERT INTO public.contacts (username)
@@ -45,9 +47,9 @@ INSERT INTO public.tickets (
   origin
 )
 SELECT
-  'Welcome to ticqex',
+  'Welcome to tasqex',
   'task',
-  'This is a sample task on the board. Edit the description in the ticket modal.',
+  'This is a sample task on the board. Edit the description to make it yours.',
   c.id,
   s.id,
   'manual'
@@ -57,44 +59,10 @@ WHERE c.username = 'demo@example.com'
   AND s.name = 'Open'
 LIMIT 1;
 
-INSERT INTO public.tickets (
-  title,
-  kind,
-  channel,
-  contact_address,
-  contact_id,
-  status_id,
-  origin
-)
-SELECT
-  'Sample email conversation',
-  'conversation',
-  'email',
-  'demo@example.com',
-  c.id,
-  s.id,
-  'manual'
-FROM public.contacts c
-CROSS JOIN public.status_types s
-WHERE c.username = 'demo@example.com'
-  AND s.name = 'In Process'
-LIMIT 1;
-
-INSERT INTO public.messages (ticket_id, body, visibility, author_type, channel)
-SELECT
-  t.id,
-  'Thanks for trying ticqex - this is a sample contact message.',
-  'public',
-  'contact',
-  'admin'
-FROM public.tickets t
-WHERE t.title = 'Sample email conversation'
-LIMIT 1;
-
 INSERT INTO public.ticket_tags (ticket_id, tag_id)
 SELECT t.id, tag.id
 FROM public.tickets t
 CROSS JOIN public.tags tag
-WHERE t.title = 'Welcome to ticqex'
+WHERE t.title = 'Welcome to tasqex'
   AND tag.name = 'feature request'
 LIMIT 1;

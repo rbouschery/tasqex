@@ -19,10 +19,10 @@ import { registerAuthedTool, toolResult, uuid } from "../core";
 export function registerCustomFieldTools(server: McpServer) {
   registerAuthedTool(
     server,
-    "ticqex_list_custom_fields",
+    "tasqex_list_custom_fields",
     {
       title: "List Custom Fields",
-      description: "List custom field definitions. Ticket field card/ticket visibility is configured via global settings (`ticket_field_visibility` / `ticket_field_layout`).",
+      description: "List custom field definitions. Task field card and detail visibility is configured via global settings (`ticket_field_visibility` / `ticket_field_layout`).",
       inputSchema: { group: z.enum(["ticket", "contact"]).optional() },
     },
     async ({ group }) => toolResult(await listDefinitions(createAdminClient(), group)),
@@ -30,7 +30,7 @@ export function registerCustomFieldTools(server: McpServer) {
 
   registerAuthedTool(
     server,
-    "ticqex_create_custom_field",
+    "tasqex_create_custom_field",
     {
       title: "Create Custom Field",
       description:
@@ -46,7 +46,7 @@ export function registerCustomFieldTools(server: McpServer) {
 
   registerAuthedTool(
     server,
-    "ticqex_update_custom_field",
+    "tasqex_update_custom_field",
     {
       title: "Update Custom Field",
       description:
@@ -62,7 +62,7 @@ export function registerCustomFieldTools(server: McpServer) {
 
   registerAuthedTool(
     server,
-    "ticqex_delete_custom_field",
+    "tasqex_delete_custom_field",
     {
       title: "Delete Custom Field",
       description: "Delete a custom field definition. Admin only.",
@@ -77,10 +77,10 @@ export function registerCustomFieldTools(server: McpServer) {
 
   registerAuthedTool(
     server,
-    "ticqex_reorder_custom_fields",
+    "tasqex_reorder_custom_fields",
     {
       title: "Reorder Custom Fields",
-      description: "Reorder custom field definitions within a ticket or contact group. Admin only.",
+      description: "Reorder custom field definitions within a task or contact group. Admin only.",
       inputSchema: reorderCustomFieldsSchema.shape,
       admin: true,
     },

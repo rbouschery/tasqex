@@ -49,28 +49,6 @@ export async function getVisibleStatusIds(db = createAdminClient()) {
   return (data ?? []).map((row) => row.id as string);
 }
 
-export async function getInboundEmailStatusId() {
-  const db = createAdminClient();
-  const { data: settings, error: settingsErr } = await db
-    .from("global_settings")
-    .select("default_inbound_status_id")
-    .eq("id", 1)
-    .single();
-  if (settingsErr) throw ApiError.internal(settingsErr.message);
-
-  if (settings?.default_inbound_status_id) {
-    const { data: status, error: statusErr } = await db
-      .from("status_types")
-      .select("id")
-      .eq("id", settings.default_inbound_status_id)
-      .maybeSingle();
-    if (statusErr) throw ApiError.internal(statusErr.message);
-    if (status) return status.id;
-  }
-
-  return getDefaultStatusId();
-}
-
 async function assertCanHideStatus(id: string) {
   const db = createAdminClient();
   const { count, error } = await db

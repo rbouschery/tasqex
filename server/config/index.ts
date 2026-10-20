@@ -3,17 +3,16 @@ export type {
   ConfigValidationIssue,
   ConfigValidationResult,
   IntegrationBinding,
-  TicqexConfig,
+  TasqexConfig,
 } from "@server/config/types";
 export {
-  defaultTicqexConfig,
-  loadTicqexConfig,
+  defaultTasqexConfig,
+  loadTasqexConfig,
   resolveConfigPath,
 } from "@server/config/load";
 export {
-  getEmailChannelRuntime,
   resolveChannelRuntime,
-  validateTicqexConfig,
+  validateTasqexConfig,
   type ChannelRuntime,
 } from "@server/config/resolve";
 export {
@@ -23,6 +22,5 @@ export {
 } from "@server/config/runtime";
 export {
   channelUnavailableWebhookResult,
-  getOperationalEmailChannel,
   isChannelOperational,
 } from "@server/config/channel-gate";

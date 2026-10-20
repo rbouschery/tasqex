@@ -67,16 +67,6 @@ export function useBoardRealtime(
       )
       .on(
         "postgres_changes",
-        { event: "*", schema: "public", table: "messages" },
-        scheduleRefresh,
-      )
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "message_reads" },
-        scheduleRefresh,
-      )
-      .on(
-        "postgres_changes",
         { event: "*", schema: "public", table: "status_types" },
         scheduleRefresh,
       )
@@ -94,20 +84,9 @@ export function useTicketRealtime(ticketId: string, onRefresh: () => void) {
   useEffect(() => {
     const supabase = createClient();
     const ticketFilter = `id=eq.${ticketId}`;
-    const messageFilter = `ticket_id=eq.${ticketId}`;
 
     const channel = supabase
       .channel(`ticket:${ticketId}`)
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "messages",
-          filter: messageFilter,
-        },
-        scheduleRefresh,
-      )
       .on(
         "postgres_changes",
         {

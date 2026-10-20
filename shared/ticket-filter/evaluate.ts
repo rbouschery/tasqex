@@ -8,7 +8,6 @@ import {
 
 export type TicketFilterMatchTicket = {
   kind: string;
-  channel: string | null;
   origin?: string | null;
   assignee_id: string | null;
   contact_id: string | null;
@@ -139,8 +138,6 @@ export function evaluateCondition(
       );
     case "kind":
       return matchesScalar(ticket.kind, normalized.op, normalized.value, normalized.values);
-    case "channel":
-      return matchesScalar(ticket.channel, normalized.op, normalized.value, normalized.values);
     case "origin":
       return matchesScalar(
         ticket.origin ?? null,

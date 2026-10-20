@@ -1,5 +1,4 @@
 import { createAdminClient } from "@server/lib/supabase-admin";
-import { isTaskTicket, type TicketRow } from "@server/domain/ticket";
 import {
   listDefinitions,
   loadCustomFieldsMap,
@@ -36,7 +35,6 @@ export function buildTicketContextMarkdown(
   contactFieldDefinitions: CustomFieldDefinition[],
   ticketFieldDefinitions: CustomFieldDefinition[],
   contactFields: Record<string, unknown>,
-  agentNames: Map<string, string>,
 ): string {
   const lines: string[] = [];
   const prepend = settings.prepend_text.trim();
@@ -48,8 +46,7 @@ export function buildTicketContextMarkdown(
   lines.push(`# ${ticket.title}`, "");
 
   if (settings.append_contact) {
-    const contactLabel =
-      ticket.contact_address ?? ticket.contact?.username ?? "Unknown";
+    const contactLabel = ticket.contact?.username ?? "Unknown";
     lines.push(`**Contact:** ${contactLabel}`);
 
     if (settings.append_contact_custom_fields) {
@@ -69,30 +66,8 @@ export function buildTicketContextMarkdown(
 
   lines.push("", "---", "");
 
-  if (isTaskTicket({ kind: ticket.kind as TicketRow["kind"] })) {
-    if (ticket.body) {
-      lines.push(String(ticket.body), "");
-    }
-  } else {
-    for (const msg of ticket.messages) {
-      let authorName = "System";
-      if (msg.author_type === "contact") {
-        authorName =
-          (ticket.contact_address as string | null) ??
-          ticket.contact?.username ??
-          "Contact";
-      } else if (msg.author_type === "agent" && msg.author_id) {
-        authorName = agentNames.get(msg.author_id) ?? "Agent";
-      }
-
-      const date = new Date(String(msg.created_at))
-        .toISOString()
-        .slice(0, 16)
-        .replace("T", " ");
-
-      lines.push(`**${authorName}** (${date}):`);
-      lines.push(String(msg.body), "");
-    }
+  if (ticket.body) {
+    lines.push(String(ticket.body), "");
   }
 
   lines.push("---");
@@ -122,36 +97,11 @@ export async function getTicketContext(id: string) {
       : Promise.resolve([]),
   ]);
 
-  const agentNames = new Map<string, string>();
-  if (
-    !isTaskTicket({ kind: ticket.kind as TicketRow["kind"] }) &&
-    ticket.messages.length > 0
-  ) {
-    const agentIds = [
-      ...new Set(
-        ticket.messages
-          .filter((msg) => msg.author_type === "agent" && msg.author_id)
-          .map((msg) => msg.author_id as string),
-      ),
-    ];
-
-    if (agentIds.length) {
-      const { data: agents } = await db
-        .from("users")
-        .select("id, username")
-        .in("id", agentIds);
-      for (const agent of agents ?? []) {
-        agentNames.set(agent.id, agent.username);
-      }
-    }
-  }
-
   return buildTicketContextMarkdown(
     ticket,
     settings,
     contactFieldDefinitions,
     ticketFieldDefinitions,
     contactFields,
-    agentNames,
   );
 }

@@ -11,7 +11,7 @@ type VerifyToken = (
  * API-key MCP auth without OAuth Protected Resource Metadata.
  *
  * mcp-handler's withMcpAuth always advertises resource_metadata on 401, which
- * makes Cursor start OAuth discovery. Ticqex MCP is Bearer API key only.
+ * makes Cursor start OAuth discovery. Tasqex MCP is Bearer API key only.
  */
 export function withApiKeyMcpAuth(
   handler: McpHandler,

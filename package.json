@@ -1,30 +1,25 @@
 {
-  "name": "ticqex",
+  "name": "tasqex",
   "version": "0.1.0",
   "private": true,
-  "description": "Open-source, agent-first support platform with first-class REST API and MCP, a realtime Kanban admin, and a composable channel layer (email parsing onboard). Built on Next.js and Supabase.",
+  "description": "Collaborative task board for a team, with a realtime Kanban, comments, tags, and a REST and MCP API. Built on Next.js and Supabase.",
   "license": "MIT",
-  "homepage": "https://github.com/rbouschery/ticqex#readme",
+  "homepage": "https://github.com/rbouschery/tasqex#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rbouschery/ticqex.git"
+    "url": "https://github.com/rbouschery/tasqex.git"
   },
   "bugs": {
-    "url": "https://github.com/rbouschery/ticqex/issues"
+    "url": "https://github.com/rbouschery/tasqex/issues"
   },
   "keywords": [
-    "agent-first",
-    "ai-agents",
-    "mcp",
-    "support",
-    "helpdesk",
-    "ticketing",
+    "tasks",
+    "collaboration",
     "kanban",
+    "mcp",
     "api",
     "nextjs",
-    "supabase",
-    "resend",
-    "email"
+    "supabase"
   ],
   "engines": {
     "node": ">=20"
@@ -32,7 +27,7 @@
   "scripts": {
     "postinstall": "pnpm build:packages",
     "dev": "next dev",
-    "build": "pnpm --filter @ticqex/api-spec build && next build",
+    "build": "pnpm --filter @tasqex/api-spec build && next build",
     "start": "next start",
     "lint": "eslint",
     "db:start": "supabase start",
@@ -42,8 +37,7 @@
     "db:env": "tsx scripts/sync-supabase-env.ts",
     "env:verify": "tsx scripts/verify-env.ts",
     "db:seed-admin": "tsx scripts/seed.ts",
-    "ticqex": "tsx scripts/ticqex.ts",
-    "resend:setup-webhooks": "tsx scripts/setup-resend-webhooks.ts",
+    "tasqex": "tsx scripts/tasqex.ts",
     "config:check": "tsx scripts/config-check.ts",
     "config:sync": "tsx scripts/config-sync.ts",
     "supabase": "supabase",
@@ -51,13 +45,11 @@
     "test:watch": "vitest",
     "test:unit": "vitest run --project unit",
     "test:integration": "vitest run --project integration",
-    "build:packages": "pnpm --filter @ticqex/api-spec --filter @ticqex/api-client --filter @ticqex/cli build",
-    "test:packages": "pnpm --filter @ticqex/api-spec --filter @ticqex/api-client --filter @ticqex/cli test",
-    "openapi:generate": "pnpm --filter @ticqex/api-spec build && tsx scripts/generate-openapi.ts",
-    "openapi:check": "pnpm --filter @ticqex/api-spec build && tsx scripts/generate-openapi.ts --check",
-    "seed:board-load": "tsx --env-file=.env.local scripts/seed-board-load.ts",
-    "seed:long-email-demo": "tsx --env-file=.env.local scripts/seed-long-email-demo.ts",
-    "seed:cedar-crm-demo": "tsx --env-file=.env.local scripts/seed-cedar-crm-demo.ts"
+    "build:packages": "pnpm --filter @tasqex/api-spec --filter @tasqex/api-client --filter @tasqex/cli build",
+    "test:packages": "pnpm --filter @tasqex/api-spec --filter @tasqex/api-client --filter @tasqex/cli test",
+    "openapi:generate": "pnpm --filter @tasqex/api-spec build && tsx scripts/generate-openapi.ts",
+    "openapi:check": "pnpm --filter @tasqex/api-spec build && tsx scripts/generate-openapi.ts --check",
+    "seed:board-load": "tsx --env-file=.env.local scripts/seed-board-load.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
@@ -68,7 +60,7 @@
     "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.117.3",
     "@tanstack/react-query": "^5.104.1",
-    "@ticqex/api-spec": "workspace:*",
+    "@tasqex/api-spec": "workspace:*",
     "cal-sans": "^1.0.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -81,7 +73,6 @@
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "react-markdown": "^10.1.0",
-    "resend": "^6.32.1",
     "shadcn": "^4.21.4",
     "sonner": "^2.0.8",
     "tailwind-merge": "^3.7.0",

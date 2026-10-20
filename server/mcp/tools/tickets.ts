@@ -1,42 +1,19 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { enqueueChannelOutbound } from "@server/channels/email/background";
-import { isChannelOperational } from "@server/config/channel-gate";
-import { ApiError } from "@server/lib/errors";
 import {
   commentInputSchema,
   commentUpdateSchema,
   createTicketMcpInputSchema,
   createTicketSchema,
-  messageInputSchema,
   parseBody,
-  sendDraftSchema,
-  toggleMessageReadSchema,
   updateTicketSchema,
 } from "@server/lib/validation/schemas";
-import {
-  getAttachmentSignedUrl,
-  stageAttachmentUploadFromBytes,
-} from "@server/services/attachment-uploads";
-import {
-  createAgentDraft,
-  createAgentReply,
-  deleteAgentDraft,
-  listEnrichedDrafts,
-  listEnrichedMessages,
-  sendAgentDraft,
-  updateAgentDraft,
-} from "@server/services/messages";
 import {
   createTicketComment,
   deleteTicketComment,
   listTicketComments,
   updateTicketComment,
 } from "@server/services/comments";
-import {
-  markTicketMessagesRead,
-  setMessageReadState,
-} from "@server/services/message-reads";
 import { getTicketContext } from "@server/services/ticket-context";
 import {
   createTicket,
@@ -57,10 +34,10 @@ import {
 export function registerTicketTools(server: McpServer) {
   registerAuthedTool(
     server,
-    "ticqex_list_tickets",
+    "tasqex_list_tickets",
     {
       title: "List Tickets",
-      description: "List tickets using the same filters as GET /api/v1/tickets.",
+      description: "List tasks using the same filters as GET /api/v1/tickets.",
       inputSchema: {
         ...paginationInput,
         status_id: uuid.optional(),
@@ -68,7 +45,6 @@ export function registerTicketTools(server: McpServer) {
         contact_id: uuid.optional(),
         origin: z.string().optional(),
         kind: z.string().optional(),
-        channel: z.string().optional(),
         tag: z.string().optional(),
         custom_fields: z.record(z.string(), z.string()).optional(),
       },
@@ -78,54 +54,50 @@ export function registerTicketTools(server: McpServer) {
 
   registerAuthedTool(
     server,
-    "ticqex_create_ticket",
+    "tasqex_create_ticket",
     {
       title: "Create Ticket",
-      description:
-        "Create a task ticket, an API conversation (contact message), or an agent-initiated email conversation (outbound).",
+      description: "Create a task.",
       inputSchema: createTicketMcpInputSchema.shape,
     },
     async (input, auth) => {
       const mcpInput = parseBody(createTicketMcpInputSchema, input);
-      const { ticket, outboundMessageId } = await createTicket(
+      const { ticket } = await createTicket(
         parseBody(createTicketSchema, mcpInput),
         auth,
       );
-      if (outboundMessageId) {
-        enqueueChannelOutbound("email", outboundMessageId);
-      }
       return toolResult(ticket);
     },
   );
 
   registerAuthedTool(
     server,
-    "ticqex_get_ticket",
+    "tasqex_get_ticket",
     {
       title: "Get Ticket",
-      description: "Get a ticket with messages when the ticket has a message thread.",
+      description: "Get a task.",
       inputSchema: { id: uuid },
     },
-    async ({ id }, auth) => toolResult(await getTicket(id, auth.userId)),
+    async ({ id }) => toolResult(await getTicket(id)),
   );
 
   registerAuthedTool(
     server,
-    "ticqex_get_ticket_summary",
+    "tasqex_get_ticket_summary",
     {
       title: "Get Ticket Summary",
-      description: "Get a ticket summary without loading the full message thread.",
+      description: "Get a task summary.",
       inputSchema: { id: uuid },
     },
-    async ({ id }, auth) => toolResult(await getTicketSummary(id, auth.userId)),
+    async ({ id }) => toolResult(await getTicketSummary(id)),
   );
 
   registerAuthedTool(
     server,
-    "ticqex_get_ticket_context",
+    "tasqex_get_ticket_context",
     {
       title: "Get Ticket Context",
-      description: "Get a markdown context export for a ticket.",
+      description: "Get a markdown context export for a task.",
       inputSchema: { id: uuid },
     },
     async ({ id }) => toolResult({ markdown: await getTicketContext(id) }),
@@ -133,10 +105,10 @@ export function registerTicketTools(server: McpServer) {
 
   registerAuthedTool(
     server,
-    "ticqex_update_ticket",
+    "tasqex_update_ticket",
     {
       title: "Update Ticket",
-      description: "Update ticket fields, tags, and custom fields.",
+      description: "Update task fields, tags, and custom fields.",
       inputSchema: { id: uuid, patch: updateTicketSchema },
     },
     async ({ id, patch }, auth) =>
@@ -147,10 +119,10 @@ export function registerTicketTools(server: McpServer) {
 
   registerAuthedTool(
     server,
-    "ticqex_delete_ticket",
+    "tasqex_delete_ticket",
     {
       title: "Delete Ticket",
-      description: "Delete a ticket.",
+      description: "Delete a task.",
       inputSchema: { id: uuid },
     },
     async ({ id }, auth) => {
@@ -161,49 +133,10 @@ export function registerTicketTools(server: McpServer) {
 
   registerAuthedTool(
     server,
-    "ticqex_list_ticket_messages",
-    {
-      title: "List Ticket Messages",
-      description: "List public messages for a ticket.",
-      inputSchema: { ticket_id: uuid },
-    },
-    async ({ ticket_id }, auth) =>
-      toolResult(await listEnrichedMessages(ticket_id, auth.userId)),
-  );
-
-  registerAuthedTool(
-    server,
-    "ticqex_create_ticket_message",
-    {
-      title: "Create Ticket Message",
-      description: "Create an agent reply on a ticket and enqueue outbound email when applicable.",
-      inputSchema: { ticket_id: uuid, message: messageInputSchema },
-    },
-    async ({ ticket_id, message }, auth) => {
-      const body = parseBody(messageInputSchema, message);
-      const { message: created, shouldSendEmail } = await createAgentReply(
-        ticket_id,
-        { body: body.body, channel: body.channel ?? "admin", email: body.email },
-        auth,
-      );
-      if (shouldSendEmail) {
-        if (!isChannelOperational("email")) {
-          throw ApiError.serviceUnavailable(
-            "Email channel is disabled or integration is not configured",
-          );
-        }
-        enqueueChannelOutbound("email", created.id);
-      }
-      return toolResult(created);
-    },
-  );
-
-  registerAuthedTool(
-    server,
-    "ticqex_list_ticket_comments",
+    "tasqex_list_ticket_comments",
     {
       title: "List Ticket Comments",
-      description: "List internal comments for a ticket using GET /api/v1/tickets/:id/comments.",
+      description: "List comments on a task using GET /api/v1/tickets/:id/comments.",
       inputSchema: { ticket_id: uuid, ...paginationInput },
     },
     async ({ ticket_id, ...input }, auth) =>
@@ -214,10 +147,10 @@ export function registerTicketTools(server: McpServer) {
 
   registerAuthedTool(
     server,
-    "ticqex_create_ticket_comment",
+    "tasqex_create_ticket_comment",
     {
       title: "Create Ticket Comment",
-      description: "Create an internal markdown comment on a ticket.",
+      description: "Create a markdown comment on a task.",
       inputSchema: { ticket_id: uuid, comment: commentInputSchema },
     },
     async ({ ticket_id, comment }, auth) =>
@@ -232,10 +165,10 @@ export function registerTicketTools(server: McpServer) {
 
   registerAuthedTool(
     server,
-    "ticqex_update_ticket_comment",
+    "tasqex_update_ticket_comment",
     {
       title: "Update Ticket Comment",
-      description: "Update an internal ticket comment.",
+      description: "Update a task comment.",
       inputSchema: {
         ticket_id: uuid,
         comment_id: uuid,
@@ -255,202 +188,14 @@ export function registerTicketTools(server: McpServer) {
 
   registerAuthedTool(
     server,
-    "ticqex_delete_ticket_comment",
+    "tasqex_delete_ticket_comment",
     {
       title: "Delete Ticket Comment",
-      description: "Hard-delete an internal ticket comment.",
+      description: "Delete a task comment.",
       inputSchema: { ticket_id: uuid, comment_id: uuid },
     },
     async ({ ticket_id, comment_id }, auth) =>
       toolResult(await deleteTicketComment(ticket_id, comment_id, auth)),
   );
 
-  registerAuthedTool(
-    server,
-    "ticqex_create_ticket_draft",
-    {
-      title: "Create Ticket Draft",
-      description:
-        "Save an agent reply as a draft without sending email. Uses the same payload as create ticket message.",
-      inputSchema: { ticket_id: uuid, message: messageInputSchema },
-    },
-    async ({ ticket_id, message }, auth) => {
-      const body = parseBody(messageInputSchema, message);
-      const { message: created } = await createAgentDraft(
-        ticket_id,
-        { body: body.body, channel: body.channel ?? "admin", email: body.email },
-        auth,
-      );
-      return toolResult(created);
-    },
-  );
-
-  registerAuthedTool(
-    server,
-    "ticqex_list_ticket_drafts",
-    {
-      title: "List Ticket Drafts",
-      description: "List unsent email drafts for a ticket.",
-      inputSchema: { ticket_id: uuid },
-    },
-    async ({ ticket_id }) => toolResult(await listEnrichedDrafts(ticket_id)),
-  );
-
-  registerAuthedTool(
-    server,
-    "ticqex_update_ticket_draft",
-    {
-      title: "Update Ticket Draft",
-      description: "Update a saved draft reply on a ticket.",
-      inputSchema: {
-        ticket_id: uuid,
-        message_id: uuid,
-        message: messageInputSchema,
-      },
-    },
-    async ({ ticket_id, message_id, message }, auth) => {
-      const body = parseBody(messageInputSchema, message);
-      const { message: updated } = await updateAgentDraft(
-        ticket_id,
-        message_id,
-        { body: body.body, email: body.email },
-        auth,
-      );
-      return toolResult(updated);
-    },
-  );
-
-  registerAuthedTool(
-    server,
-    "ticqex_send_ticket_draft",
-    {
-      title: "Send Ticket Draft",
-      description: "Send a saved draft and enqueue outbound email.",
-      inputSchema: {
-        ticket_id: uuid,
-        message_id: uuid,
-        options: sendDraftSchema.optional(),
-      },
-    },
-    async ({ ticket_id, message_id, options }, auth) => {
-      const body = parseBody(sendDraftSchema, options ?? {});
-      const { message: sent, shouldSendEmail } = await sendAgentDraft(
-        ticket_id,
-        message_id,
-        body,
-        auth,
-      );
-      if (shouldSendEmail) {
-        if (!isChannelOperational("email")) {
-          throw ApiError.serviceUnavailable(
-            "Email channel is disabled or integration is not configured",
-          );
-        }
-        enqueueChannelOutbound("email", sent.id);
-      }
-      return toolResult(sent);
-    },
-  );
-
-  registerAuthedTool(
-    server,
-    "ticqex_delete_ticket_draft",
-    {
-      title: "Delete Ticket Draft",
-      description: "Delete a saved draft reply.",
-      inputSchema: { ticket_id: uuid, message_id: uuid },
-    },
-    async ({ ticket_id, message_id }, auth) =>
-      toolResult(await deleteAgentDraft(ticket_id, message_id, auth)),
-  );
-
-  registerAuthedTool(
-    server,
-    "ticqex_mark_ticket_read",
-    {
-      title: "Mark Ticket Read",
-      description: "Mark contact messages on a ticket as read for the API-key user.",
-      inputSchema: { ticket_id: uuid },
-    },
-    async ({ ticket_id }, auth) =>
-      toolResult(await markTicketMessagesRead(ticket_id, auth.userId)),
-  );
-
-  registerAuthedTool(
-    server,
-    "ticqex_set_message_read",
-    {
-      title: "Set Message Read State",
-      description: "Set a contact message read state for the API-key user.",
-      inputSchema: { ticket_id: uuid, message_id: uuid, read: z.boolean().optional() },
-    },
-    async ({ ticket_id, message_id, read }, auth) => {
-      const body = parseBody(toggleMessageReadSchema, { read });
-      const result = await setMessageReadState(message_id, auth.userId, body.read);
-      if (result.ticket_id !== ticket_id) throw ApiError.notFound("Message not found on this ticket");
-      return toolResult(result);
-    },
-  );
-
-  registerAuthedTool(
-    server,
-    "ticqex_get_attachment_url",
-    {
-      title: "Get Attachment URL",
-      description: "Create a signed URL for a message attachment.",
-      inputSchema: {
-        message_id: uuid,
-        attachment_id: uuid,
-        force_download: z.boolean().optional(),
-      },
-    },
-    async ({ message_id, attachment_id, force_download }) =>
-      toolResult({
-        url: await getAttachmentSignedUrl(message_id, attachment_id, {
-          forceDownload: force_download,
-        }),
-      }),
-  );
-
-  registerAuthedTool(
-    server,
-    "ticqex_stage_ticket_attachment_upload",
-    {
-      title: "Stage Ticket Attachment Upload",
-      description:
-        "Stage a file for an outbound email on a conversation ticket. Pass returned id in message email.attachment_upload_ids.",
-      inputSchema: {
-        ticket_id: uuid,
-        filename: z.string().min(1),
-        content_base64: z.string().min(1),
-        content_type: z.string().optional(),
-      },
-    },
-    async ({ ticket_id, filename, content_base64, content_type }, auth) => {
-      let content: Buffer;
-      try {
-        content = Buffer.from(content_base64, "base64");
-      } catch {
-        throw ApiError.badRequest("content_base64 must be valid base64");
-      }
-      if (!content.length) {
-        throw ApiError.badRequest("Attachment content is empty");
-      }
-
-      const upload = await stageAttachmentUploadFromBytes({
-        ticketId: ticket_id,
-        filename,
-        contentType: content_type?.trim() || "application/octet-stream",
-        content,
-        uploadedBy: auth.userId,
-      });
-
-      return toolResult({
-        id: upload.id,
-        filename: upload.filename,
-        content_type: upload.content_type,
-        size_bytes: upload.size_bytes,
-      });
-    },
-  );
 }

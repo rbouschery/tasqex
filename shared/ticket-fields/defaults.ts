@@ -8,10 +8,6 @@ export const DEFAULT_CORE_VISIBILITY: TicketFieldVisibility = {
   [CORE_TICKET_FIELD_IDS.tags]: { showOnCard: true, showInTicket: true },
   [CORE_TICKET_FIELD_IDS.description]: { showOnCard: false, showInTicket: true },
   [CORE_TICKET_FIELD_IDS.preview]: { showOnCard: true, showInTicket: false },
-  [CORE_TICKET_FIELD_IDS.contact_address]: {
-    showOnCard: false,
-    showInTicket: true,
-  },
 };
 
 export const CORE_TICKET_FIELD_LABELS: Record<string, string> = {
@@ -21,7 +17,6 @@ export const CORE_TICKET_FIELD_LABELS: Record<string, string> = {
   [CORE_TICKET_FIELD_IDS.tags]: "Tags",
   [CORE_TICKET_FIELD_IDS.description]: "Description",
   [CORE_TICKET_FIELD_IDS.preview]: "Preview",
-  [CORE_TICKET_FIELD_IDS.contact_address]: "Email address",
 };
 
 export const DEFAULT_CUSTOM_FIELD_VISIBILITY: TicketFieldVisibilityEntry = {

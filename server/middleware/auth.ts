@@ -4,11 +4,12 @@ import type { NextRequest } from "next/server";
 import { createAdminClient } from "@server/lib/supabase-admin";
 import { ApiError } from "@server/lib/errors";
 import { hashApiKey } from "@server/lib/utils";
+import { isUserRole, type UserRole } from "@shared/organization/membership";
 
 export type AuthContext = {
   type: "staff" | "api_key";
   userId: string;
-  role: "admin" | "agent";
+  role: UserRole;
   apiKeyId?: string;
 };
 
@@ -38,13 +39,8 @@ export async function authenticateApiKeyToken(
   const match = keys.find((k) => k.key_hash === keyHash);
   if (!match) return null;
 
-  const { data: user } = await db
-    .from("users")
-    .select("id, role")
-    .eq("id", match.created_by)
-    .single();
-
-  if (!user) return null;
+  const role = await loadActiveRole(match.created_by);
+  if (!role) return null;
 
   void db
     .from("api_keys")
@@ -53,10 +49,23 @@ export async function authenticateApiKeyToken(
 
   return {
     type: "api_key",
-    userId: user.id,
-    role: user.role as "admin" | "agent",
+    userId: match.created_by,
+    role,
     apiKeyId: match.id,
   };
+}
+
+async function loadActiveRole(userId: string): Promise<UserRole | null> {
+  const db = createAdminClient();
+  const { data: staff } = await db
+    .from("users")
+    .select("id, role, active")
+    .eq("id", userId)
+    .single();
+
+  if (!staff || staff.active === false) return null;
+  if (!isUserRole(staff.role)) return null;
+  return staff.role;
 }
 
 async function authViaJwt(token: string): Promise<AuthContext | null> {
@@ -71,19 +80,13 @@ async function authViaJwt(token: string): Promise<AuthContext | null> {
   const { data, error } = await supabase.auth.getUser(token);
   if (error || !data.user) return null;
 
-  const db = createAdminClient();
-  const { data: staff } = await db
-    .from("users")
-    .select("id, role")
-    .eq("id", data.user.id)
-    .single();
-
-  if (!staff) return null;
+  const role = await loadActiveRole(data.user.id);
+  if (!role) return null;
 
   return {
     type: "staff",
-    userId: staff.id,
-    role: staff.role as "admin" | "agent",
+    userId: data.user.id,
+    role,
   };
 }
 
@@ -110,19 +113,13 @@ async function authViaRequestCookies(
   } = await supabase.auth.getUser();
   if (!user) return null;
 
-  const db = createAdminClient();
-  const { data: staff } = await db
-    .from("users")
-    .select("id, role")
-    .eq("id", user.id)
-    .single();
-
-  if (!staff) return null;
+  const role = await loadActiveRole(user.id);
+  if (!role) return null;
 
   return {
     type: "staff",
-    userId: staff.id,
-    role: staff.role as "admin" | "agent",
+    userId: user.id,
+    role,
   };
 }
 

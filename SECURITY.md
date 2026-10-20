@@ -1,11 +1,11 @@
 # Security Policy
 
-We take the security of Ticqex seriously. Thank you for helping keep the project
+We take the security of Tasqex seriously. Thank you for helping keep the project
 and its users safe.
 
 ## Supported versions
 
-Ticqex is pre-1.0 and under active development. Security fixes are applied to the
+Tasqex is pre-1.0 and under active development. Security fixes are applied to the
 `main` branch and the latest release. Older releases are not maintained.
 
 ## Reporting a vulnerability
@@ -31,8 +31,8 @@ Please include:
 
 ## Scope
 
-In scope: authentication and session handling, API key handling, webhook
-signature verification, access control on `/api/v1/*`, SQL/RLS issues, and
+In scope: authentication and session handling, API key handling, organization
+invite tokens, access control on `/api/v1/*`, SQL/RLS issues, and
 secret/credential exposure.
 
 Out of scope: vulnerabilities in third-party dependencies (report upstream),

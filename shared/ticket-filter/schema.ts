@@ -17,15 +17,14 @@ export const SCALAR_FILTER_FIELDS = [
   "assignee_id",
   "contact_id",
   "kind",
-  "channel",
   "origin",
 ] as const;
 
 export type ScalarFilterField = (typeof SCALAR_FILTER_FIELDS)[number];
 
 const uuidSchema = z.string().uuid();
-const kindValueSchema = z.enum(["task", "conversation"]);
-const originValueSchema = z.enum(["manual", "api", "email"]);
+const kindValueSchema = z.enum(["task"]);
+const originValueSchema = z.enum(["manual", "api"]);
 
 const scalarConditionSchema = z
   .object({

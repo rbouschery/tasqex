@@ -22,6 +22,5 @@ export type FilterField =
   | "unread"
   | "ticket_field";
 
-export const KIND_OPTIONS = ["task", "conversation"] as const;
-export const ORIGIN_OPTIONS = ["manual", "api", "email"] as const;
-export const CHANNEL_OPTIONS = ["email"] as const;
+export const KIND_OPTIONS = ["task"] as const;
+export const ORIGIN_OPTIONS = ["manual", "api"] as const;

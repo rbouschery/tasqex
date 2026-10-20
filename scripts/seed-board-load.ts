@@ -1,5 +1,5 @@
 /**
- * Seeds ~1200 load-test tickets plus one needle-in-haystack conversation.
+ * Seeds ~1200 load-test tickets plus one needle task whose body holds the secret.
  * Run: pnpm seed:board-load
  * Reset prior load-test rows: pnpm seed:board-load -- --reset
  */
@@ -67,16 +67,6 @@ async function main() {
     process.exit(1);
   }
 
-  const { data: contact, error: contactErr } = await db
-    .from("contacts")
-    .select("id")
-    .limit(1)
-    .maybeSingle();
-  if (contactErr || !contact) {
-    console.error("Need at least one contact:", contactErr?.message);
-    process.exit(1);
-  }
-
   const statusIds = statuses.map((s) => s.id as string);
   const baseTime = Date.parse("2024-01-01T00:00:00.000Z");
 
@@ -113,10 +103,8 @@ async function main() {
     .from("tickets")
     .insert({
       title: NEEDLE_TITLE,
-      kind: "conversation",
-      channel: "email",
-      contact_address: "needle@example.com",
-      contact_id: contact.id,
+      kind: "task",
+      body: `Hidden keyword ${NEEDLE_SECRET} buried in the task body.`,
       status_id: closedStatus,
       origin: "manual",
       updated_at: needleUpdatedAt,
@@ -130,20 +118,8 @@ async function main() {
     process.exit(1);
   }
 
-  const { error: msgErr } = await db.from("messages").insert({
-    ticket_id: needle.id,
-    body: `Contact follow-up with hidden keyword ${NEEDLE_SECRET} buried in the thread.`,
-    visibility: "public",
-    author_type: "contact",
-    channel: "admin",
-  });
-  if (msgErr) {
-    console.error("Failed to create needle message:", msgErr.message);
-    process.exit(1);
-  }
-
   console.log(
-    `Seeded ${inserted} bulk tickets + 1 needle (${NEEDLE_SECRET} in message only).`,
+    `Seeded ${inserted} bulk tickets + 1 needle (${NEEDLE_SECRET} in the task body).`,
   );
   console.log(`Needle ticket id: ${needle.id}`);
 }

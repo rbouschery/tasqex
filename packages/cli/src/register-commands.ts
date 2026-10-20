@@ -40,7 +40,7 @@ function bindAuth(
 
 function addGlobalOptions(command: Command): Command {
   return command
-    .option("--instance <url>", "Ticqex instance URL")
+    .option("--instance <url>", "Tasqex instance URL")
     .option("--api-key <key>", "API key (tq_live_*)")
     .option("--json", "Output JSON (default: true)", true);
 }
@@ -75,13 +75,13 @@ function registerOperationCommand(
 export function createProgram(): Command {
   const program = addGlobalOptions(new Command());
   program
-    .name("ticqex")
-    .description("Ticqex REST API command-line interface")
+    .name("tasqex")
+    .description("Tasqex REST API command-line interface")
     .showHelpAfterError("(use --help for usage)");
 
   const call = program.command("call").description("Execute a catalog operation by MCP name");
   addInputOption(call)
-    .argument("<operation>", "Operation name (e.g. ticqex_get_me)")
+    .argument("<operation>", "Operation name (e.g. tasqex_get_me)")
     .action(async (operation: string, options: GlobalOptions, command: Command) => {
       const merged = collectUnknownOptions(command, options);
       await executeOperation(operation, merged);
@@ -96,146 +96,117 @@ export function createProgram(): Command {
   auth.command("status").description("Show auth status").action(bindAuth(authStatus));
 
   const users = program.command("users").description("User operations");
-  registerOperationCommand(users, "me", "Get current user", "ticqex_get_me");
-  registerOperationCommand(users, "list", "List users", "ticqex_list_users");
+  registerOperationCommand(users, "me", "Get current user", "tasqex_get_me");
+  registerOperationCommand(users, "list", "List users", "tasqex_list_users");
+  registerOperationCommand(users, "update-role", "Change a member role", "tasqex_update_user_role");
+  registerOperationCommand(users, "remove", "Remove a member", "tasqex_remove_user");
 
-  const tickets = program.command("tickets").description("Ticket operations");
-  registerOperationCommand(tickets, "list", "List tickets", "ticqex_list_tickets");
-  registerOperationCommand(tickets, "create", "Create ticket", "ticqex_create_ticket");
-  registerOperationCommand(tickets, "get", "Get ticket", "ticqex_get_ticket");
-  registerOperationCommand(tickets, "summary", "Get ticket summary", "ticqex_get_ticket_summary");
-  registerOperationCommand(tickets, "context", "Get ticket context", "ticqex_get_ticket_context");
-  registerOperationCommand(tickets, "update", "Update ticket", "ticqex_update_ticket");
-  registerOperationCommand(tickets, "delete", "Delete ticket", "ticqex_delete_ticket");
-  registerOperationCommand(tickets, "read", "Mark ticket read", "ticqex_mark_ticket_read");
-
-  const ticketMessages = tickets.command("messages").description("Ticket message operations");
-  registerOperationCommand(ticketMessages, "list", "List messages", "ticqex_list_ticket_messages");
-  registerOperationCommand(ticketMessages, "create", "Create message", "ticqex_create_ticket_message");
-  registerOperationCommand(ticketMessages, "set-read", "Set message read state", "ticqex_set_message_read");
-
-  const ticketComments = tickets.command("comments").description("Ticket comment operations");
-  registerOperationCommand(ticketComments, "list", "List comments", "ticqex_list_ticket_comments");
-  registerOperationCommand(ticketComments, "create", "Create comment", "ticqex_create_ticket_comment");
-  registerOperationCommand(ticketComments, "update", "Update comment", "ticqex_update_ticket_comment");
-  registerOperationCommand(ticketComments, "delete", "Delete comment", "ticqex_delete_ticket_comment");
-
-  const ticketDrafts = tickets.command("drafts").description("Ticket draft operations");
-  registerOperationCommand(ticketDrafts, "list", "List drafts", "ticqex_list_ticket_drafts");
-  registerOperationCommand(ticketDrafts, "create", "Create draft", "ticqex_create_ticket_draft");
-  registerOperationCommand(ticketDrafts, "update", "Update draft", "ticqex_update_ticket_draft");
-  registerOperationCommand(ticketDrafts, "send", "Send draft", "ticqex_send_ticket_draft");
-  registerOperationCommand(ticketDrafts, "delete", "Delete draft", "ticqex_delete_ticket_draft");
-
-  const ticketAttachments = tickets.command("attachments").description("Ticket attachment operations");
+  const organization = program.command("organization").description("Organization and invites");
+  registerOperationCommand(organization, "get", "Get the organization", "tasqex_get_organization");
   registerOperationCommand(
-    ticketAttachments,
-    "stage-upload",
-    "Stage attachment upload",
-    "ticqex_stage_ticket_attachment_upload",
+    organization,
+    "update",
+    "Rename the organization",
+    "tasqex_update_organization",
   );
-  registerOperationCommand(
-    ticketAttachments,
-    "get-url",
-    "Get attachment URL",
-    "ticqex_get_attachment_url",
-  );
+  const invites = organization.command("invites").description("Invite links");
+  registerOperationCommand(invites, "list", "List pending invites", "tasqex_list_organization_invites");
+  registerOperationCommand(invites, "create", "Create an invite link", "tasqex_create_organization_invite");
+  registerOperationCommand(invites, "revoke", "Revoke an invite", "tasqex_revoke_organization_invite");
+  registerOperationCommand(invites, "preview", "Preview an invite", "tasqex_preview_organization_invite");
+  registerOperationCommand(invites, "redeem", "Create an account from an invite", "tasqex_redeem_organization_invite");
+  registerOperationCommand(invites, "accept", "Accept an invite as the current user", "tasqex_accept_organization_invite");
+
+  const tickets = program.command("tickets").description("Task operations");
+  registerOperationCommand(tickets, "list", "List tasks", "tasqex_list_tickets");
+  registerOperationCommand(tickets, "create", "Create task", "tasqex_create_ticket");
+  registerOperationCommand(tickets, "get", "Get task", "tasqex_get_ticket");
+  registerOperationCommand(tickets, "summary", "Get task summary", "tasqex_get_ticket_summary");
+  registerOperationCommand(tickets, "context", "Get task context", "tasqex_get_ticket_context");
+  registerOperationCommand(tickets, "update", "Update task", "tasqex_update_ticket");
+  registerOperationCommand(tickets, "delete", "Delete task", "tasqex_delete_ticket");
+
+  const ticketComments = tickets.command("comments").description("Task comment operations");
+  registerOperationCommand(ticketComments, "list", "List comments", "tasqex_list_ticket_comments");
+  registerOperationCommand(ticketComments, "create", "Create comment", "tasqex_create_ticket_comment");
+  registerOperationCommand(ticketComments, "update", "Update comment", "tasqex_update_ticket_comment");
+  registerOperationCommand(ticketComments, "delete", "Delete comment", "tasqex_delete_ticket_comment");
 
   const board = program.command("board").description("Board operations");
-  registerOperationCommand(board, "get", "Get board", "ticqex_get_board");
+  registerOperationCommand(board, "get", "Get board", "tasqex_get_board");
   registerOperationCommand(
     board,
     "filter-options",
     "Get board filter options",
-    "ticqex_get_board_filter_options",
+    "tasqex_get_board_filter_options",
   );
   registerOperationCommand(
     board,
     "move-ticket",
     "Move ticket on board",
-    "ticqex_move_ticket_on_board",
+    "tasqex_move_ticket_on_board",
   );
   registerOperationCommand(
     board,
     "seed-manual-order",
     "Seed manual board order",
-    "ticqex_seed_manual_board_orders",
+    "tasqex_seed_manual_board_orders",
   );
 
   const boardLanes = board.command("lanes").description("Board lane operations");
   registerOperationCommand(
     boardLanes,
     "tickets",
-    "List lane tickets",
-    "ticqex_get_board_lane_tickets",
+    "List lane tasks",
+    "tasqex_get_board_lane_tickets",
   );
   registerOperationCommand(
     boardLanes,
     "set-order",
     "Set lane order",
-    "ticqex_set_board_lane_order",
+    "tasqex_set_board_lane_order",
   );
 
   const contacts = program.command("contacts").description("Contact operations");
-  registerOperationCommand(contacts, "list", "List contacts", "ticqex_list_contacts");
-  registerOperationCommand(contacts, "get", "Get contact", "ticqex_get_contact");
-  registerOperationCommand(contacts, "create", "Create contact", "ticqex_create_contact");
-  registerOperationCommand(contacts, "update", "Update contact", "ticqex_update_contact");
-  registerOperationCommand(contacts, "delete", "Delete contact", "ticqex_delete_contact");
+  registerOperationCommand(contacts, "list", "List contacts", "tasqex_list_contacts");
+  registerOperationCommand(contacts, "get", "Get contact", "tasqex_get_contact");
+  registerOperationCommand(contacts, "create", "Create contact", "tasqex_create_contact");
+  registerOperationCommand(contacts, "update", "Update contact", "tasqex_update_contact");
+  registerOperationCommand(contacts, "delete", "Delete contact", "tasqex_delete_contact");
 
   const tags = program.command("tags").description("Tag operations");
-  registerOperationCommand(tags, "list", "List tags", "ticqex_list_tags");
-  registerOperationCommand(tags, "create", "Create tag", "ticqex_create_tag");
-  registerOperationCommand(tags, "update", "Update tag", "ticqex_update_tag");
-  registerOperationCommand(tags, "delete", "Delete tag", "ticqex_delete_tag");
+  registerOperationCommand(tags, "list", "List tags", "tasqex_list_tags");
+  registerOperationCommand(tags, "create", "Create tag", "tasqex_create_tag");
+  registerOperationCommand(tags, "update", "Update tag", "tasqex_update_tag");
+  registerOperationCommand(tags, "delete", "Delete tag", "tasqex_delete_tag");
 
   const statuses = program.command("statuses").description("Status operations");
-  registerOperationCommand(statuses, "list", "List statuses", "ticqex_list_statuses");
-  registerOperationCommand(statuses, "create", "Create status", "ticqex_create_status");
-  registerOperationCommand(statuses, "update", "Update status", "ticqex_update_status");
-  registerOperationCommand(statuses, "delete", "Delete status", "ticqex_delete_status");
-  registerOperationCommand(statuses, "reorder", "Reorder statuses", "ticqex_reorder_statuses");
+  registerOperationCommand(statuses, "list", "List statuses", "tasqex_list_statuses");
+  registerOperationCommand(statuses, "create", "Create status", "tasqex_create_status");
+  registerOperationCommand(statuses, "update", "Update status", "tasqex_update_status");
+  registerOperationCommand(statuses, "delete", "Delete status", "tasqex_delete_status");
+  registerOperationCommand(statuses, "reorder", "Reorder statuses", "tasqex_reorder_statuses");
 
   const customFields = program.command("custom-fields").description("Custom field operations");
-  registerOperationCommand(customFields, "list", "List custom fields", "ticqex_list_custom_fields");
-  registerOperationCommand(customFields, "create", "Create custom field", "ticqex_create_custom_field");
-  registerOperationCommand(customFields, "update", "Update custom field", "ticqex_update_custom_field");
-  registerOperationCommand(customFields, "delete", "Delete custom field", "ticqex_delete_custom_field");
+  registerOperationCommand(customFields, "list", "List custom fields", "tasqex_list_custom_fields");
+  registerOperationCommand(customFields, "create", "Create custom field", "tasqex_create_custom_field");
+  registerOperationCommand(customFields, "update", "Update custom field", "tasqex_update_custom_field");
+  registerOperationCommand(customFields, "delete", "Delete custom field", "tasqex_delete_custom_field");
   registerOperationCommand(
     customFields,
     "reorder",
     "Reorder custom fields",
-    "ticqex_reorder_custom_fields",
+    "tasqex_reorder_custom_fields",
   );
 
   const settings = program.command("settings").description("Settings operations");
-  registerOperationCommand(settings, "get", "Get settings", "ticqex_get_settings");
-  registerOperationCommand(settings, "patch", "Patch settings", "ticqex_patch_settings");
-
-  const emailSnippets = program.command("email-snippets").description("Email snippet operations");
-  registerOperationCommand(
-    emailSnippets,
-    "list",
-    "List email snippets",
-    "ticqex_list_email_snippets",
-  );
-  registerOperationCommand(
-    emailSnippets,
-    "create",
-    "Create email snippet",
-    "ticqex_create_email_snippet",
-  );
-  registerOperationCommand(
-    emailSnippets,
-    "delete",
-    "Delete email snippet",
-    "ticqex_delete_email_snippet",
-  );
+  registerOperationCommand(settings, "get", "Get settings", "tasqex_get_settings");
+  registerOperationCommand(settings, "patch", "Patch settings", "tasqex_patch_settings");
 
   const apiKeys = program.command("api-keys").description("API key management (admin, REST-only)");
-  registerOperationCommand(apiKeys, "list", "List API keys", "ticqex_list_api_keys");
-  registerOperationCommand(apiKeys, "create", "Create API key", "ticqex_create_api_key");
-  registerOperationCommand(apiKeys, "revoke", "Revoke API key", "ticqex_revoke_api_key");
+  registerOperationCommand(apiKeys, "list", "List API keys", "tasqex_list_api_keys");
+  registerOperationCommand(apiKeys, "create", "Create API key", "tasqex_create_api_key");
+  registerOperationCommand(apiKeys, "revoke", "Revoke API key", "tasqex_revoke_api_key");
 
   return program;
 }

@@ -52,7 +52,7 @@ function authFromExtra(extra: ToolExtra): AuthContext {
   if (
     auth?.type !== "api_key" ||
     !auth.userId ||
-    (auth.role !== "admin" && auth.role !== "agent")
+    (auth.role !== "admin" && auth.role !== "member")
   ) {
     throw ApiError.unauthorized();
   }

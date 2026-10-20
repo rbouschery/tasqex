@@ -1,10 +1,10 @@
-export { TicqexClient, normalizeBaseUrl } from "./client.js";
-export { TicqexApiError } from "./errors.js";
+export { TasqexClient, normalizeBaseUrl } from "./client.js";
+export { TasqexApiError } from "./errors.js";
 export type {
   ApiEnvelope,
   ApiErrorEnvelope,
   HttpMethod,
   QueryParams,
   RequestOptions,
-  TicqexClientOptions,
+  TasqexClientOptions,
 } from "./types.js";

@@ -14,11 +14,11 @@ const calSans = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Ticqex",
-  description: "Agent-first support platform",
+  title: "Tasqex",
+  description: "Collaborative task management",
   manifest: "/manifest.json",
   appleWebApp: {
-    title: "Ticqex",
+    title: "Tasqex",
   },
 };
 
@@ -49,7 +49,7 @@ export default function RootLayout({
             attribute="class"
             defaultTheme="light"
             enableSystem
-            storageKey="ticqex-theme"
+            storageKey="tasqex-theme"
             disableTransitionOnChange
           >
             {children}

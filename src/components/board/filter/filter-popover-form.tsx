@@ -99,7 +99,6 @@ export function FilterPopoverForm({
             <SelectItem value="contact_id">Contact</SelectItem>
             <SelectItem value="tag">Tag</SelectItem>
             <SelectItem value="kind">Kind</SelectItem>
-            <SelectItem value="channel">Channel</SelectItem>
             <SelectItem value="origin">Origin</SelectItem>
             <SelectItem value="unread">Unread status</SelectItem>
             <SelectItem value="ticket_field">Custom field</SelectItem>
@@ -187,8 +186,8 @@ export function FilterPopoverForm({
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="true">Has unread messages</SelectItem>
-              <SelectItem value="false">Fully read</SelectItem>
+              <SelectItem value="true">Unread</SelectItem>
+              <SelectItem value="false">Read</SelectItem>
             </SelectContent>
           </Select>
         </div>

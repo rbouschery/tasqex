@@ -43,7 +43,7 @@ export function ApiMcpSettingsSection({
         <CardHeader>
           <CardTitle>API keys</CardTitle>
           <CardDescription>
-            Programmatic access to the Ticqex API.
+            Programmatic access to the Tasqex API.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -106,7 +106,7 @@ export function ApiMcpSettingsSection({
         <div>
           <h2 className="font-heading text-lg font-semibold">MCP</h2>
           <p className="text-sm text-muted-foreground">
-            Connect Ticqex to any MCP-compatible client through the native
+            Connect Tasqex to any MCP-compatible client through the native
             Streamable HTTP endpoint.
           </p>
         </div>

@@ -1,4 +1,4 @@
-import { TicqexClient, TicqexApiError, type HttpMethod } from "@ticqex/api-client";
+import { TasqexClient, TasqexApiError, type HttpMethod } from "@tasqex/api-client";
 import { getOperation } from "./command-catalog.js";
 import { resolveCredentials, type CredentialOverrides } from "./credentials.js";
 import { buildRequest, mergeInput } from "./input.js";
@@ -15,7 +15,7 @@ function assertNever(value: never): never {
 }
 
 async function invokeClient(
-  client: TicqexClient,
+  client: TasqexClient,
   method: HttpMethod,
   path: string,
   query?: Record<string, string | number | boolean | undefined | null>,
@@ -49,13 +49,13 @@ export async function executeOperation(
   const credentials = await resolveCredentials(options);
   if (!credentials) {
     throw new CliUsageError(
-      "Missing credentials. Run `ticqex auth login --instance <url>` or set TICQEX_INSTANCE and TICQEX_API_KEY.",
+      "Missing credentials. Run `tasqex auth login --instance <url>` or set TASQEX_INSTANCE and TASQEX_API_KEY.",
     );
   }
 
   const input = mergeInput(options.input, options);
   const { path, query, body } = buildRequest(operation, input);
-  const client = new TicqexClient({
+  const client = new TasqexClient({
     baseUrl: credentials.instance,
     apiKey: credentials.apiKey,
   });
@@ -64,11 +64,11 @@ export async function executeOperation(
     const data = await invokeClient(client, operation.method, path, query, body);
     writeJson(data);
   } catch (error) {
-    if (error instanceof TicqexApiError) {
+    if (error instanceof TasqexApiError) {
       throw error;
     }
     throw error;
   }
 }
 
-export { TicqexApiError };
+export { TasqexApiError };

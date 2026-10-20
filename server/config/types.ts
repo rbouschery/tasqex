@@ -1,10 +1,10 @@
 export {
-  TICQEX_CONFIG_VERSION,
+  TASQEX_CONFIG_VERSION,
   type ChannelKey,
   type ConfigValidationIssue,
   type IntegrationKey,
-  type TicqexConfig,
-} from "@shared/ticqex-config/types";
+  type TasqexConfig,
+} from "@shared/tasqex-config/types";
 
 export type ChannelBinding = {
   enabled: boolean;
@@ -17,6 +17,6 @@ export type IntegrationBinding = {
 
 export type ConfigValidationResult = {
   ok: boolean;
-  config: import("@shared/ticqex-config/types").TicqexConfig;
-  issues: import("@shared/ticqex-config/types").ConfigValidationIssue[];
+  config: import("@shared/tasqex-config/types").TasqexConfig;
+  issues: import("@shared/tasqex-config/types").ConfigValidationIssue[];
 };

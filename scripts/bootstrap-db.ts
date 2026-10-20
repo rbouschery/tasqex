@@ -6,7 +6,7 @@ import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
-const container = process.env.SUPABASE_DB_CONTAINER ?? "supabase_db_ticqex";
+const container = process.env.SUPABASE_DB_CONTAINER ?? "supabase_db_tasqex";
 const sqlPath = join(process.cwd(), "supabase/bootstrap.sql");
 const sql = readFileSync(sqlPath, "utf8");
 

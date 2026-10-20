@@ -11,9 +11,9 @@ import {
 type Params = { params: Promise<{ id: string }> };
 
 export async function GET(request: NextRequest, { params }: Params) {
-  return withAuth(request, async (auth) => {
+  return withAuth(request, async () => {
     const { id } = await params;
-    return jsonData(await getTicket(id, auth.userId));
+    return jsonData(await getTicket(id));
   });
 }
 

@@ -9,5 +9,8 @@ export function loginErrorMessage(message: string): string {
   if (lower.includes("too many requests")) {
     return "Too many attempts. Wait a moment and try again.";
   }
+  if (lower.includes("banned")) {
+    return "This account is not active. Open your invite link to join.";
+  }
   return message;
 }

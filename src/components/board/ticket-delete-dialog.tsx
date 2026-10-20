@@ -10,29 +10,25 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-export function ticketDeleteCopy(kind: "task" | "conversation") {
-  const isTask = kind === "task";
+export function ticketDeleteCopy() {
   return {
     label: "Delete",
-    title: isTask ? "Delete this task?" : "Delete this email conversation?",
-    description: isTask
-      ? "The task and its details will be removed from your board. This action cannot be undone."
-      : "The conversation and all messages will be removed from your board. This action cannot be undone. If a new email arrives later, it will start a new conversation.",
+    title: "Delete this task?",
+    description:
+      "The task and its details will be removed from your board. This action cannot be undone.",
   };
 }
 
 export function TicketDeleteDialog({
   open,
-  kind,
   onOpenChange,
   onConfirmDelete,
 }: {
   open: boolean;
-  kind: "task" | "conversation";
   onOpenChange: (open: boolean) => void;
   onConfirmDelete: () => void;
 }) {
-  const copy = ticketDeleteCopy(kind);
+  const copy = ticketDeleteCopy();
 
   function stopCardOpen(e: React.SyntheticEvent) {
     e.stopPropagation();

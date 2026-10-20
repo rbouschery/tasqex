@@ -1,4 +1,4 @@
-const STORAGE_KEY = "ticqex.board.lastLaneCount.v1";
+const STORAGE_KEY = "tasqex.board.lastLaneCount.v1";
 export const DEFAULT_BOARD_LANE_COUNT = 3;
 const DEFAULT_LANE_COUNT = DEFAULT_BOARD_LANE_COUNT;
 const MAX_LANE_COUNT = 24;

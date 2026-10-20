@@ -1,11 +1,11 @@
-import type { ChannelKey } from "@shared/ticqex-keys";
+import type { ChannelKey } from "@shared/tasqex-keys";
 import type {
   ChannelCardSurfaceBuilder,
   ChannelFieldPolicy,
 } from "@shared/channels";
 import type { ChannelSettingsSectionMeta } from "@shared/settings/types";
 
-export type { ChannelKey, IntegrationKey } from "@shared/ticqex-keys";
+export type { ChannelKey, IntegrationKey } from "@shared/tasqex-keys";
 
 export type {
   ChannelCardSurfaceBuilder,

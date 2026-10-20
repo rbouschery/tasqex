@@ -1,4 +1,4 @@
-export type TicketOrigin = "manual" | "api" | "email";
+export type TicketOrigin = "manual" | "api";
 
 export type TicketCardBadgeVariant =
   | "default"
@@ -42,9 +42,7 @@ export type ChannelFieldPolicy = {
 };
 
 export type ChannelCardTicketContext = {
-  kind?: "task" | "conversation";
-  channel: string | null;
-  contact_address: string | null;
+  kind?: "task";
   custom_fields: Record<string, unknown>;
   preview?: string;
   origin?: TicketOrigin;

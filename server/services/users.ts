@@ -6,6 +6,7 @@ export async function listUsers() {
   const { data, error } = await db
     .from("users")
     .select("id, username, email, role, created_at")
+    .eq("active", true)
     .order("username");
   if (error) throw ApiError.internal(error.message);
   return data ?? [];

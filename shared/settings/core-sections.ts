@@ -10,6 +10,13 @@ export const CORE_SETTINGS_SECTIONS: readonly SettingsSectionDescriptor[] = [
     order: 10,
   },
   {
+    id: "organization",
+    label: "Organization",
+    description: "Workspace name, members, and invite links.",
+    componentKey: "settings.organization",
+    order: 15,
+  },
+  {
     id: "api-mcp",
     label: "API & MCP",
     description: "Programmatic access and MCP client connection.",
@@ -26,7 +33,7 @@ export const CORE_SETTINGS_SECTIONS: readonly SettingsSectionDescriptor[] = [
   {
     id: "custom-fields",
     label: "Custom fields",
-    description: "Typed metadata fields for tickets and contacts.",
+    description: "Typed metadata fields for tasks and contacts.",
     componentKey: "settings.custom-fields",
     order: 40,
   },

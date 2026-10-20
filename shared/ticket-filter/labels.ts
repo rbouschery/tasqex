@@ -37,7 +37,6 @@ export function getScalarOperators(field: ScalarFilterField): FilterOperator[] {
       return ["eq", "neq", "in", "nin"];
     case "assignee_id":
     case "contact_id":
-    case "channel":
       return ["eq", "neq", "in", "nin", "empty", "not_empty"];
     default:
       return ["eq", "neq", "in", "nin"];
@@ -73,7 +72,6 @@ const FIELD_LABELS: Record<string, string> = {
   assignee_id: "Assignee",
   contact_id: "Contact",
   kind: "Kind",
-  channel: "Channel",
   origin: "Origin",
   tag: "Tag",
   unread: "Unread",
@@ -81,8 +79,7 @@ const FIELD_LABELS: Record<string, string> = {
 };
 
 export const TICKET_KIND_LABELS: Record<string, string> = {
-  task: "Ticket",
-  conversation: "Email conversation",
+  task: "Task",
 };
 
 function formatKindValue(value: string): string {
@@ -132,7 +129,6 @@ export function formatFilterConditionLabel(
         return `${fieldLabel} ${opLabel} ${(normalized.values ?? []).map(formatKindValue).join(", ")}`;
       }
       return `${fieldLabel} ${opLabel} ${formatKindValue(normalized.value!)}`;
-    case "channel":
     case "origin":
       if (operatorNeedsValues(normalized.op)) {
         return `${fieldLabel} ${opLabel} ${(normalized.values ?? []).join(", ")}`;

@@ -27,9 +27,9 @@ export function BoardSearchBar({
         onKeyDown={(event) => {
           if (event.key === "Escape") onChange("");
         }}
-        placeholder="Search tickets…"
+        placeholder="Search tasks…"
         className="h-8 pl-8 pr-8"
-        aria-label="Search tickets"
+        aria-label="Search tasks"
       />
       {value ? (
         <button

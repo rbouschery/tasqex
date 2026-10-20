@@ -1,10 +1,10 @@
-import { TicqexApiError } from "./errors.js";
+import { TasqexApiError } from "./errors.js";
 import type {
   ApiEnvelope,
   ApiErrorEnvelope,
   QueryParams,
   RequestOptions,
-  TicqexClientOptions,
+  TasqexClientOptions,
 } from "./types.js";
 
 const API_PREFIX = "/api/v1";
@@ -36,11 +36,11 @@ function isApiEnvelope<T>(value: unknown): value is ApiEnvelope<T> {
   return typeof value === "object" && value !== null && "data" in value;
 }
 
-export class TicqexClient {
+export class TasqexClient {
   private readonly baseUrl: string;
   private readonly apiKey: string;
 
-  constructor(options: TicqexClientOptions) {
+  constructor(options: TasqexClientOptions) {
     this.baseUrl = normalizeBaseUrl(options.baseUrl);
     this.apiKey = options.apiKey;
   }
@@ -82,7 +82,7 @@ export class TicqexClient {
     const json: unknown = await response.json();
 
     if (isApiErrorEnvelope(json)) {
-      throw new TicqexApiError(
+      throw new TasqexApiError(
         response.status,
         json.error.code,
         json.error.message,
@@ -90,7 +90,7 @@ export class TicqexClient {
     }
 
     if (!response.ok) {
-      throw new TicqexApiError(
+      throw new TasqexApiError(
         response.status,
         "unknown",
         "Request failed",
@@ -98,7 +98,7 @@ export class TicqexClient {
     }
 
     if (!isApiEnvelope<T>(json)) {
-      throw new TicqexApiError(
+      throw new TasqexApiError(
         response.status,
         "invalid_response",
         "Response is missing data envelope",

@@ -44,7 +44,7 @@ describe("withApiKeyMcpAuth", () => {
     const authInfo: AuthInfo = {
       token: "tq_live_test",
       clientId: "key-1",
-      scopes: ["ticqex:read"],
+      scopes: ["tasqex:read"],
     };
     const handler = vi.fn(async (req: AuthedRequest) => {
       expect(req.auth).toEqual(authInfo);

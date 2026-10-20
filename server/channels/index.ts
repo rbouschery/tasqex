@@ -1,5 +1,4 @@
-import type { ChannelDefinition, ChannelKey } from "@server/channels/types";
-import { emailChannel } from "@server/channels/email/channel";
+import type { ChannelDefinition } from "@server/channels/types";
 import { createRegistry } from "@shared/registry";
 
 export type {
@@ -7,7 +6,7 @@ export type {
   ChannelKey,
   TicketCardSurface,
 } from "@server/channels/types";
-export type { IntegrationKey } from "@shared/ticqex-keys";
+export type { IntegrationKey } from "@shared/tasqex-keys";
 export { buildTicketCardSurface } from "@shared/channels/card-surface";
 export {
   findMissingRequiredFields,
@@ -22,14 +21,8 @@ export {
   assertSendRecipientMatchesLockedFields,
   getMissingChannelFields,
 } from "@server/channels/field-enforcement";
-export {
-  getChannelIntegrationEmail,
-} from "@server/channels/runtime";
-export { emailChannel } from "@server/channels/email/channel";
 
-const channels = createRegistry<ChannelKey, ChannelDefinition>({
-  email: emailChannel as ChannelDefinition,
-});
+const channels = createRegistry<string, ChannelDefinition>({});
 
 export const channelRegistry = channels.registry;
 export const channelKeys = channels.keys;

@@ -99,7 +99,7 @@ export function CopyContextSettingsSection() {
       <CardHeader>
         <CardTitle>Copy context</CardTitle>
         <CardDescription>
-          Controls the ticket modal Copy context action and exported markdown.
+          Controls the task modal Copy context action and exported markdown.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -130,7 +130,7 @@ export function CopyContextSettingsSection() {
           ) : null}
           <CopyContextSwitchRow
             id="copy-context-append-custom-fields"
-            label="Append ticket custom fields"
+            label="Append task custom fields"
             checked={settings.append_custom_fields}
             disabled={!copyContextEnabled}
             onCheckedChange={(checked) =>
@@ -160,7 +160,7 @@ export function CopyContextSettingsSection() {
             value={prependValue}
             onChange={(event) => setPrependDraft(event.target.value)}
             rows={4}
-            placeholder="Optional text copied before the ticket title"
+            placeholder="Optional text copied before the task title"
             className="font-mono"
             disabled={!copyContextEnabled}
           />

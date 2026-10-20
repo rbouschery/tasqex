@@ -19,8 +19,8 @@ if (fs.existsSync(envLocal)) {
   dotenv.config({ path: envLocal });
 }
 
-const email = process.env.SEED_ADMIN_EMAIL ?? "admin@ticqex.local";
-const password = process.env.SEED_ADMIN_PASSWORD ?? "ticqex-admin-change-me";
+const email = process.env.SEED_ADMIN_EMAIL ?? "admin@tasqex.local";
+const password = process.env.SEED_ADMIN_PASSWORD ?? "tasqex-admin-change-me";
 
 async function main() {
   const url = normalizeSupabaseUrl(
@@ -51,7 +51,10 @@ async function main() {
   const found = existing.users.find((user) => user.email === email);
 
   if (found) {
-    await supabase.from("users").update({ role: "admin" }).eq("id", found.id);
+    await supabase
+      .from("users")
+      .update({ role: "admin", active: true })
+      .eq("id", found.id);
     console.log(`Admin already exists: ${email}`);
     return;
   }
@@ -75,7 +78,7 @@ async function main() {
   if (data.user) {
     await supabase
       .from("users")
-      .update({ role: "admin", username: "Admin" })
+      .update({ role: "admin", username: "Admin", active: true })
       .eq("id", data.user.id);
   }
 

@@ -31,7 +31,7 @@ export function TicketCustomFieldsSection({
   onSave: () => void;
 }) {
   const { expanded, toggleExpanded } = usePersistedExpanded(
-    "ticqex.ticket-custom-fields.expanded.v1",
+    "tasqex.ticket-custom-fields.expanded.v1",
     true,
   );
 

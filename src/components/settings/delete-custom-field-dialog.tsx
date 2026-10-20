@@ -26,7 +26,7 @@ export function DeleteCustomFieldDialog({
         <DialogHeader>
           <DialogTitle>Delete &ldquo;{field.label}&rdquo;?</DialogTitle>
           <DialogDescription>
-            This removes the field definition and all stored values on tickets or
+            This removes the field definition and all stored values on tasks or
             contacts. This action cannot be undone.
           </DialogDescription>
         </DialogHeader>

@@ -1,4 +1,5 @@
 import { copyContextSettingsPatchSchema } from "@shared/copy-context";
+import { USER_ROLES } from "@shared/organization/membership";
 import { z } from "zod";
 import { ApiError } from "@server/lib/errors";
 import {
@@ -6,27 +7,6 @@ import {
   validateDefinitionOptions,
   validateShowOpenInTicketForGroup,
 } from "@shared/custom-fields";
-
-const emailAddressSchema = z.string().email();
-
-export const emailComposeOptionsSchema = z.object({
-  cc: z.array(emailAddressSchema).optional(),
-  subject: z.string().optional(),
-  reply_all: z.boolean().optional(),
-  include_quote: z.boolean().optional(),
-  attachment_upload_ids: z.array(z.string().uuid()).optional(),
-});
-
-export const sendDraftSchema = z.object({
-  include_quote: z.boolean().optional(),
-  reply_all: z.boolean().optional(),
-});
-
-export const messageInputSchema = z.object({
-  body: z.string().min(1),
-  channel: z.enum(["email", "api", "admin"]).optional(),
-  email: emailComposeOptionsSchema.optional(),
-});
 
 export const COMMENT_BODY_MAX = 32000;
 
@@ -42,7 +22,7 @@ const ticketBaseSchema = z.object({
   title: z.string().trim().min(1),
   status_id: z.string().uuid().optional(),
   assignee_id: z.string().uuid().nullable().optional(),
-  origin: z.enum(["manual", "api", "email"]).optional(),
+  origin: z.enum(["manual", "api"]).optional(),
   tags: z.array(z.string()).optional(),
   custom_fields: z.record(z.string(), z.unknown()).optional(),
 });
@@ -59,85 +39,20 @@ export const createTaskTicketSchema = ticketBaseSchema.extend({
     }),
 });
 
-export const conversationOutboundSchema = z.object({
-  body: z.string().min(1),
-  subject: z.string().optional(),
-  cc: z.array(emailAddressSchema).optional(),
+export const createTicketSchema = createTaskTicketSchema;
+
+export const createTicketMcpInputSchema = z.object({
+  ...ticketBaseSchema.shape,
+  kind: z.literal("task").default("task"),
+  body: z.string().optional(),
+  contact: z
+    .object({ username: z.string() })
+    .optional()
+    .transform((c) => {
+      const username = c?.username?.trim();
+      return username ? { username } : undefined;
+    }),
 });
-
-export const createConversationTicketSchema = z.object({
-  kind: z.literal("conversation"),
-  title: z.string().trim().min(1),
-  contact_address: z.string().email(),
-  /** Contact-authored seed message (form / API intake). Mutually exclusive with outbound. */
-  message: z.object({ body: z.string().min(1) }).optional(),
-  /** Agent-authored first email. Requires an operational email channel. Mutually exclusive with message. */
-  outbound: conversationOutboundSchema.optional(),
-  origin: z.enum(["manual", "api"]).optional(),
-  status_id: z.string().uuid().optional(),
-  assignee_id: z.string().uuid().nullable().optional(),
-  tags: z.array(z.string()).optional(),
-  custom_fields: z.record(z.string(), z.unknown()).optional(),
-});
-
-function refineConversationCreate(
-  data: {
-    kind: string;
-    message?: { body?: string };
-    outbound?: { body?: string };
-  },
-  ctx: z.RefinementCtx,
-) {
-  if (data.kind !== "conversation") return;
-
-  const hasMessage = Boolean(data.message?.body?.trim());
-  const hasOutbound = Boolean(data.outbound?.body?.trim());
-  if (hasMessage === hasOutbound) {
-    ctx.addIssue({
-      code: "custom",
-      message:
-        "Conversation tickets require exactly one of message (contact intake) or outbound (agent email)",
-      path: hasMessage ? ["outbound"] : ["message"],
-    });
-  }
-}
-
-export const createTicketSchema = z
-  .discriminatedUnion("kind", [
-    createTaskTicketSchema,
-    createConversationTicketSchema,
-  ])
-  .superRefine(refineConversationCreate);
-
-export const createTicketMcpInputSchema = z
-  .object({
-    ...ticketBaseSchema.shape,
-    kind: z.enum(["task", "conversation"]),
-    body: z.string().optional(),
-    contact: z
-      .object({ username: z.string() })
-      .optional()
-      .transform((c) => {
-        const username = c?.username?.trim();
-        return username ? { username } : undefined;
-      }),
-    contact_address: z.string().email().optional(),
-    message: z.object({ body: z.string().min(1).optional() }).optional(),
-    outbound: conversationOutboundSchema.optional(),
-  })
-  .superRefine((data, ctx) => {
-    if (data.kind !== "conversation") return;
-
-    if (!data.contact_address) {
-      ctx.addIssue({
-        code: "custom",
-        message: "contact_address is required for conversation tickets",
-        path: ["contact_address"],
-      });
-    }
-
-    refineConversationCreate(data, ctx);
-  });
 
 export const updateTicketSchema = z.object({
   title: z.string().min(1).optional(),
@@ -146,15 +61,6 @@ export const updateTicketSchema = z.object({
   assignee_id: z.string().uuid().nullable().optional(),
   tags: z.array(z.string()).optional(),
   custom_fields: z.record(z.string(), z.unknown()).optional(),
-});
-
-export const toggleMessageReadSchema = z.object({
-  read: z.boolean().optional(),
-});
-
-export const createEmailSnippetSchema = z.object({
-  title: z.string().min(1),
-  body: z.string().min(1),
 });
 
 export const createContactSchema = z.object({
@@ -287,16 +193,38 @@ export const ticketFieldVisibilitySchema = z.record(
 
 export const patchSettingsSchema = z.object({
   visible_status_ids: z.array(z.string().uuid()).optional(),
-  default_inbound_status_id: z.string().uuid().nullable().optional(),
   ticket_field_visibility: ticketFieldVisibilitySchema.optional(),
-  email_signature: z.string().optional(),
-  email_thread_order: z.enum(["oldest_first", "newest_first"]).optional(),
   comment_thread_order: z.enum(["oldest_first", "newest_first"]).optional(),
   copy_context: copyContextSettingsPatchSchema.optional(),
 });
 
 export const createApiKeySchema = z.object({
   name: z.string().trim().min(1, "Key name is required"),
+});
+
+export const userRoleSchema = z.enum(USER_ROLES);
+
+export const updateOrganizationSchema = z.object({
+  name: z.string().trim().min(1).max(80),
+});
+
+export const createOrganizationInviteSchema = z.object({
+  email: z.string().trim().email(),
+  role: userRoleSchema.default("member"),
+});
+
+export const acceptOrganizationInviteSchema = z.object({
+  token: z.string().trim().min(1),
+});
+
+export const redeemOrganizationInviteSchema = z.object({
+  token: z.string().trim().min(1),
+  password: z.string().min(8).max(200),
+  username: z.string().trim().min(1).max(80).optional(),
+});
+
+export const updateUserRoleSchema = z.object({
+  role: userRoleSchema,
 });
 
 export function parseBody<T>(schema: z.ZodType<T>, body: unknown): T {

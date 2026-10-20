@@ -26,16 +26,6 @@ export type CreateTicketPayload = {
   tags: Tag[];
 };
 
-export type CreateEmailPayload = {
-  title: string;
-  contactAddress: string;
-  body: string;
-  subject?: string;
-  cc?: string[];
-  statusId: string;
-  tags: Tag[];
-};
-
 function initials(name: string): string {
   const parts = name.trim().split(/[\s@._-]+/).filter(Boolean);
   if (parts.length === 0) return "?";
@@ -50,23 +40,13 @@ function bodyPreview(body: string, maxLen = 120): string {
 }
 
 function buildCardSurfaceForTicket(
-  detail: Pick<
-    TicketDetail,
-    | "kind"
-    | "channel"
-    | "contact_address"
-    | "custom_fields"
-    | "card_surface"
-    | "origin"
-  >,
+  detail: Pick<TicketDetail, "kind" | "custom_fields" | "card_surface" | "origin">,
   preview: string,
 ) {
   if (detail.card_surface) return detail.card_surface;
 
   return buildTicketCardSurface({
     kind: detail.kind,
-    channel: detail.kind === "conversation" ? detail.channel : null,
-    contact_address: detail.contact_address ?? null,
     custom_fields: detail.custom_fields,
     preview,
     origin: detail.origin,
@@ -87,7 +67,6 @@ export function buildOptimisticBoardTicket(
     title: payload.title,
     is_pending: true,
     kind: "task",
-    channel: null,
     origin: "manual",
     contact_id: null,
     assignee_id: null,
@@ -105,54 +84,8 @@ export function buildOptimisticBoardTicket(
     })),
     card_surface: buildTicketCardSurface({
       kind: "task",
-      channel: null,
-      contact_address: null,
       custom_fields: {},
       preview,
-    }),
-    created_at: now,
-    updated_at: now,
-    unread_count: 0,
-  };
-}
-
-export function buildOptimisticEmailTicket(
-  payload: CreateEmailPayload,
-  tempId: string,
-  now: string,
-): BoardTicket {
-  const preview = bodyPreview(payload.body);
-  const contactAddress = payload.contactAddress.trim().toLowerCase();
-
-  return {
-    id: tempId,
-    title: payload.title,
-    is_pending: true,
-    kind: "conversation",
-    channel: "email",
-    origin: "manual",
-    contact_id: null,
-    assignee_id: null,
-    preview,
-    contact: {
-      username: contactAddress,
-      initials: initials(contactAddress),
-    },
-    assignee: null,
-    custom_fields: {},
-    contact_open_fields: [],
-    tags: payload.tags.map((tag) => ({
-      id: tag.id ?? tag.name,
-      name: tag.name,
-      color: tag.color,
-    })),
-    card_surface: buildTicketCardSurface({
-      kind: "conversation",
-      channel: "email",
-      contact_address: contactAddress,
-      custom_fields: {},
-      preview,
-      origin: "manual",
     }),
     created_at: now,
     updated_at: now,
@@ -194,12 +127,9 @@ export function ticketDetailToBoardTicket(detail: TicketDetail): BoardTicket {
     card_surface,
     created_at: detail.created_at,
     updated_at: detail.updated_at,
-    unread_count: "unread_count" in detail ? (detail.unread_count ?? 0) : 0,
+    unread_count: detail.unread_count ?? 0,
   };
-  if (detail.kind === "task") {
-    return { ...base, kind: "task", channel: null };
-  }
-  return { ...base, kind: "conversation", channel: detail.channel };
+  return { ...base, kind: "task" };
 }
 
 function ticketMatchesSearch(
@@ -217,7 +147,6 @@ function ticketMatchesSearch(
 function asFilterMatchTicket(ticket: BoardTicket): TicketFilterMatchTicket {
   return {
     kind: ticket.kind,
-    channel: ticket.channel,
     origin: ticket.origin,
     assignee_id: ticket.assignee_id,
     contact_id: ticket.contact_id,
