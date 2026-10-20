@@ -1,8 +1,4 @@
 <p align="center">
-  <img src="docs/assets/logo.png" alt="Tasqex" width="96" height="96">
-</p>
-
-<p align="center">
   <strong>A shared task board for people and agents — lanes, tasks, comments, and one workspace.</strong>
 </p>
 
@@ -10,15 +6,9 @@
 
 <p align="center">
   <a href="https://github.com/rbouschery/tasqex/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/rbouschery/tasqex/ci.yml?branch=main&label=CI" alt="CI"></a>
-  <a href="https://www.npmjs.com/package/@tasqex/cli"><img src="https://img.shields.io/npm/v/@tasqex/cli?label=%40tasqex%2Fcli" alt="@tasqex/cli on npm"></a>
-  <a href="https://www.npmjs.com/package/@tasqex/api-client"><img src="https://img.shields.io/npm/v/@tasqex/api-client?label=%40tasqex%2Fapi-client" alt="@tasqex/api-client on npm"></a>
   <a href="./LICENSE"><img src="https://img.shields.io/github/license/rbouschery/tasqex" alt="License: MIT"></a>
   <img src="https://img.shields.io/badge/status-pre--1.0-orange" alt="Status: pre-1.0">
   <img src="https://img.shields.io/badge/open--source-free-brightgreen" alt="Open-Source · Free">
-</p>
-
-<p align="center">
-  <img src="docs/assets/preview.png" alt="Tasqex task board" width="800">
 </p>
 
 ## What is Tasqex?
